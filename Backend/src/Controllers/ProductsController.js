@@ -1,15 +1,11 @@
 const Product = require('../Models/ProductSchema');
 
-const getProdutoInfo = async (req, res) => {
-    const {
-        id
-    } = req.params;
-    return res.json(await Product.findOne({
-        _id: id
-    }));
-}
+const getProductData = async (req, res) => {
+    const { id } = req.params;
+    return res.json(await Product.findOne({ _id: id }));
+};
 
-const createProdut = async (req, res) => {
+const createProduct = async (req, res) => {
     const {
         productName,
         productDescription,
@@ -19,9 +15,7 @@ const createProdut = async (req, res) => {
     } = req.body;
 
     if (!productName || !productDescription || !category || !available || !price) {
-        return res.json({
-            'err': 'invalid values'
-        });
+        return res.json({ 'err': 'invalid values' });
     }
 
     try {
@@ -34,23 +28,47 @@ const createProdut = async (req, res) => {
         });
         return createProduct;
     } catch (err) {
-        return res.json({
-            err
-        })
+        return res.json(err);
+    }
+};
+
+const updateProduct = async (req, res) => {
+    const {
+        productName,
+        productDescription,
+        category,
+        available,
+        price
+    } = req.body;
+
+    if (!productName || !productDescription || !category || !available || !price) {
+        return res.json({ 'err': 'invalid values' });
+    };
+
+    try {
+        const updatedProduct = await Product.findOneAndUpdate({
+            _id: id,
+            productName,
+            productDescription,
+            category,
+            available,
+            price
+        });
+        return res.json(updatedProduct);
+    } catch (err) {
+        return res.json(err);
     }
 }
 
-const updateProduct = (req, res) => {
+const deleteProduct = async (req, res) => {
+    const { id } = req.params;
 
-}
-
-const deleteProduct = (req, res) => {
-
+    return res.json(await Product.findOneAndDelete({ _id: id }));
 }
 
 module.exports = {
-    getProdutoInfo,
-    createProdut,
+    getProductData,
+    createProduct,
     updateProduct,
     deleteProduct,
 };
