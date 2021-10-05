@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
-import { StyleSheet, View, Text, TextInput, Button } from 'react-native';
+import React, { useState } from 'react'
+import { StyleSheet, View, Text, TextInput, Button, ToastAndroid } from 'react-native';
 import Navbar from '../../components/navbar';
 import Header from '../../components/header';
-import { getUserList, registerUser } from '../../services/apiservices';
+import { registerUser } from '../../services/apiservices';
 
 const Signup = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -13,16 +13,9 @@ const Signup = ({ navigation }) => {
   const registrar = async () => {
     await registerUser(email, phone, cpf, password)
       .then((r) => console.log(r));
+    ToastAndroid.show('Cadastro realizado com sucesso.', ToastAndroid.SHORT);
+    navigation.navigate('home');
   };
-
-  const obter = async () => {
-    await getUserList()
-      .then((r) => console.log(r.data));
-  };
-
-  useEffect(() => {
-    obter();
-  }, []);
 
   return (
     <View style={styles.container}>

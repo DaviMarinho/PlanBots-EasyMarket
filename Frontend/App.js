@@ -5,6 +5,7 @@ import HomePage from './src/scenes/homepage';
 import showStore from './src/scenes/showStore';
 import Login from './src/scenes/login';
 import Signup from './src/scenes/signup';
+import createStore from './src/scenes/createStore';
 
 const Stack = createNativeStackNavigator();
 
@@ -27,6 +28,10 @@ const App = () => {
         <Stack.Screen
           name="register"
           component={Signup}
+        />
+        <Stack.Screen
+          name="createStore"
+          component={createStore}
         />
       </Stack.Navigator>
     </NavigationContainer>
