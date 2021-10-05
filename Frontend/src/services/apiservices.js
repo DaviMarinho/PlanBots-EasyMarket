@@ -11,7 +11,6 @@ export const getUserList = async () => {
 }
 
 export const registerUser = async (email, phone, cpf, password) => {
-  console.log(email, phone, password, cpf);
   try {
     const r = await APIGeneral.post('/user/create', {
       email,
@@ -36,5 +35,23 @@ export const loginUser = async (email, password) => {
   } catch (err) {
     console.error(err);
     return err;
+  };
+};
+
+
+// Loja
+
+export const registerStore = async (storeName, storeDescription, userId) => {
+  try {
+    const r = await APIGeneral.post("/store/create", {
+      storeName,
+      storeDescription,
+      userId,
+    });
+    console.log(r);
+    return r;
+  } catch (err) {
+    console.error(err);
+    return err
   };
 };

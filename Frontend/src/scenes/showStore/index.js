@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { StyleSheet, View, Text, Button, TextInput } from 'react-native';
 import Navbar from '../../components/navbar';
 import Header from '../../components/header';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const showStore = ({ navigation }) => {
   return (
@@ -15,7 +16,7 @@ const showStore = ({ navigation }) => {
         <Text style={styles.subtext}>
           Você ainda não abriu nenhuma loja, clique no botão abaixo para começar a montar sua primeira loja.
         </Text>
-        <AntDesign name="pluscircleo" size={50} color={styles.header.color} />
+        <AntDesign name="pluscircleo" size={50} color={styles.header.color} onPress={() => navigation.navigate('createStore')} />
       </View>
       <Navbar />
     </View>
