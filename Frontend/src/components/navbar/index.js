@@ -11,7 +11,7 @@ const Navbar = () => {
     <View style={styles.container}>
       <Ionicons name="person" size={30} color="#FFF" />
       <Ionicons name="home" size={30} color="#FFF" onPress={() => navigation.navigate('home')} />
-      <Feather name="shopping-bag" size={30} color="#FFF" onPress={() => navigation.navigate('create_store')}/>
+      <Feather name="shopping-bag" size={30} color="#FFF" onPress={() => navigation.navigate('showStore')}/>
     </View>
   );
 };

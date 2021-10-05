@@ -15,7 +15,7 @@ const App = () => {
           component={HomePage}
         />
         <Stack.Screen
-          name="create_store"
+          name="showStore"
           component={showStore}
         />
       </Stack.Navigator>
