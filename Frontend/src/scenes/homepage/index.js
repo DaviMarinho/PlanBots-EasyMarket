@@ -1,7 +1,6 @@
 import React from 'react'
 import { StyleSheet, StatusBar, View, Text, Button, TextInput } from 'react-native';
 import Navbar from '../../components/navbar';
-import Top from '../../components/header';
 
 const HomePage = ({ navigation }) => {
   return (

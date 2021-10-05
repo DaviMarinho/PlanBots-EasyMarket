@@ -1,13 +1,13 @@
 import React from 'react'
 import { StyleSheet, View, Text, Button, TextInput } from 'react-native';
 import Navbar from '../../components/navbar';
-import Top from '../../components/header';
+import Header from '../../components/header';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const showStore = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <Top />
+      <Header />
       <View style={styles.content}>
         <Text style={styles.header}>
           Sua Loja
@@ -17,7 +17,7 @@ const showStore = ({ navigation }) => {
         </Text>
         <AntDesign name="pluscircleo" size={50} color={styles.header.color} />
       </View>
-      <Navbar navigation={navigation} />
+      <Navbar />
     </View>
   );
 }
