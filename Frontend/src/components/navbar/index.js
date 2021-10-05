@@ -14,7 +14,7 @@ const Navbar = () => {
       const value = await AsyncStorage.getItem('@storage_Key');
       setUserdata(JSON.parse(value));
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
   };
 
@@ -24,7 +24,13 @@ const Navbar = () => {
 
   return (
     <View style={styles.container}>
-      <Ionicons name="person" size={30} color="#FFF" onPress={() => navigation.navigate('login')} />
+      <Ionicons name="person" size={30} color="#FFF" onPress={() => {
+        if (userdata) {
+          //
+        } else {
+          navigation.navigate('login')
+        }
+      }} />
       <Ionicons name="home" size={30} color="#FFF" onPress={() => navigation.navigate('home')} />
       <Feather name="shopping-bag" size={30} color="#FFF" onPress={() => {
         console.log(userdata);
@@ -32,7 +38,7 @@ const Navbar = () => {
           if (userdata.storeID === '') {
             navigation.navigate('showStore');
           } else {
-            console.log('teste');
+            navigation.navigate('storePage');
           }
         } else {
           ToastAndroid.show("Para visualizar/cadastrar uma loja realize seu login", ToastAndroid.LONG);

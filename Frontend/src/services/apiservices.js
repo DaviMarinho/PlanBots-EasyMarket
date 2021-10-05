@@ -40,6 +40,15 @@ export const loginUser = async (email, password) => {
 
 
 // Loja
+export const getStoreData = async (storeID) => {
+  try {
+    const r = await APIGeneral.get(`/store/${storeID}`);
+    return r;
+  } catch (err) {
+    console.error(err);
+    return err;
+  }
+}
 
 export const registerStore = async (storeName, storeDescription, userId) => {
   try {

@@ -26,7 +26,7 @@ const Login = ({ navigation }) => {
         await AsyncStorage.setItem("@storage_Key", value);
         navigation.navigate('home');
       } catch (e) {
-        console.log(e);
+        console.error(e);
       }
     });
   }

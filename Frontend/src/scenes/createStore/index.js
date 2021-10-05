@@ -13,11 +13,20 @@ const createStore = ({ navigation }) => {
     try {
       const value = await AsyncStorage.getItem('@storage_Key');
       const userId = JSON.parse(value)._id;
+      console.log(userId);
       await registerStore(storeName, storeDescription, userId)
-        .then((r) => console.log(r.data));
+        .then(async (r) => {
+          console.log(r.data);
+          try {
+            const value = JSON.stringify(r.data);
+            await AsyncStorage.setItem("@storage_Key", value);
+          } catch (e) {
+            console.error(e);
+          }
+        });
       navigation.navigate('home');
     } catch (e) {
-      console.log(e);
+      console.error(e);
       return;
     }
   }

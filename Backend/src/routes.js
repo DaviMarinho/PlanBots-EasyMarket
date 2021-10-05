@@ -13,9 +13,11 @@ routes.delete('/product/delete/:id', ProductController.deleteProduct);
 
 // Store
 routes.get('/store', StoresController.getStoreList);
+routes.get('/store/:id', StoresController.getStoreByID);
 routes.post('/store/create', StoresController.createStore)
 routes.put('/store/edit/:id', StoresController.editStore);
 routes.delete('/store/delete/:id', StoresController.deleteStore)
+
 // Users
 routes.get('/user', UsersController.getUserList);
 routes.post('/user/create', UsersController.createUser)

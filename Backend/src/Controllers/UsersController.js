@@ -11,11 +11,7 @@ const createUser = async (req, res) => {
     email, phone, password, cpf,
   } = req.body;
 
-  console.log(email, phone, password, cpf)
-
   const invalidValues = validate.validateValues(email, phone, password, cpf);
-
-  console.log(invalidValues);
 
   if (invalidValues.length) {
     return res.status(400).json({ 'invalid values': invalidValues });

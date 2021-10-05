@@ -5,22 +5,29 @@ const getStoreList = async (req, res) => {
   return res.json(await Store.find());
 }
 
+const getStoreByID = async (req, res) => {
+  return res.json(await Store.findOne({ _id: req.params.id }))
+}
+
 const createStore = async (req, res) => {
   const { 
     storeName,
+    storeDescription,
     userId 
   } = req.body;
+
+  console.log(storeName, storeDescription, userId);
 
   if (!storeName) {
     return res.json({ 'err': 'invalid name' });
   }
 
   try {
-    const newStore = await Store.create({ storeName });
-    await User.findOneAndUpdate({ _id: userId }, {
+    const newStore = await Store.create({ storeName, storeDescription });
+    const user = await User.findOneAndUpdate({ _id: userId }, {
       storeID: newStore._id
     }, { new: true });
-    return res.json(newStore);
+    return res.json(user);
   } catch (err) {
     return res.json(err);
   }
@@ -56,5 +63,5 @@ const deleteStore = async (req, res) => {
 };
 
 module.exports = {
-  getStoreList, createStore, editStore, deleteStore,
+  getStoreList, createStore, editStore, deleteStore, getStoreByID,
 };
