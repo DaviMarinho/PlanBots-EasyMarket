@@ -11,7 +11,7 @@ const {
     PORT,
 } = process.env;
 
-const url = `mongodb://${DB_USER}:${DB_PASS}@${DB_HOST}/${DB_NAME}`;
+const url = `mongodb+srv://${DB_USER}:${DB_PASS}@${DB_HOST}/${DB_NAME}`
 
 mongoose
     .connect(url, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
