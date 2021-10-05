@@ -7,6 +7,7 @@ import Login from './src/scenes/login';
 import Signup from './src/scenes/signup';
 import createStore from './src/scenes/createStore';
 import storePage from './src/scenes/storePage';
+import editUser from './src/scenes/editUser';
 
 const Stack = createNativeStackNavigator();
 
@@ -37,6 +38,10 @@ const App = () => {
         <Stack.Screen
           name="storePage"
           component={storePage}
+        />
+        <Stack.Screen
+          name="editUser"
+          component={editUser}
         />
       </Stack.Navigator>
     </NavigationContainer>

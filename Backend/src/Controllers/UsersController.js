@@ -38,24 +38,25 @@ const createUser = async (req, res) => {
 const editUser = async (req, res) => {
   const { id } = req.params;
   const {
-    username, email, phone, pass, cpf,
+    email, cpf, phone, pass,
   } = req.body;
 
-  const invalidValues = validate.validateValues(username, email, phone, pass, cpf);
+  const invalidValues = validate.validateValues(email, phone, pass, cpf);
 
   if (invalidValues.length) {
     return res.status(400).json({ 'invalid values': invalidValues });
   }
 
-  var salt = bcrypt.genSaltSync(10);
-  var cryptedPassword = bcrypt.hashSync(pass, salt);
+  if (pass) {
+    var salt = bcrypt.genSaltSync(10);
+    var cryptedPassword = bcrypt.hashSync(pass, salt);
+  }
 
   try {
     const updatedUser = await User.findOneAndUpdate({ _id: id }, {
-      username,
       email,
       phone,
-      cryptedPassword,
+      pass: cryptedPassword,
       cpf,
     }, { new: true });
     return res.json(updatedUser);

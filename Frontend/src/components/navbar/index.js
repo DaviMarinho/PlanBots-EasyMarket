@@ -26,7 +26,7 @@ const Navbar = () => {
     <View style={styles.container}>
       <Ionicons name="person" size={30} color="#FFF" onPress={() => {
         if (userdata) {
-          //
+          navigation.navigate('editUser');
         } else {
           navigation.navigate('login')
         }
