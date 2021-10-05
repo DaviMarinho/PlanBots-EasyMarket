@@ -2,7 +2,7 @@ import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomePage from './src/scenes/homepage';
-import createStore from './src/scenes/create_store';
+import showStore from './src/scenes/showStore';
 
 const Stack = createNativeStackNavigator();
 
@@ -16,7 +16,7 @@ const App = () => {
         />
         <Stack.Screen
           name="create_store"
-          component={createStore}
+          component={showStore}
         />
       </Stack.Navigator>
     </NavigationContainer>
