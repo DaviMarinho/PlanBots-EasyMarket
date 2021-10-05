@@ -5,13 +5,17 @@ import HomePage from './src/scenes/homepage';
 import showStore from './src/scenes/showStore';
 import Login from './src/scenes/login';
 import Signup from './src/scenes/signup';
+import UserAccountScreen from './src/scenes/userAccountScreen';
 
 const Stack = createNativeStackNavigator();
 
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator
+        initialRouteName="home"
+        screenOptions={{ headerShown: false}}
+        >
         <Stack.Screen
           name="home"
           component={HomePage}
@@ -27,6 +31,10 @@ const App = () => {
         <Stack.Screen
           name="register"
           component={Signup}
+        />
+        <Stack.Screen
+          name="perfil"
+          component={UserAccountScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>
