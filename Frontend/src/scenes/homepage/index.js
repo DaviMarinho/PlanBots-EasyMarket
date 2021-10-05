@@ -6,7 +6,7 @@ import Top from '../../components/header';
 const HomePage = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <Button title="Ola" onPress={() => navigation.navigate('listStore')}>EasyMarket!</Button>
+      <Button title="Ola" onPress={() => navigation.navigate('showStore')}>EasyMarket!</Button>
       <StatusBar style="auto" />
       <View style={styles.teste}>
         <Text>Oi</Text>
