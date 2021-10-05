@@ -1,24 +1,34 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { StyleSheet, View, Text, TextInput, Button } from 'react-native';
 import Navbar from '../../components/navbar';
 import Header from '../../components/header';
-import { loginUser } from '../../services/apiservices';
+import { getUserList, registerUser } from '../../services/apiservices';
 
-const Login = ({ navigation }) => {
-  const [userdata, setUserdata] = useState('');
+const Signup = ({ navigation }) => {
   const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [cpf, setCPF] = useState('');
   const [password, setPassword] = useState('');
 
-  const login = async () => {
-    await loginUser(email, password)
-    .then((r) => setUserdata(r.data));
-  }
+  const registrar = async () => {
+    await registerUser(email, phone, cpf, password)
+      .then((r) => console.log(r));
+  };
+
+  const obter = async () => {
+    await getUserList()
+      .then((r) => console.log(r.data));
+  };
+
+  useEffect(() => {
+    obter();
+  }, []);
 
   return (
     <View style={styles.container}>
       <Header />
       <View style={styles.content}>
-        <Text style={styles.header}>Login</Text>
+        <Text style={styles.header}>Cadastro</Text>
         <View style={styles.inputs}>
           <Text style={styles.label}>Email:</Text>
           <TextInput
@@ -26,8 +36,27 @@ const Login = ({ navigation }) => {
             onChangeText={setEmail}
             value={email}
             placeholder="Email"
+            autoCompleteType="email"
           />
-          <Text style={styles.label}>Senha:</Text>
+          <Text>Telefone:</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={setPhone}
+            value={phone}
+            placeholder="(DDD) + Telefone"
+            keyboardType="numeric"
+            maxLength={11}
+          />
+          <Text>CPF:</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={setCPF}
+            value={cpf}
+            placeholder="CPF"
+            keyboardType="numeric"
+            maxLength={11}
+          />
+          <Text>Senha:</Text>
           <TextInput
             style={styles.input}
             onChangeText={setPassword}
@@ -37,14 +66,11 @@ const Login = ({ navigation }) => {
           />
         </View>
         <View style={styles.button}>
-          <Button onPress={() => login()} color='rgb(117,136,236)' title="Entrar" />
+          <Button color='rgb(117,136,236)' onPress={() => registrar()} title="Cadastrar" />
         </View>
         <View style={styles.additionalOptions}>
-          <Text style={styles.additionalOptionsText}>
-            Esqueci minha senha
-          </Text>
-          <Text style={styles.additionalOptionsText} onPress={() => navigation.navigate('register')}>
-            Criar conta
+          <Text style={styles.additionalOptionsText} onPress={() => navigation.navigate('login')}>
+            Realizar login
           </Text>
         </View>
       </View>
@@ -100,5 +126,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   }
 });
-
-export default Login;
+export default Signup;

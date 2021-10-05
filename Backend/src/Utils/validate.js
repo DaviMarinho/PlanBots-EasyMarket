@@ -1,7 +1,3 @@
-const validateUsername = (username) => {
-  return (username && username.length > 4);
-}
-
 const validateEmail = (email) => {
   const regexRule = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return (email && regexRule.test(email));
@@ -20,11 +16,8 @@ const validateCpf = (cpf) => {
   return (cpf && regexRule.test(cpf))
 }
 
-const validateValues = (username, email, phone, pass, cpf) => {
+const validateValues = (email, phone, pass, cpf) => {
   const invalidValues = [];
-  if (!validateUsername(username)) {
-    invalidValues.push('username');
-  } 
   if (!validateEmail(email)) {
     invalidValues.push('email');
   } 
