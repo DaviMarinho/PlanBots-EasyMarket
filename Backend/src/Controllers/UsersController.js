@@ -2,26 +2,33 @@ const User = require('../Models/UserSchema');
 const bcrypt = require('bcrypt');
 const validate = require('../Utils/validate');
 
+const getUserList = async (req, res) => {
+  return res.json(await User.find());
+};
+
 const createUser = async (req, res) => {
   const {
-    username, email, phone, pass, cpf,
+    email, phone, password, cpf,
   } = req.body;
 
-  const invalidValues = validate.validateValues(username, email, phone, pass, cpf);
+  console.log(email, phone, password, cpf)
+
+  const invalidValues = validate.validateValues(email, phone, password, cpf);
+
+  console.log(invalidValues);
 
   if (invalidValues.length) {
     return res.status(400).json({ 'invalid values': invalidValues });
   }
 
   var salt = bcrypt.genSaltSync(10);
-  var cryptedPassword = bcrypt.hashSync(pass, salt);
+  var cryptedPassword = bcrypt.hashSync(password, salt);
 
   try {
     const user = await User.create({
-      username,
       email,
       phone,
-      cryptedPassword,
+      pass: cryptedPassword,
       storeID: '',
       rating: 0,
       cpf,
@@ -71,6 +78,22 @@ const deleteUser = async (req, res) => {
   };
 };
 
+const loginUser = async (req, res) => {
+  const { email, password } = req.body;
+
+  const user = await User.findOne({ email });
+
+  if (user == null) {
+    return res.json({ message: "user not found" });
+  }
+
+  if (await bcrypt.compare(password, user.pass)) {
+    return res.json(user);
+  }
+
+  return res.json({ message: "wrong password" });
+}
+
 module.exports = {
-  createUser, editUser, deleteUser,
+  getUserList, createUser, editUser, deleteUser, loginUser,
 };

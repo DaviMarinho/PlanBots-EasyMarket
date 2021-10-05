@@ -17,10 +17,10 @@ routes.post('/store/create', StoresController.createStore)
 routes.put('/store/edit/:id', StoresController.editStore);
 routes.delete('/store/delete/:id', StoresController.deleteStore)
 // Users
+routes.get('/user', UsersController.getUserList);
 routes.post('/user/create', UsersController.createUser)
 routes.put('/user/edit/:id', UsersController.editUser);
 routes.delete('/user/delete/:id', UsersController.deleteUser)
-
-
+routes.post('/user/login', UsersController.loginUser);
 
 module.exports = routes;
