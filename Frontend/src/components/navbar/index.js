@@ -9,9 +9,9 @@ const Navbar = () => {
 
   return (
     <View style={styles.container}>
-      <Ionicons name="person" size={30} color="#FFF" />
+      <Ionicons name="person" size={30} color="#FFF" onPress={() => navigation.navigate('login')} />
       <Ionicons name="home" size={30} color="#FFF" onPress={() => navigation.navigate('home')} />
-      <Feather name="shopping-bag" size={30} color="#FFF" onPress={() => navigation.navigate('showStore')}/>
+      <Feather name="shopping-bag" size={30} color="#FFF" onPress={() => navigation.navigate('showStore')} />
     </View>
   );
 };

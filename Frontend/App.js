@@ -3,6 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomePage from './src/scenes/homepage';
 import showStore from './src/scenes/showStore';
+import Login from './src/scenes/login';
 
 const Stack = createNativeStackNavigator();
 
@@ -17,6 +18,10 @@ const App = () => {
         <Stack.Screen
           name="showStore"
           component={showStore}
+        />
+        <Stack.Screen
+          name="login"
+          component={Login}
         />
       </Stack.Navigator>
     </NavigationContainer>
