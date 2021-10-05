@@ -4,7 +4,6 @@ import Navbar from '../../components/navbar';
 import Top from '../../components/header';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
-
 const showStore = ({ navigation }) => {
   return (
     <View style={styles.container}>
