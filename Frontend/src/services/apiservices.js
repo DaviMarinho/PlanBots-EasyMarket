@@ -11,7 +11,6 @@ export const getUserList = async () => {
 }
 
 export const registerUser = async (email, phone, cpf, password) => {
-  console.log(email, phone, password, cpf);
   try {
     const r = await APIGeneral.post('/user/create', {
       email,
@@ -26,6 +25,22 @@ export const registerUser = async (email, phone, cpf, password) => {
   }
 };
 
+export const updateUser = async (userID, email, cpf, phone, pass) => {
+  console.log(userID, email, cpf, phone, pass);
+  try {
+    const r = await APIGeneral.put(`/user/edit/${userID}`, {
+      email,
+      cpf,
+      phone,
+      pass
+    });
+    return r;
+  } catch (err) {
+    console.error(err);
+    return err;
+  }
+}
+
 export const loginUser = async (email, password) => {
   try {
     const r = await APIGeneral.post('/user/login', {
@@ -36,5 +51,32 @@ export const loginUser = async (email, password) => {
   } catch (err) {
     console.error(err);
     return err;
+  };
+};
+
+
+// Loja
+export const getStoreData = async (storeID) => {
+  try {
+    const r = await APIGeneral.get(`/store/${storeID}`);
+    return r;
+  } catch (err) {
+    console.error(err);
+    return err;
+  }
+}
+
+export const registerStore = async (storeName, storeDescription, userId) => {
+  try {
+    const r = await APIGeneral.post("/store/create", {
+      storeName,
+      storeDescription,
+      userId,
+    });
+    console.log(r);
+    return r;
+  } catch (err) {
+    console.error(err);
+    return err
   };
 };

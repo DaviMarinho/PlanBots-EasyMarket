@@ -16,21 +16,4 @@ const validateCpf = (cpf) => {
   return (cpf && regexRule.test(cpf))
 }
 
-const validateValues = (email, phone, pass, cpf) => {
-  const invalidValues = [];
-  if (!validateEmail(email)) {
-    invalidValues.push('email');
-  } 
-  if (!validatePhone(phone)) {
-    invalidValues.push('phone');
-  } 
-  if (pass && !validatePassword(pass)) {
-    invalidValues.push('pass');
-  } 
-  if (!validateCpf(cpf)) {
-    invalidValues.push('cpf');
-  }
-  return invalidValues;
-}
-
-module.exports = { validateValues }
+module.exports = { validateEmail, validatePhone, validatePassword, validateCpf }

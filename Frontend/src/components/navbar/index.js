@@ -1,17 +1,50 @@
-import React from 'react'
-import { StyleSheet, View } from 'react-native';
+import React, { useEffect, useState } from 'react'
+import { StyleSheet, View, ToastAndroid } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Navbar = () => {
   const navigation = useNavigation();
+  const [userdata, setUserdata] = useState();
+
+  const getUserData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@storage_Key');
+      setUserdata(JSON.parse(value));
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  useEffect(() => {
+    getUserData();
+  }, []);
 
   return (
     <View style={styles.container}>
-      <Ionicons name="person" size={30} color="#FFF" onPress={() => navigation.navigate('login')} />
+      <Ionicons name="person" size={30} color="#FFF" onPress={() => {
+        if (userdata) {
+          navigation.navigate('editUser');
+        } else {
+          navigation.navigate('login')
+        }
+      }} />
       <Ionicons name="home" size={30} color="#FFF" onPress={() => navigation.navigate('home')} />
-      <Feather name="shopping-bag" size={30} color="#FFF" onPress={() => navigation.navigate('showStore')} />
+      <Feather name="shopping-bag" size={30} color="#FFF" onPress={() => {
+        console.log(userdata);
+        if (userdata) {
+          if (userdata.storeID === '') {
+            navigation.navigate('showStore');
+          } else {
+            navigation.navigate('storePage');
+          }
+        } else {
+          ToastAndroid.show("Para visualizar/cadastrar uma loja realize seu login", ToastAndroid.LONG);
+          navigation.navigate('login');
+        }
+      }} />
     </View>
   );
 };

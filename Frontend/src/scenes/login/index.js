@@ -1,17 +1,34 @@
-import React, { useState } from 'react'
-import { StyleSheet, View, Text, TextInput, Button } from 'react-native';
+import React, { useEffect, useState } from 'react'
+import { StyleSheet, View, Text, TextInput, Button, ToastAndroid } from 'react-native';
 import Navbar from '../../components/navbar';
 import Header from '../../components/header';
 import { loginUser } from '../../services/apiservices';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login = ({ navigation }) => {
-  const [userdata, setUserdata] = useState('');
+  const [data, setData] = useState();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const login = async () => {
     await loginUser(email, password)
-    .then((r) => setUserdata(r.data));
+    .then(async (r) => {
+      if (r.data.message === 'user not found') {
+        ToastAndroid.show("Email incorreto", ToastAndroid.SHORT);
+        return;
+      } else if (r.data.message === 'wrong password') {
+        ToastAndroid.show("Senha incorreta", ToastAndroid.SHORT);
+        return;
+      }
+
+      try {
+        const value = JSON.stringify(r.data);
+        await AsyncStorage.setItem("@storage_Key", value);
+        navigation.navigate('home');
+      } catch (e) {
+        console.error(e);
+      }
+    });
   }
 
   return (
