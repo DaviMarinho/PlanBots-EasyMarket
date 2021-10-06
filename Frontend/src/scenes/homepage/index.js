@@ -1,12 +1,35 @@
-import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import React, { useEffect, useState } from "react";
+import MapView from 'react-native-maps';
+import { StyleSheet, Text, View, Dimensions } from 'react-native';
+import * as Location from 'expo-location';
 
-const HomePage = ({ navigation }) => {
-  return (
-    <View style={styles.container}>
-    </View>
-  );
-};
+const HomePage = () => {
+const [region, setRegion] = useState(null);
+useEffect(() => {
+  Location.installWebGeolocationPolyfill()
+  navigator.geolocation.getCurrentPosition(
+    // success
+    async ({ coords: { latitude, longitude } }) => {
+      setRegion({
+        latitude,
+        longitude,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+      });
+    },
+    // error
+    () => {},{
+      timeout: 2000,
+      enableHighAccuracy: true,
+      maximumAge: 1000,
+    });
+  }, []);
+return (
+      <View style={styles.container}>
+        <MapView style={styles.mapStyle} initialRegion={region}/>
+      </View>
+    );
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -15,9 +38,10 @@ const styles = StyleSheet.create({
   loading: {
     justifyContent: 'center',
   },
-  teste: {
-    backgroundColor: 'blue'
-  }
+  mapStyle: {
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
+  },
 });
 
 export default HomePage;
