@@ -8,7 +8,7 @@ const getUserList = async (req, res) => {
 
 const createUser = async (req, res) => {
   const {
-    email, phone, password, cpf,
+    email, phone, password, cpf, username,
   } = req.body;
 
   const invalidValues = validate.validateValues(email, phone, password, cpf);
@@ -22,6 +22,7 @@ const createUser = async (req, res) => {
 
   try {
     const user = await User.create({
+      username,
       email,
       phone,
       pass: cryptedPassword,
