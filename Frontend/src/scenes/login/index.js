@@ -46,6 +46,9 @@ const Login = ({ navigation }) => {
           <Text style={styles.additionalOptionsText} onPress={() => navigation.navigate('register')}>
             Criar conta
           </Text>
+          <Text style={styles.additionalOptionsText} onPress={() => navigation.navigate('perfil')}>
+            perfil
+          </Text>
         </View>
       </View>
       <Navbar />
