@@ -1,7 +1,5 @@
-import React, { useState } from 'react'
-import { StyleSheet, View, Text, TextInput, Button, ToastAndroid } from 'react-native';
-import Navbar from '../../components/navbar';
-import Header from '../../components/header';
+import React, { useState } from 'react';
+import { StyleSheet, View, Text, TextInput, Button } from 'react-native';
 import { registerStore } from '../../services/apiservices';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -13,10 +11,8 @@ const createStore = ({ navigation }) => {
     try {
       const value = await AsyncStorage.getItem('@storage_Key');
       const userId = JSON.parse(value)._id;
-      console.log(userId);
       await registerStore(storeName, storeDescription, userId)
         .then(async (r) => {
-          console.log(r.data);
           try {
             const value = JSON.stringify(r.data);
             await AsyncStorage.setItem("@storage_Key", value);
@@ -33,7 +29,6 @@ const createStore = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Header />
       <View style={styles.content}>
         <Text style={styles.header}>Criar loja</Text>
         <View style={styles.inputs}>
@@ -57,7 +52,6 @@ const createStore = ({ navigation }) => {
           <Button onPress={() => cadastrarLoja()} color='rgb(117,136,236)' title="Criar loja" />
         </View>
       </View>
-      <Navbar />
     </View>
   )
 }

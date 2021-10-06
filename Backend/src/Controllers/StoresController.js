@@ -6,6 +6,7 @@ const getStoreList = async (req, res) => {
 }
 
 const getStoreByID = async (req, res) => {
+  console.log(req.params._id);
   return res.json(await Store.findOne({ _id: req.params.id }))
 }
 
@@ -15,8 +16,6 @@ const createStore = async (req, res) => {
     storeDescription,
     userId 
   } = req.body;
-
-  console.log(storeName, storeDescription, userId);
 
   if (!storeName) {
     return res.json({ 'err': 'invalid name' });
@@ -35,7 +34,7 @@ const createStore = async (req, res) => {
 
 const editStore = async (req, res) => {
   const { id } = req.params;
-  const { storeName } = req.body;
+  const { storeName, storeDescription } = req.body;
 
   if (!storeName) {
     return res.json({ 'err': 'invalid name' });
@@ -44,6 +43,7 @@ const editStore = async (req, res) => {
   try {
     const updatedStore = await Store.findOneAndUpdate({ _id: id }, {
       storeName,
+      storeDescription
     }, { new: true });
     return res.json(updatedStore);
   } catch (err) {

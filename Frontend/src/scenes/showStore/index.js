@@ -1,14 +1,10 @@
-import React, { useEffect } from 'react'
-import { StyleSheet, View, Text, Button, TextInput } from 'react-native';
-import Navbar from '../../components/navbar';
-import Header from '../../components/header';
+import React from 'react';
+import { StyleSheet, View, Text } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const showStore = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <Header />
       <View style={styles.content}>
         <Text style={styles.header}>
           Sua Loja
@@ -18,7 +14,6 @@ const showStore = ({ navigation }) => {
         </Text>
         <AntDesign name="pluscircleo" size={50} color={styles.header.color} onPress={() => navigation.navigate('createStore')} />
       </View>
-      <Navbar />
     </View>
   );
 }

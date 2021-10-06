@@ -1,7 +1,5 @@
-import React, { useState } from 'react'
-import { StyleSheet, View, Text, TextInput, Button, ToastAndroid } from 'react-native';
-import Navbar from '../../components/navbar';
-import Header from '../../components/header';
+import React, { useState } from 'react';
+import { StyleSheet, View, Text, TextInput, Button, ToastAndroid, ActivityIndicator } from 'react-native';
 import { registerUser } from '../../services/apiservices';
 
 const Signup = ({ navigation }) => {
@@ -19,7 +17,7 @@ const Signup = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Header />
+      <ActivityIndicator size="large" color="red" />
       <View style={styles.content}>
         <Text style={styles.header}>Cadastro</Text>
         <View style={styles.inputs}>
@@ -31,16 +29,16 @@ const Signup = ({ navigation }) => {
             placeholder="Email"
             autoCompleteType="email"
           />
-          <Text>Telefone:</Text>
+          <Text style={styles.label}>Telefone:</Text>
           <TextInput
             style={styles.input}
             onChangeText={setPhone}
             value={phone}
-            placeholder="(DDD) + Telefone"
+            placeholder="(DDD) Telefone"
             keyboardType="numeric"
             maxLength={11}
           />
-          <Text>CPF:</Text>
+          <Text style={styles.label}>CPF:</Text>
           <TextInput
             style={styles.input}
             onChangeText={setCPF}
@@ -49,7 +47,7 @@ const Signup = ({ navigation }) => {
             keyboardType="numeric"
             maxLength={11}
           />
-          <Text>Senha:</Text>
+          <Text style={styles.label}>Senha:</Text>
           <TextInput
             style={styles.input}
             onChangeText={setPassword}
@@ -67,7 +65,6 @@ const Signup = ({ navigation }) => {
           </Text>
         </View>
       </View>
-      <Navbar />
     </View>
   )
 }
@@ -119,4 +116,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   }
 });
+
 export default Signup;
