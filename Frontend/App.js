@@ -11,7 +11,7 @@ import storePage from './src/scenes/storePage';
 import editUser from './src/scenes/editUser';
 import Navbar from './src/components/navbar';
 import Header from './src/components/header';
-import editStore from './src/scenes/editStore';
+// import editStore from './src/scenes/editStore';
 
 const Stack = createNativeStackNavigator();
 
@@ -19,7 +19,10 @@ const App = () => {
   return (
     <NavigationContainer>
       <Header />
-      <Stack.Navigator>
+      <Stack.Navigator
+        initialRouteName="home"
+        screenOptions={{ headerShown: false}}
+      >
         <Stack.Screen
           name="home"
           component={HomePage}
@@ -59,11 +62,11 @@ const App = () => {
           component={editUser}
           options={{ headerShown: false }}
         />
-        <Stack.Screen
+        {/* <Stack.Screen
           name="editStore"
           component={editStore}
           options={{ headerShown: false }}
-        />
+        /> */}
       </Stack.Navigator>
       <Navbar />
     </NavigationContainer>

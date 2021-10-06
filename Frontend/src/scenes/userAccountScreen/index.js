@@ -9,7 +9,6 @@ import Navbar from '../../components/navbar';
 import Header from '../../components/header';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {widthPercentageToDP, heightPercentageToDP} from 'react-native-responsive-screen';
 
 const UserAccountScreen = (props) => {
 
@@ -49,14 +48,13 @@ const UserAccountScreen = (props) => {
 
   return (
     <View style={style.container} keyboardShouldPersistTaps='handled'>
-      <Header />
       <View style={style.teste}>
         {renderPhoto()}
         <Ionicons name="create-outline" size={30} color="#4A86E8" style={{ position: "absolute", right: 0, top: 25 }} />
       </View>
       <Text style={style.textName}>{userName}</Text>
 
-      <View style={{ alignSelf: 'center' }}>
+      <View style={{ alignSelf: 'center', width: '100%' }}>
 
         <View style={style.line} />
 
@@ -80,7 +78,6 @@ const UserAccountScreen = (props) => {
         </View>
 
       </View>
-      <Navbar />
     </View>
   );
 };
@@ -115,8 +112,9 @@ const style = StyleSheet.create({
   line: {
     backgroundColor: 'black',
     height: 1,
-    width: widthPercentageToDP('90%'),
-    margin: 10
+    width: '90%',
+    margin: 10,
+    alignSelf: 'center'
   },
   dataInput: {
     alignSelf: 'flex-start',
