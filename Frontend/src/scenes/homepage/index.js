@@ -1,12 +1,9 @@
 import React from 'react';
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 const HomePage = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <View style={styles.loading}>
-        <ActivityIndicator size="large" color="red" />
-      </View>
     </View>
   );
 };
