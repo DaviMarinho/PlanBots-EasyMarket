@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { StyleSheet, View, Text, TextInput, Button, ToastAndroid } from 'react-native';
 import Navbar from '../../components/navbar';
 import Header from '../../components/header';

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, StatusBar, View, Text, Button, TextInput, ToastAndroid } from 'react-native';
+import { StyleSheet, View, Text, Button, TextInput, ToastAndroid } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Navbar from '../../components/navbar';
 import Header from '../../components/header';
@@ -18,10 +18,10 @@ const editUser = () => {
     try {
       const value = await AsyncStorage.getItem('@storage_Key');
       const data = JSON.parse(value);
-      setUserID(data._id);
-      setEmail(data.email);
-      setPhone(data.phone);
-      setCPF(data.cpf);
+      setUserID(data?._id);
+      setEmail(data?.email);
+      setPhone(data?.phone);
+      setCPF(data?.cpf);
     } catch (e) {
       console.error(e);
     }
@@ -63,40 +63,42 @@ const editUser = () => {
         <View style={styles.iconView}>
           <Ionicons name="person" style={styles.icon} size={80} />
         </View>
-        <Text style={styles.label}>Email:</Text>
-        <TextInput
-          style={styles.input}
-          onChangeText={setEmail}
-          value={email}
-          placeholder="Email"
-        />
-        <Text style={styles.label}>CPF:</Text>
-        <TextInput
-          style={styles.input}
-          onChangeText={setCPF}
-          value={cpf}
-          editable={false}
-          placeholder="CPF"
-          maxLength={11}
-          keyboardType="numeric"
-        />
-        <Text style={styles.label}>Telefone:</Text>
-        <TextInput
-          style={styles.input}
-          onChangeText={setPhone}
-          value={phone}
-          placeholder="(DDD) + Telefone"
-          keyboardType="numeric"
-          maxLength={11}
-        />
-        <Text style={styles.label}>Senha:</Text>
-        <TextInput
-          style={styles.input}
-          onChangeText={setPassword}
-          value={password}
-          placeholder="Senha"
-          secureTextEntry={true}
-        />
+        <View style={styles.inputs}>
+          <Text style={styles.label}>Email:</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={setEmail}
+            value={email}
+            placeholder="Email"
+          />
+          <Text style={styles.label}>CPF:</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={setCPF}
+            value={cpf}
+            editable={false}
+            placeholder="CPF"
+            maxLength={11}
+            keyboardType="numeric"
+          />
+          <Text style={styles.label}>Telefone:</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={setPhone}
+            value={phone}
+            placeholder="(DDD) + Telefone"
+            keyboardType="numeric"
+            maxLength={11}
+          />
+          <Text style={styles.label}>Senha:</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={setPassword}
+            value={password}
+            placeholder="Senha"
+            secureTextEntry={true}
+          />
+        </View>
         <View style={styles.button}>
           <Button title="Editar" onPress={() => updateUserData()} />
         </View>

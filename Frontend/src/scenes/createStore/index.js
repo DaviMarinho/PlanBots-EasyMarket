@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { StyleSheet, View, Text, TextInput, Button, ToastAndroid } from 'react-native';
+import { StyleSheet, View, Text, TextInput, Button } from 'react-native';
 import Navbar from '../../components/navbar';
 import Header from '../../components/header';
 import { registerStore } from '../../services/apiservices';
@@ -13,10 +13,8 @@ const createStore = ({ navigation }) => {
     try {
       const value = await AsyncStorage.getItem('@storage_Key');
       const userId = JSON.parse(value)._id;
-      console.log(userId);
       await registerStore(storeName, storeDescription, userId)
         .then(async (r) => {
-          console.log(r.data);
           try {
             const value = JSON.stringify(r.data);
             await AsyncStorage.setItem("@storage_Key", value);
