@@ -8,6 +8,8 @@ import {
 import Navbar from '../../components/navbar';
 import Header from '../../components/header';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {widthPercentageToDP, heightPercentageToDP} from 'react-native-responsive-screen';
 
 const UserAccountScreen = (props) => {
 
@@ -15,35 +17,68 @@ const UserAccountScreen = (props) => {
   const [userPhone, setUserPhone] = useState('(61) 940028922');
   const [userEmail, setUserEmail] = useState('teste@gmail.com');
   const [userCPF, setUserCPF] = useState('123.456.890.61');
+  const [userImage, setUserImage] = useState();
+
+  const getUserdata = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@storage_Key');
+      setUserName(JSON.parse(value).username);
+      setUserPhone(JSON.parse(value).phone);
+      setUserEmail(JSON.parse(value).email);
+      setUserCPF(JSON.parse(value).cpf);
+      // setUserImage(JSON.parse(value).username);
+
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  useEffect(() => {
+    getUserdata();
+  }, []);
+
+  const renderPhoto = () => {
+    if(userImage == null) {
+      return <Ionicons name="person-circle-outline" size={120} color="#4A86E8" />
+    }
+
+    else {
+      return <Text>teste</Text>
+    }
+  }
 
   return (
     <View style={style.container} keyboardShouldPersistTaps='handled'>
       <Header />
       <View style={style.teste}>
-        <Ionicons name="person-circle-outline" size={120} color="#4A86E8" />
-        <Ionicons name="create-outline" size={30} color="#4A86E8" style={{ position: "absolute", right: 100, top: 25 }} />
+        {renderPhoto()}
+        <Ionicons name="create-outline" size={30} color="#4A86E8" style={{ position: "absolute", right: 0, top: 25 }} />
       </View>
       <Text style={style.textName}>{userName}</Text>
 
-      <View style={style.line} />
+      <View style={{ alignSelf: 'center' }}>
 
-      <View style={style.dataInput}>
-        <Text style={style.label}>Contato</Text>
-        <Text style={style.textformat}>{userPhone}</Text>
-      </View>
+        <View style={style.line} />
 
-      <View style={style.line} />
+        <View style={style.dataInput}>
+          <Text style={style.label}>Contato</Text>
+          <Text style={style.textformat}>{userPhone}</Text>
+        </View>
 
-      <View style={style.dataInput}>
-        <Text style={style.label}>Email</Text>
-        <Text style={style.textformat}>{userEmail}</Text>
-      </View>
+        <View style={style.line} />
 
-      <View style={style.line} />
+        <View style={style.dataInput}>
+          <Text style={style.label}>Email</Text>
+          <Text style={style.textformat}>{userEmail}</Text>
+        </View>
 
-      <View style={style.dataInput}>
-        <Text style={style.label}>CPF</Text>
-        <Text style={style.textformat}>{userCPF}</Text>
+        <View style={style.line} />
+
+        <View style={style.dataInput}>
+          <Text style={style.label}>CPF</Text>
+          <Text style={style.textformat}>{userCPF}</Text>
+        </View>
+
       </View>
       <Navbar />
     </View>
@@ -57,6 +92,8 @@ const style = StyleSheet.create({
   teste: {
     padding: 20,
     alignItems: 'center',
+    width: 150,
+    alignSelf: "center",
   },
   input: {
     height: 40,
@@ -72,14 +109,13 @@ const style = StyleSheet.create({
   textName: {
     fontSize: 30,
     textAlign: 'center',
-    fontFamily: 'Inter',
     color: '#4A86E8',
     fontWeight: 'bold'
   },
   line: {
     backgroundColor: 'black',
     height: 1,
-    width: 380,
+    width: widthPercentageToDP('90%'),
     margin: 10
   },
   dataInput: {

@@ -7,6 +7,10 @@ const validatePhone = (phone) => {
   return (phone && phone.length === 11);
 }
 
+const validateUser = (username) => {
+  return (username != null)
+}
+
 const validatePassword = (pass) => {
   return (pass && pass.length >= 7)
 }
@@ -16,7 +20,7 @@ const validateCpf = (cpf) => {
   return (cpf && regexRule.test(cpf))
 }
 
-const validateValues = (email, phone, pass, cpf) => {
+const validateValues = (email, phone, pass, cpf, username) => {
   const invalidValues = [];
   if (!validateEmail(email)) {
     invalidValues.push('email');
@@ -29,6 +33,9 @@ const validateValues = (email, phone, pass, cpf) => {
   } 
   if (!validateCpf(cpf)) {
     invalidValues.push('cpf');
+  }
+  if (!validateUser(username)) {
+    invalidValues.push('username');
   }
   return invalidValues;
 }

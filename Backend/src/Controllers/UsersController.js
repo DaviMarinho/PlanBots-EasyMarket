@@ -11,7 +11,7 @@ const createUser = async (req, res) => {
     email, phone, password, cpf, username,
   } = req.body;
 
-  const invalidValues = validate.validateValues(email, phone, password, cpf);
+  const invalidValues = validate.validateValues(email, phone, password, cpf, username);
 
   if (invalidValues.length) {
     return res.status(400).json({ 'invalid values': invalidValues });
@@ -78,6 +78,7 @@ const deleteUser = async (req, res) => {
 
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
+  console.log("passei");
 
   const user = await User.findOne({ email });
 

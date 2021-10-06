@@ -38,6 +38,8 @@ const App = () => {
         <Stack.Screen
           name="perfil"
           component={UserAccountScreen}
+        />
+        <Stack.Screen
           name="createStore"
           component={createStore}
         />
