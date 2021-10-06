@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { StyleSheet, View, ToastAndroid } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, View, ToastAndroid, TouchableOpacity } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 import { useNavigation } from '@react-navigation/native';
@@ -12,39 +12,67 @@ const Navbar = () => {
   const getUserData = async () => {
     try {
       const value = await AsyncStorage.getItem('@storage_Key');
-      setUserdata(JSON.parse(value));
+      setUserdata(value ? JSON.parse(value) : null);
     } catch (e) {
       console.error(e);
     }
   };
 
-  useEffect(() => {
-    getUserData();
-  }, []);
-
   return (
     <View style={styles.container}>
-      <Ionicons name="person" size={30} color="#FFF" onPress={() => {
-        if (userdata) {
-          navigation.navigate('editUser');
-        } else {
-          navigation.navigate('login')
-        }
-      }} />
-      <Ionicons name="home" size={30} color="#FFF" onPress={() => navigation.navigate('home')} />
-      <Feather name="shopping-bag" size={30} color="#FFF" onPress={() => {
-        console.log(userdata);
-        if (userdata) {
-          if (userdata.storeID === '') {
-            navigation.navigate('showStore');
+      <TouchableOpacity
+        style={styles.icon}
+        onPress={() => {
+          userdata ? null : getUserData();
+          console.log(userdata);
+          if (userdata) {
+            navigation.navigate('editUser');
           } else {
-            navigation.navigate('storePage');
+            navigation.navigate('login')
           }
-        } else {
-          ToastAndroid.show("Para visualizar/cadastrar uma loja realize seu login", ToastAndroid.LONG);
-          navigation.navigate('login');
-        }
-      }} />
+        }}
+      >
+        <Ionicons
+          name="person"
+          size={30}
+          color="#FFF"
+        />
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.icon}
+        onPress={() => navigation.navigate('home')}
+      >
+        <Ionicons
+          name="home"
+          size={30}
+          color="#FFF"
+        />
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.icon}
+        onPress={() => {
+          userdata ? null : getUserData();
+          console.log(userdata);
+          if (userdata) {
+            if (userdata.storeID === '') {
+              navigation.navigate('showStore');
+            } else {
+              navigation.navigate('storePage');
+            }
+          } else {
+            ToastAndroid.show("Para visualizar/cadastrar uma loja realize seu login", ToastAndroid.LONG);
+            navigation.navigate('login');
+          }
+        }}
+      >
+        <Feather
+          name="shopping-bag"
+          size={30}
+          color="#FFF"
+        />
+      </TouchableOpacity>
     </View>
   );
 };
@@ -52,14 +80,19 @@ const Navbar = () => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    justifyContent: 'space-evenly',
+    justifyContent: 'space-around',
     backgroundColor: 'rgb(117,136,236)',
     bottom: 0,
     width: '100%',
     position: 'absolute',
-    paddingTop: 16,
-    paddingBottom: 16,
+    alignItems: 'center',
   },
+  icon: {
+    alignItems: 'center',
+    paddingTop: 14,
+    paddingBottom: 14,
+    width: `${100/3}%`,
+  }
 });
 
 
