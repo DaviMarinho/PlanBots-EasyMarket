@@ -1,12 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react';
 import { StyleSheet, View, Text, TextInput, Button, ToastAndroid } from 'react-native';
-import Navbar from '../../components/navbar';
-import Header from '../../components/header';
 import { loginUser } from '../../services/apiservices';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login = ({ navigation }) => {
-  const [data, setData] = useState();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -33,7 +30,6 @@ const Login = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Header />
       <View style={styles.content}>
         <Text style={styles.header}>Login</Text>
         <View style={styles.inputs}>
@@ -65,7 +61,6 @@ const Login = ({ navigation }) => {
           </Text>
         </View>
       </View>
-      <Navbar />
     </View>
   )
 }
