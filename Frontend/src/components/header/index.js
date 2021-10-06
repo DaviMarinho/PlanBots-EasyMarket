@@ -1,22 +1,20 @@
+import React from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react'
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const Header = () => {
   const navigation = useNavigation();
-  const [showLoading, setShowLoading] = useState(true);
 
   const clear = async () => {
-    setShowLoading(true);
     try {
       await AsyncStorage.clear();
-      setShowLoading(false);
       navigation.navigate('home');
     } catch (err) {
       console.error(err);
     };
+
   };
 
   return (
@@ -35,11 +33,12 @@ const Header = () => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'rgb(117,136,236)',
-    height: 70,
     flexDirection: 'row',
     alignItems: 'center',
     paddingLeft: 12,
-    paddingRight: 12
+    paddingRight: 12,
+    paddingTop: 60,
+    paddingBottom: 15,
   },
   logoA: {
     fontWeight: 'bold',

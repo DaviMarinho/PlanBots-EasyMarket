@@ -1,8 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Navbar from '../../components/navbar';
-import Header from '../../components/header';
 import { getStoreData } from '../../services/apiservices';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
@@ -14,15 +12,14 @@ const storePage = () => {
     try {
       const value = await AsyncStorage.getItem('@storage_Key');
       const userStoreID = JSON.parse(value).storeID;
-      getStoreData(userStoreID)
+      await getStoreData(userStoreID)
         .then((r) => {
           setStoreName(r.data.storeName);
           setStoreDescription(r.data.storeDescription);
         });
     } catch (e) {
       console.error(e);
-    }
-    getStoreData()
+    };
   }
 
   useEffect(() => {
@@ -31,7 +28,6 @@ const storePage = () => {
 
   return (
     <View style={styles.container}>
-      <Header />
       <View style={styles.content}>
         <Text style={styles.label}>Nome:</Text>
         <Text style={styles.data}>{storeName}</Text>
@@ -45,7 +41,6 @@ const storePage = () => {
       <View style={styles.centralize}>
         <AntDesign name="pluscircleo" size={50} style={{ color: 'rgb(117,136,236)'}} onPress={() => navigation.navigate('createStore')} />
       </View>
-      <Navbar />
     </View>
   );
 };

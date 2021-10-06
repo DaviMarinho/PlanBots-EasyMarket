@@ -1,8 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, Button, TextInput, ToastAndroid } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Navbar from '../../components/navbar';
-import Header from '../../components/header';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { updateUser } from '../../services/apiservices';
 import { validateEmail, validatePhone, validatePassword } from '../../utils/validate';
@@ -58,7 +56,6 @@ const editUser = () => {
 
   return (
     <View style={styles.container}>
-      <Header />
       <View style={styles.content}>
         <View style={styles.iconView}>
           <Ionicons name="person" style={styles.icon} size={80} />
@@ -103,7 +100,6 @@ const editUser = () => {
           <Button title="Editar" onPress={() => updateUserData()} />
         </View>
       </View>
-      <Navbar />
     </View>
   );
 };

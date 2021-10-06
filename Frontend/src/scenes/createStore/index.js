@@ -1,7 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import { StyleSheet, View, Text, TextInput, Button } from 'react-native';
-import Navbar from '../../components/navbar';
-import Header from '../../components/header';
 import { registerStore } from '../../services/apiservices';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -31,7 +29,6 @@ const createStore = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Header />
       <View style={styles.content}>
         <Text style={styles.header}>Criar loja</Text>
         <View style={styles.inputs}>
@@ -55,7 +52,6 @@ const createStore = ({ navigation }) => {
           <Button onPress={() => cadastrarLoja()} color='rgb(117,136,236)' title="Criar loja" />
         </View>
       </View>
-      <Navbar />
     </View>
   )
 }
