@@ -12,7 +12,7 @@ const Signup = ({ navigation }) => {
 
   const registrar = async () => {
     await registerUser(email, phone, cpf, password)
-      .then((r) => console.log(r));
+      .then((r) => r);
     ToastAndroid.show('Cadastro realizado com sucesso.', ToastAndroid.SHORT);
     navigation.navigate('home');
   };
