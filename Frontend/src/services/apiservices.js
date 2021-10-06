@@ -25,6 +25,22 @@ export const registerUser = async (email, phone, cpf, password) => {
   }
 };
 
+export const updateUser = async (userID, email, cpf, phone, pass) => {
+  console.log(userID, email, cpf, phone, pass);
+  try {
+    const r = await APIGeneral.put(`/user/edit/${userID}`, {
+      email,
+      cpf,
+      phone,
+      pass
+    });
+    return r;
+  } catch (err) {
+    console.error(err);
+    return err;
+  }
+}
+
 export const loginUser = async (email, password) => {
   try {
     const r = await APIGeneral.post('/user/login', {
