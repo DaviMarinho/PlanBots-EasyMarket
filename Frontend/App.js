@@ -10,13 +10,14 @@ import storePage from './src/scenes/storePage';
 import editUser from './src/scenes/editUser';
 import Navbar from './src/components/navbar';
 import Header from './src/components/header';
+import editStore from './src/scenes/editStore';
 
 const Stack = createNativeStackNavigator();
 
 const App = () => {
   return (
     <NavigationContainer>
-      <Header/>
+      <Header />
       <Stack.Navigator>
         <Stack.Screen
           name="home"
@@ -51,6 +52,11 @@ const App = () => {
         <Stack.Screen
           name="editUser"
           component={editUser}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="editStore"
+          component={editStore}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
