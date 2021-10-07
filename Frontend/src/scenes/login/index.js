@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, TextInput, Button, ToastAndroid, ActivityIndicator } from 'react-native';
-import { loginUser } from '../../services/apiservices';
+import { loginUser, getStoreData } from '../../services/apiservices';
 import { useData } from '../../context/';
 
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { userData, setUserData } = useData();
+  const { userData, setUserData, setStoreData, storeData } = useData();
 
   const login = async () => {
     await loginUser(email, password)
       .then((r) => {
-        console.log(r.data);
         if (r.data.message === 'user not found') {
           ToastAndroid.show("Email incorreto", ToastAndroid.SHORT);
           return;
@@ -20,7 +19,17 @@ const Login = ({ navigation }) => {
           return;
         }
         setUserData(r.data);
+        if (r.data.storeID !== '') {
+          getStoreDataFromAPI(r.data.storeID);
+        }
         navigation.navigate('home');
+      });
+  };
+
+  const getStoreDataFromAPI = (storeID) => {
+    getStoreData(storeID)
+      .then((r) => {
+        setStoreData(r.data);
       });
   };
 

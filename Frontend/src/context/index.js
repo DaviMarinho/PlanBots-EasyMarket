@@ -5,6 +5,7 @@ const DataContext = createContext({});
 
 const DataProvider = ({ children }) => {
   const [userData, setUserData] = useState();
+  const [storeData, setStoreData] = useState();
 
   // const onDataDidChange = (data) => {
   //   if (data) {
@@ -25,6 +26,7 @@ const DataProvider = ({ children }) => {
         console.error(err);
       }
     } else {
+      setStoreData();
       AsyncStorage.clear();
     }
   }, [userData])
@@ -35,6 +37,8 @@ const DataProvider = ({ children }) => {
         userData,
         setUserData,
         userClean,
+        storeData,
+        setStoreData
       }}>
       {children} 
     </DataContext.Provider>

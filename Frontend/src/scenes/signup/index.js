@@ -17,7 +17,6 @@ const Signup = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <ActivityIndicator size="large" color="red" />
       <View style={styles.content}>
         <Text style={styles.header}>Cadastro</Text>
         <View style={styles.inputs}>

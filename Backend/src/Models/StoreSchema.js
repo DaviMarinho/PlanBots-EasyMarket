@@ -14,7 +14,10 @@ const StoreSchema = new mongoose.Schema({
     productsIds: {
       type: String,
     }
-  }]
+  }],
+  open: {
+    type: Boolean,
+  },
 });
 
 module.exports = mongoose.model('Store', StoreSchema);

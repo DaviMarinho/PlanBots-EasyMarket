@@ -1,40 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, ActivityIndicator } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getStoreData } from '../../services/apiservices';
+import React from 'react';
+import { StyleSheet, View, Text } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { useData } from '../../context/';
+import { deleteStore } from '../../services/apiservices';
 
 const storePage = ({ navigation }) => {
-  const [userdata, setUserdata] = useState();
-  const [storeName, setStoreName] = useState();
-  const [storeDescription, setStoreDescription] = useState();
+  const { userData, storeData, setUserData, setStoreData } = useData();
 
-  const getStoreDataFromAPI = async () => {
-    await getStoreData(userdata.storeID)
-      .then((r) => {
-        setStoreName(r.data.storeName);
-        setStoreDescription(r.data.storeDescription);
-      });
-  };
-
-  const getUserData = async () => {
-    try {
-      const value = await AsyncStorage.getItem('@user_Data');
-      setUserdata(JSON.parse(value));
-    } catch (e) {
-      console.error(e);
-    };
+  const deleteStoreFromAPI = () => {
+    deleteStore(storeData._id)
+    .then((r) => {
+      const deletedStoreUser = userData;
+      deletedStoreUser.storeID = '';
+      setUserData(deletedStoreUser);
+      setStoreData();
+      navigation.navigate('home');
+    })
   }
-
-  useEffect(() => {
-    if (userdata) {
-      getStoreDataFromAPI();
-    }
-  }, [userdata]);
-
-  useEffect(() => {
-    getUserData();
-  }, []);
 
   return (
     <View style={styles.container}>
@@ -42,28 +25,37 @@ const storePage = ({ navigation }) => {
         <View style={styles.storeHeader}>
           <View>
             <Text style={styles.label}>Nome:</Text>
-            <Text style={styles.data}>{storeName}</Text>
+            <Text style={styles.data}>{storeData.storeName}</Text>
             <Text style={styles.label}>Descrição:</Text>
-            <Text style={styles.data}>{storeDescription}</Text>
+            <Text style={styles.data}>{storeData.storeDescription}</Text>
           </View>
-          <AntDesign
-            name="edit"
-            size={30}
-            style={{ color: 'rgb(117,136,236)' }}
-            onPress={() =>
-              navigation.navigate('editStore', {
-                storeID: userdata.storeID,
-                storeName: storeName,
-                storeDescription: storeDescription
-              })
-            } />
+          <View style={styles.icons}>
+            <AntDesign
+              name="edit"
+              size={30}
+              style={{ color: 'rgb(117,136,236)' }}
+              onPress={() =>
+                navigation.navigate('editStore', {
+                  storeID: storeData._id,
+                  storeName: storeData.storeName,
+                  storeDescription: storeData.storeDescription
+                })
+              } />
+            <FontAwesome
+              name="trash-o"
+              size={30}
+              style={{ color: 'rgb(117,136,236)', marginLeft: 6 }}
+              onPress={() => deleteStoreFromAPI()}
+            />
+          </View>
+
         </View>
         <View style={styles.hr} />
         <View style={styles.centralize}>
           <Text style={styles.label}>Produtos</Text>
         </View>
         <View style={styles.centralize}>
-          <AntDesign 
+          <AntDesign
             name="pluscircleo"
             size={50}
             style={{ color: 'rgb(117,136,236)' }}
@@ -102,6 +94,9 @@ const styles = StyleSheet.create({
   centralize: {
     alignItems: 'center',
   },
+  icons: {
+    flexDirection: 'row',
+  }
 });
 
 export default storePage;

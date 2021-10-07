@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -5,6 +6,7 @@ import { useData } from '../../context/';
 
 const Header = () => {
   const { userClean } = useData();
+  const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
@@ -12,7 +14,7 @@ const Header = () => {
         <Text style={styles.logoA}>Easy</Text>
         <Text style={styles.logoB}>Market</Text>
       </View>
-      <TouchableOpacity onPress={() => userClean()}>
+      <TouchableOpacity onPress={() => { userClean(); navigation.navigate('home'); }}>
         <MaterialIcons name="exit-to-app" size={30} color="#FFF" />
       </TouchableOpacity>
     </View>

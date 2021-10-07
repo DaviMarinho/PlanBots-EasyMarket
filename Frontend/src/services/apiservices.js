@@ -91,3 +91,13 @@ export const updateStore = async (storeID, storeName, storeDescription) => {
     return err;
   };
 };
+
+export const deleteStore = async (storeID) => {
+  try {
+    const r = await APIGeneral.delete(`/store/delete/${storeID}`);
+    return r;
+  } catch (err) {
+    console.error(err);
+    return err;
+  }
+};

@@ -1,20 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View, Text, Button, TextInput, ToastAndroid } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { updateStore } from '../../services/apiservices';
+import { useData } from '../../context/';
 
-const editStore = ({ route }) => {
-  const [userID, setUserID] = useState();
+const editStore = ({ navigation, route }) => {
+  const storeID = route.params.storeID;
   const [storeName, setStoreName] = useState(route.params.storeName);
   const [storeDescription, setStoreDescription] = useState(route.params.storeDescription);
+  const { setStoreData } = useData();
 
-  const updateStoreData = async () => {
-    if (!validatePassword(password)) {
-      ToastAndroid.show("Senha muito curta.", ToastAndroid.LONG);
+  const updateStoreData = () => {
+    if (storeName.length <= 4) {
+      ToastAndroid.show("Nome da loja muito pequeno. Insira pelo menos 5 caracteres.", ToastAndroid.LONG);
       return;
     }
-    await updateStore(storeID, storeName, storeDescription)
-      .then(async (r) => r);
+    updateStore(storeID, storeName, storeDescription)
+      .then((r) => {
+        setStoreData(r.data)
+        navigation.navigate('home');
+      });
   }
 
   return (

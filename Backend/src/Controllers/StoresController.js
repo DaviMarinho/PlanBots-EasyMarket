@@ -6,9 +6,6 @@ const getStoreList = async (req, res) => {
 }
 
 const getStoreByID = async (req, res) => {
-  if (!req.params.id) {
-    return res.json({ erro: 'undefined'});
-  }
   return res.json(await Store.findOne({ _id: req.params.id }))
 }
 
@@ -16,7 +13,7 @@ const createStore = async (req, res) => {
   const { 
     storeName,
     storeDescription,
-    userId 
+    userId
   } = req.body;
 
   if (!storeName) {
@@ -24,11 +21,11 @@ const createStore = async (req, res) => {
   }
 
   try {
-    const newStore = await Store.create({ storeName, storeDescription });
-    const user = await User.findOneAndUpdate({ _id: userId }, {
+    const newStore = await Store.create({ storeName, storeDescription, open: false });
+    await User.findOneAndUpdate({ _id: userId }, {
       storeID: newStore._id
     }, { new: true });
-    return res.json(user);
+    return res.json(newStore);
   } catch (err) {
     return res.json(err);
   }
