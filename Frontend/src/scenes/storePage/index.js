@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, TextInput, ToastAndroid } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -10,84 +10,83 @@ import Modal from 'react-native-modal';
 const storePage = ({ navigation }) => {
   const { userData, storeData, setUserData, setStoreData } = useData();
   const [modalVisibility, setModalVisibility] = useState(false);
-  const [productName,  setProductName] = useState('');
+  const [productName, setProductName] = useState('');
   const [productDescription, setProductDescription] = useState('');
   const [productCategory, setProductCategory] = useState('');
   const [productPrice, setProductPrice] = useState('');
   const [productID, setProductID] = useState('');
+  const [products, setProducts] = useState([]);
 
   const deleteStoreFromAPI = () => {
     deleteStore(storeData._id)
-    .then((r) => {
-      const deletedStoreUser = userData;
-      deletedStoreUser.storeID = '';
-      setUserData(deletedStoreUser);
-      setStoreData();
-      navigation.navigate('home');
-    })
-  }
-
-  const getUserData = async () => {
-    try {
-      const value = await AsyncStorage.getItem('@user_Data');
-      setUserdata(JSON.parse(value));
-    } catch (e) {
-      console.error(e);
-    };
+      .then((r) => {
+        const deletedStoreUser = userData;
+        deletedStoreUser.storeID = '';
+        setUserData(deletedStoreUser);
+        setStoreData();
+        navigation.navigate('home');
+      })
   }
 
   const createNewProduct = async () => {
     await createProduct(productName, productDescription, productCategory, true, productPrice)
-      .then((r) =>{
+      .then((r) => {
         setProductID(r?.data?._id);
       });
   }
 
   const addNewProductToStore = async () => {
     await addProductToStore(productID, storeData._id)
-      .then(() => ToastAndroid.show('Cadastro realizado com sucesso.', ToastAndroid.SHORT))
+      .then((r) => {
+        setStoreData(r.data);
+        ToastAndroid.show('Cadastro realizado com sucesso.', ToastAndroid.SHORT);
+      
+      });
   }
 
   const addProduct = () => {
     createNewProduct();
     addNewProductToStore();
     setModalVisibility(false);
+  };
+
+  const getProductsDataFromAPI = () => {
+    getProduct(storeData.products)
+      .then((r) => {
+        setProducts(r.data);
+      });
   }
-
-  useEffect(() => {
-    if (userdata) {
-      getStoreDataFromAPI();
-    }
-  }, [userdata]);
-
-  useEffect(() => {
-    getUserData();
-  }, []);
 
   const listProducts = () => {
-    if(storeData.products.length() === 0){
-      return(
+    if (storeData.products.length === 0) {
+      return (
         <Text>Sua loja não possui nenhum produto, clique no botão abaixo para começar a adicionar.</Text>
       )
-    }
+    } else {
+      getProductsDataFromAPI(storeData.products);
+      return (
+        products.map((product) => {
+          return (
+            <View style={styles.productCard}>
+              <Text style={styles.productName}>
+                {product.productName}
+              </Text>
+              <Text style={styles.productDescription}>
+                {product.productDescription}
+              </Text>
+              <Text style={styles.productDescription}>
+                R${product.price}
+              </Text>
+            </View>
+          );
+        })
+      );
+    };
+  };
 
-    const productsData = storeData.products.map(async (product) => {
-      return await getProduct(product._id);
-    })
-    return productsData.map((product) => {
-      <View style={styles.productCard}>
-        <Text style={styles.productName}>
-          {product.productName}
-        </Text>
-        <Text style={styles.productDescription}>  
-          {product.productDescription}
-        </Text>
-        <Text style={styles.productDescription}>
-          R${product.productPrice}
-        </Text>
-      </View>
-    })
-  }
+  useEffect(() => {
+    getProductsDataFromAPI();
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -95,7 +94,7 @@ const storePage = ({ navigation }) => {
         <View style={styles.modalContainer}>
           <Text style={styles.pageTitle}>
             Adicionar novo produto
-                </Text>
+          </Text>
           <View style={styles.inputView}>
             <Text style={styles.inputLabel}>Nome do produto*</Text>
             <TextInput
@@ -129,7 +128,7 @@ const storePage = ({ navigation }) => {
           </View>
           <CreateButton create={addProduct} text='Cadastrar produto' />
         </View>
-      </Modal>  
+      </Modal>
       <View>
         <View style={styles.storeHeader}>
           <View>
@@ -205,7 +204,7 @@ const styles = StyleSheet.create({
   icons: {
     flexDirection: 'row',
   },
-  
+
   modalContainer: {
     position: 'absolute',
     width: '100%',
@@ -278,6 +277,7 @@ const styles = StyleSheet.create({
     height: "30%",
     marginLeft: "5%",
     justifyContent: "flex-start",
+    backgroundColor: 'rgba(0,0,0,0.1)'
   }
 });
 

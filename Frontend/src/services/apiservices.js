@@ -130,9 +130,11 @@ export const createProduct = async (productName, productDescription, category, a
   };
 };
 
-export const getProduct = async (productID) => {
+export const getProduct = async (productList) => {
   try {
-    const r = await APIGeneral.get(`/product/${productID}`);
+    const r = await APIGeneral.post(`/product`, {
+      productsIdsList: productList,
+    });
     return r;
   } catch (err) {
     console.error(err);
