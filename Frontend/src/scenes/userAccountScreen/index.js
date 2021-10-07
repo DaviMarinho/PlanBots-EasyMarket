@@ -5,8 +5,6 @@ import {
   StyleSheet,
   Text,
 } from "react-native";
-import Navbar from '../../components/navbar';
-import Header from '../../components/header';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
@@ -40,7 +38,7 @@ const UserAccountScreen = (props) => {
   }, []);
 
   const renderPhoto = () => {
-    if(userImage == null) {
+    if (userImage == null) {
       return <Ionicons name="person-circle-outline" size={120} color="#4A86E8" />
     }
 
@@ -50,44 +48,47 @@ const UserAccountScreen = (props) => {
   }
 
   return (
-    <View style={style.container} keyboardShouldPersistTaps='handled'>
-      <View style={style.teste}>
-        {renderPhoto()}
-        <Ionicons onPress={() => {navigation.navigate("editUser")}} name="create-outline" size={30} color="#4A86E8" style={{ position: "absolute", right: 0, top: 25 }} />
-      </View>
-      <Text style={style.textName}>{userName}</Text>
+    <View style={{ flex: 1 }}>
+      <ScrollView style={style.container}>
 
-      <View style={{ alignSelf: 'center', width: '100%' }}>
-
-        <View style={style.line} />
-
-        <View style={style.dataInput}>
-          <Text style={style.label}>Contato</Text>
-          <Text style={style.textformat}>{userPhone}</Text>
+        <View style={style.teste}>
+          {renderPhoto()}
+          <Ionicons onPress={() => { navigation.navigate("editUser") }} name="create-outline" size={30} color="#4A86E8" style={{ position: "absolute", right: 0, top: 25 }} />
         </View>
 
-        <View style={style.line} />
+        <View style={{ alignSelf: 'center', width: '100%' }}>
 
-        <View style={style.dataInput}>
-          <Text style={style.label}>Email</Text>
-          <Text style={style.textformat}>{userEmail}</Text>
+          <Text style={style.textName}>{userName}</Text>
+
+          <View style={style.line} />
+
+          <View style={style.dataInput}>
+            <Text style={style.label}>Contato</Text>
+            <Text style={style.textformat}>{userPhone}</Text>
+          </View>
+
+          <View style={style.line} />
+
+          <View style={style.dataInput}>
+            <Text style={style.label}>Email</Text>
+            <Text style={style.textformat}>{userEmail}</Text>
+          </View>
+
+          <View style={style.line} />
+
+          <View style={style.dataInput}>
+            <Text style={style.label}>CPF</Text>
+            <Text style={style.textformat}>{userCPF}</Text>
+          </View>
+
         </View>
-
-        <View style={style.line} />
-
-        <View style={style.dataInput}>
-          <Text style={style.label}>CPF</Text>
-          <Text style={style.textformat}>{userCPF}</Text>
-        </View>
-
-      </View>
+      </ScrollView>
     </View>
   );
 };
 
 const style = StyleSheet.create({
   container: {
-    flex: 1,
   },
   teste: {
     padding: 20,

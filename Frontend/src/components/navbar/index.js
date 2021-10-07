@@ -7,7 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Navbar = () => {
   const navigation = useNavigation();
-  const [userdata, setUserdata] = useState();
+  const [userdata, setUserdata] = useState(null);
 
   const getUserData = async () => {
     try {

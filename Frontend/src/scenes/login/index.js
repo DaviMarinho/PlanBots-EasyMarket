@@ -11,6 +11,7 @@ const Login = ({ navigation }) => {
     const responseData = await loginUser(email, password)
 
     console.log({responseData});
+    console.log(email, password, "testeee");
 
     try {
 
@@ -22,15 +23,15 @@ const Login = ({ navigation }) => {
         return;
       }
     } catch (e) {
-      console.log(e, "servidor indispobível");
+      console.log(e, "servidor indisponível");
     }
 
     try {
-      const value = JSON.stringify(responseData.data);
+      const value = JSON.stringify(responseData?.data);
       await AsyncStorage.setItem("@storage_Key", value);
       navigation.navigate('home');
     } catch (e) {
-      console.error(e);
+      console.error(e, "atention");
     }
   }
 

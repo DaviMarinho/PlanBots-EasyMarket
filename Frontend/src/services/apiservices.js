@@ -42,7 +42,6 @@ export const updateUser = async (userID, email, cpf, phone, pass) => {
 
 export const loginUser = async (email, password) => {
   try {
-    console.log(email, password);
     const r = await APIGeneral.post('/user/login', {
       email,
       password
