@@ -9,17 +9,13 @@ const Navbar = () => {
   const navigation = useNavigation();
   const { userData, storeData } = useData();
 
-  useEffect(()=>{
-    getUserData();
-  }, [])
-
   return (
     <View style={styles.container}>
       <TouchableOpacity
         style={styles.icon}
         onPress={() => {
           if (userData) {
-            navigation.navigate('editUser', {
+            navigation.navigate('perfil', {
               id: userData?._id,
               email: userData?.email,
               cpf: userData?.cpf,

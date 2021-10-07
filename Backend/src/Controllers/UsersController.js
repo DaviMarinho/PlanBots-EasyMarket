@@ -78,11 +78,8 @@ const deleteUser = async (req, res) => {
 
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
-  console.log("passeiiii");
   
   const user = await User.findOne({ email });
-
-  console.log(email, password);
   
   if (user == null) {
     return res.json({ message: "user not found" });

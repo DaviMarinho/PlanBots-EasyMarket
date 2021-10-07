@@ -6,36 +6,18 @@ import {
   Text,
 } from "react-native";
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 
-const UserAccountScreen = (props) => {
+const UserAccountScreen = ({route, navigation}) => {
 
-  const navigation = useNavigation();
+  const reqNavigation = useNavigation();
 
-  const [userName, setUserName] = useState('teste');
-  const [userPhone, setUserPhone] = useState('(61) 940028922');
-  const [userEmail, setUserEmail] = useState('teste@gmail.com');
-  const [userCPF, setUserCPF] = useState('123.456.890.61');
+  const userID = route.params.id;
+  const [userName, setUserName] = useState('Perfil');
+  const [userPhone, setUserPhone] = useState(route.params.phone);
+  const [userEmail, setUserEmail] = useState(route.params.email);
+  const [userCPF, setUserCPF] = useState(route.params.cpf);
   const [userImage, setUserImage] = useState();
-
-  const getUserdata = async () => {
-    try {
-      const value = await AsyncStorage.getItem('@storage_Key');
-      setUserName(JSON.parse(value).username);
-      setUserPhone(JSON.parse(value).phone);
-      setUserEmail(JSON.parse(value).email);
-      setUserCPF(JSON.parse(value).cpf);
-      // setUserImage(JSON.parse(value).username);
-
-    } catch (e) {
-      console.error(e);
-    }
-  }
-
-  useEffect(() => {
-    getUserdata();
-  }, []);
 
   const renderPhoto = () => {
     if (userImage == null) {
@@ -53,7 +35,12 @@ const UserAccountScreen = (props) => {
 
         <View style={style.teste}>
           {renderPhoto()}
-          <Ionicons onPress={() => { navigation.navigate("editUser") }} name="create-outline" size={30} color="#4A86E8" style={{ position: "absolute", right: 0, top: 25 }} />
+          <Ionicons onPress={() => { reqNavigation.navigate("editUser", {
+              id: userID,
+              email: userEmail,
+              cpf: userCPF,
+              phone: userPhone
+            }) }} name="create-outline" size={30} color="#4A86E8" style={{ position: "absolute", right: 0, top: 25 }} />
         </View>
 
         <View style={{ alignSelf: 'center', width: '100%' }}>
