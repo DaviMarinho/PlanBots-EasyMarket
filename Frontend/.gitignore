@@ -7,10 +7,11 @@ npm-debug.*
 *.key
 *.mobileprovision
 *.orig.*
-.env
+*.env*
 web-build/
 package-lock.json
 yarn.lock
+Frontend/.env
 
 # macOS
 .DS_Store

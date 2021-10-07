@@ -1,39 +1,37 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, TextInput, Button, ToastAndroid } from 'react-native';
-import { loginUser } from '../../services/apiservices';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { loginUser, getStoreData } from '../../services/apiservices';
+import { useData } from '../../context/';
 
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { userData, setUserData, setStoreData, storeData } = useData();
 
   const login = async () => {
-    const responseData = await loginUser(email, password)
+    await loginUser(email, password)
+      .then((r) => {
+        if (r.data.message === 'user not found') {
+          ToastAndroid.show("Email incorreto", ToastAndroid.SHORT);
+          return;
+        } else if (r.data.message === 'wrong password') {
+          ToastAndroid.show("Senha incorreta", ToastAndroid.SHORT);
+          return;
+        }
+        setUserData(r.data);
+        if (r.data.storeID !== '') {
+          getStoreDataFromAPI(r.data.storeID);
+        }
+        navigation.navigate('home');
+      });
+  };
 
-    console.log({responseData});
-    console.log(email, password, "testeee");
-
-    try {
-
-      if (responseData.data.message === 'user not found') {
-        ToastAndroid.show("Email incorreto", ToastAndroid.SHORT);
-        return;
-      } else if (responseData.data.message === 'wrong password') {
-        ToastAndroid.show("Senha incorreta", ToastAndroid.SHORT);
-        return;
-      }
-    } catch (e) {
-      console.log(e, "servidor indisponível");
-    }
-
-    try {
-      const value = JSON.stringify(responseData?.data);
-      await AsyncStorage.setItem("@storage_Key", value);
-      navigation.navigate('home');
-    } catch (e) {
-      console.error(e, "atention");
-    }
-  }
+  const getStoreDataFromAPI = (storeID) => {
+    getStoreData(storeID)
+      .then((r) => {
+        setStoreData(r.data);
+      });
+  };
 
   return (
     <View style={styles.container}>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, TextInput, Button, ToastAndroid, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, Text, TextInput, Button, ToastAndroid } from 'react-native';
 import { registerUser } from '../../services/apiservices';
 
 const Signup = ({ navigation }) => {
@@ -17,7 +17,6 @@ const Signup = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <ActivityIndicator size="large" color="red" />
       <View style={styles.content}>
         <Text style={styles.header}>Cadastro</Text>
         <View style={styles.inputs}>

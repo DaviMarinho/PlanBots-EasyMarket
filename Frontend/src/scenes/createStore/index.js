@@ -1,24 +1,21 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, TextInput, Button } from 'react-native';
 import { registerStore } from '../../services/apiservices';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useData } from '../../context/';
 
 const createStore = ({ navigation }) => {
   const [storeName, setStoreName] = useState('');
   const [storeDescription, setStoreDescription] = useState('');
+  const { userData, setStoreData, setUserData } = useData();
 
-  const cadastrarLoja = async () => {
+  const cadastrarLoja = () => {
     try {
-      const value = await AsyncStorage.getItem('@storage_Key');
-      const userId = JSON.parse(value)._id;
-      await registerStore(storeName, storeDescription, userId)
-        .then(async (r) => {
-          try {
-            const value = JSON.stringify(r.data);
-            await AsyncStorage.setItem("@storage_Key", value);
-          } catch (e) {
-            console.error(e);
-          }
+      registerStore(storeName, storeDescription, userData._id)
+        .then((r) => {
+          const updatedUserData = userData;
+          updatedUserData.storeID = r.data._id;
+          setUserData(updatedUserData);
+          setStoreData(r.data);
         });
       navigation.navigate('home');
     } catch (e) {
