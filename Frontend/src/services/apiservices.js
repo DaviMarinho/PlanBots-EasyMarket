@@ -80,7 +80,6 @@ export const registerStore = async (storeName, storeDescription, userId) => {
 };
 
 export const updateStore = async (storeID, storeName, storeDescription) => {
-  console.log(storeID, storeName, storeDescription);
   try {
     const r = await APIGeneral.put(`/store/edit/${storeID}`, {
       storeName,

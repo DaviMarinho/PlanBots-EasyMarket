@@ -1,79 +1,72 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, ToastAndroid, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, View, ToastAndroid, TouchableOpacity, ActivityIndicator } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useData } from '../../context/';
 
 const Navbar = () => {
   const navigation = useNavigation();
-  const [userdata, setUserdata] = useState();
-
-  const getUserData = async () => {
-    try {
-      const value = await AsyncStorage.getItem('@storage_Key');
-      setUserdata(value ? JSON.parse(value) : null);
-    } catch (e) {
-      console.error(e);
-    }
-  };
+  const { userData } = useData();
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        style={styles.icon}
-        onPress={() => {
-          userdata ? null : getUserData();
-          console.log(userdata);
-          if (userdata) {
-            navigation.navigate('editUser');
-          } else {
-            navigation.navigate('login')
-          }
-        }}
-      >
-        <Ionicons
-          name="person"
-          size={30}
-          color="#FFF"
-        />
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={styles.icon}
-        onPress={() => navigation.navigate('home')}
-      >
-        <Ionicons
-          name="home"
-          size={30}
-          color="#FFF"
-        />
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={styles.icon}
-        onPress={() => {
-          userdata ? null : getUserData();
-          console.log(userdata);
-          if (userdata) {
-            if (userdata.storeID === '') {
-              navigation.navigate('showStore');
+        <TouchableOpacity
+          style={styles.icon}
+          onPress={() => {
+            if (userData) {
+              navigation.navigate('editUser', {
+                id: userData._id,
+                email: userData.email,
+                cpf: userData.cpf,
+                phone: userData.phone
+              });
             } else {
-              navigation.navigate('storePage');
+              navigation.navigate('login')
             }
-          } else {
-            ToastAndroid.show("Para visualizar/cadastrar uma loja realize seu login", ToastAndroid.LONG);
-            navigation.navigate('login');
-          }
-        }}
-      >
-        <Feather
-          name="shopping-bag"
-          size={30}
-          color="#FFF"
-        />
-      </TouchableOpacity>
-    </View>
+          }}
+        >
+          <Ionicons
+            name="person"
+            size={30}
+            color="#FFF"
+          />
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.icon}
+          onPress={() => navigation.navigate('home')}
+        >
+          <Ionicons
+            name="home"
+            size={30}
+            color="#FFF"
+          />
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.icon}
+          onPress={() => {
+            if (userData) {
+              if (userData.storeID === '') {
+                navigation.navigate('showStore');
+              } else {
+                navigation.navigate('storePage');
+              }
+            } else {
+              ToastAndroid.show("Para visualizar/cadastrar uma loja realize seu login", ToastAndroid.LONG);
+              navigation.navigate('login');
+            }
+          }}
+        >
+          <Feather
+            name="shopping-bag"
+            size={30}
+            color="#FFF"
+          />
+        </TouchableOpacity>
+      </View>
   );
 };
 
@@ -91,7 +84,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 14,
     paddingBottom: 14,
-    width: `${100/3}%`,
+    width: `${100 / 3}%`,
   }
 });
 

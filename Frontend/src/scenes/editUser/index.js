@@ -5,16 +5,18 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { updateUser } from '../../services/apiservices';
 import { validateEmail, validatePhone, validatePassword } from '../../utils/validate';
 
-const editUser = () => {
-  const [userID, setUserID] = useState();
-  const [email, setEmail] = useState();
-  const [phone, setPhone] = useState();
-  const [cpf, setCPF] = useState();
+const editUser = ({ route }) => {
+  const [userID, setUserID] = useState(route.params.id);
+  const [email, setEmail] = useState(route.params.email);
+  const [phone, setPhone] = useState(route.params.phone);
+  const [cpf, setCPF] = useState(route.params.cpf);
   const [password, setPassword] = useState();
+
+  console.log(route.params);
 
   const getUserData = async () => {
     try {
-      const value = await AsyncStorage.getItem('@storage_Key');
+      const value = await AsyncStorage.getItem('@user_data');
       const data = JSON.parse(value);
       setUserID(data?._id);
       setEmail(data?.email);
@@ -42,7 +44,7 @@ const editUser = () => {
       .then(async (r) => {
         try {
           const value = JSON.stringify(r.data);
-          await AsyncStorage.setItem("@storage_Key", value);
+          await AsyncStorage.setItem("@user_data", value);
           navigation.navigate('home');
         } catch (e) {
           console.error(e);

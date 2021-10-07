@@ -1,21 +1,10 @@
 import React from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { useData } from '../../context/';
 
 const Header = () => {
-  const navigation = useNavigation();
-
-  const clear = async () => {
-    try {
-      await AsyncStorage.clear();
-      navigation.navigate('home');
-    } catch (err) {
-      console.error(err);
-    };
-
-  };
+  const { userClean } = useData();
 
   return (
     <View style={styles.container}>
@@ -23,7 +12,7 @@ const Header = () => {
         <Text style={styles.logoA}>Easy</Text>
         <Text style={styles.logoB}>Market</Text>
       </View>
-      <TouchableOpacity onPress={() => clear()}>
+      <TouchableOpacity onPress={() => userClean()}>
         <MaterialIcons name="exit-to-app" size={30} color="#FFF" />
       </TouchableOpacity>
     </View>

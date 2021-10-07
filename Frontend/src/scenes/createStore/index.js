@@ -9,13 +9,13 @@ const createStore = ({ navigation }) => {
 
   const cadastrarLoja = async () => {
     try {
-      const value = await AsyncStorage.getItem('@storage_Key');
+      const value = await AsyncStorage.getItem('@user_Data');
       const userId = JSON.parse(value)._id;
       await registerStore(storeName, storeDescription, userId)
         .then(async (r) => {
           try {
             const value = JSON.stringify(r.data);
-            await AsyncStorage.setItem("@storage_Key", value);
+            await AsyncStorage.setItem("@user_Data", value);
           } catch (e) {
             console.error(e);
           }

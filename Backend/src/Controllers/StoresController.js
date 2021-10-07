@@ -6,7 +6,9 @@ const getStoreList = async (req, res) => {
 }
 
 const getStoreByID = async (req, res) => {
-  console.log(req.params._id);
+  if (!req.params.id) {
+    return res.json({ erro: 'undefined'});
+  }
   return res.json(await Store.findOne({ _id: req.params.id }))
 }
 
