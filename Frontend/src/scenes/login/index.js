@@ -8,24 +8,30 @@ const Login = ({ navigation }) => {
   const [password, setPassword] = useState('');
 
   const login = async () => {
-    await loginUser(email, password)
-    .then(async (r) => {
-      if (r.data.message === 'user not found') {
+    const responseData = await loginUser(email, password)
+
+    console.log({responseData});
+
+    try {
+
+      if (responseData.data.message === 'user not found') {
         ToastAndroid.show("Email incorreto", ToastAndroid.SHORT);
         return;
-      } else if (r.data.message === 'wrong password') {
+      } else if (responseData.data.message === 'wrong password') {
         ToastAndroid.show("Senha incorreta", ToastAndroid.SHORT);
         return;
       }
+    } catch (e) {
+      console.log(e, "servidor indispobível");
+    }
 
-      try {
-        const value = JSON.stringify(r.data);
-        await AsyncStorage.setItem("@storage_Key", value);
-        navigation.navigate('home');
-      } catch (e) {
-        console.error(e);
-      }
-    });
+    try {
+      const value = JSON.stringify(responseData.data);
+      await AsyncStorage.setItem("@storage_Key", value);
+      navigation.navigate('home');
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   return (

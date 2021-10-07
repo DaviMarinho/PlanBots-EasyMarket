@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, ToastAndroid, TouchableOpacity } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
@@ -18,6 +18,10 @@ const Navbar = () => {
     }
   };
 
+  useEffect(()=>{
+    getUserData();
+  }, [])
+
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -26,7 +30,7 @@ const Navbar = () => {
           userdata ? null : getUserData();
           console.log(userdata);
           if (userdata) {
-            navigation.navigate('editUser');
+            navigation.navigate('perfil');
           } else {
             navigation.navigate('login')
           }

@@ -9,8 +9,11 @@ import Navbar from '../../components/navbar';
 import Header from '../../components/header';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
 
 const UserAccountScreen = (props) => {
+
+  const navigation = useNavigation();
 
   const [userName, setUserName] = useState('teste');
   const [userPhone, setUserPhone] = useState('(61) 940028922');
@@ -50,7 +53,7 @@ const UserAccountScreen = (props) => {
     <View style={style.container} keyboardShouldPersistTaps='handled'>
       <View style={style.teste}>
         {renderPhoto()}
-        <Ionicons name="create-outline" size={30} color="#4A86E8" style={{ position: "absolute", right: 0, top: 25 }} />
+        <Ionicons onPress={() => {navigation.navigate("editUser")}} name="create-outline" size={30} color="#4A86E8" style={{ position: "absolute", right: 0, top: 25 }} />
       </View>
       <Text style={style.textName}>{userName}</Text>
 
