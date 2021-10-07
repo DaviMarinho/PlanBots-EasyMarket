@@ -1,31 +1,31 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { StyleSheet, View, Text, TextInput, ToastAndroid } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getStoreData, createProduct, addProductToStore } from '../../services/apiservices';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { useData } from '../../context/';
+import { deleteStore } from '../../services/apiservices';
 import CreateButton from '../../components/createButton';
 import Modal from 'react-native-modal';
 
 const storePage = ({ navigation }) => {
-  const [userdata, setUserdata] = useState();
-  const [storeName, setStoreName] = useState();
-  const [storeDescription, setStoreDescription] = useState();
+  const { userData, storeData, setUserData, setStoreData } = useData();
   const [modalVisibility, setModalVisibility] = useState(false);
   const [productName,  setProductName] = useState('');
   const [productDescription, setProductDescription] = useState('');
   const [productCategory, setProductCategory] = useState('');
   const [productPrice, setProductPrice] = useState('');
   const [productID, setProductID] = useState('');
-  const [storeID, setStoreID] = useState('');
 
-  const getStoreDataFromAPI = async () => {
-    await getStoreData(userdata.storeID)
-      .then((r) => {
-        setStoreName(r?.data?.storeName);
-        setStoreDescription(r?.data?.storeDescription);
-        setStoreID(r?.data?._id);
-      });
-  };
+  const deleteStoreFromAPI = () => {
+    deleteStore(storeData._id)
+    .then((r) => {
+      const deletedStoreUser = userData;
+      deletedStoreUser.storeID = '';
+      setUserData(deletedStoreUser);
+      setStoreData();
+      navigation.navigate('home');
+    })
+  }
 
   const getUserData = async () => {
     try {
@@ -44,7 +44,7 @@ const storePage = ({ navigation }) => {
   }
 
   const addNewProductToStore = async () => {
-    await addProductToStore(productID, storeID)
+    await addProductToStore(productID, storeData._id)
       .then(() => ToastAndroid.show('Cadastro realizado com sucesso.', ToastAndroid.SHORT))
   }
 
