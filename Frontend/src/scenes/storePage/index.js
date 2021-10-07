@@ -71,13 +71,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  storeHeader: {
+  content: {
     paddingTop: 12,
     paddingBottom: 12,
-    paddingRight: 12,
-    paddingLeft: 12,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
   },
   label: {
     fontSize: 24,

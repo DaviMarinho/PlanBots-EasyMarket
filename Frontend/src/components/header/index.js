@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { useData } from '../../context/';
+import { useData } from '../../context';
 
 const Header = () => {
   const { userClean } = useData();

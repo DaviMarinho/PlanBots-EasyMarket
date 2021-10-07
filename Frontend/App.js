@@ -5,6 +5,7 @@ import HomePage from './src/scenes/homepage';
 import showStore from './src/scenes/showStore';
 import Login from './src/scenes/login';
 import Signup from './src/scenes/signup';
+import UserAccountScreen from './src/scenes/userAccountScreen';
 import createStore from './src/scenes/createStore';
 import storePage from './src/scenes/storePage';
 import editUser from './src/scenes/editUser';
@@ -61,6 +62,11 @@ const App = () => {
             component={editStore}
             options={{ headerShown: false }}
           />
+          <Stack.Screen
+          name="perfil"
+          component={UserAccountScreen}
+          options={{ headerShown: false }}
+        />
         </Stack.Navigator>
         <Navbar />
       </NavigationContainer>

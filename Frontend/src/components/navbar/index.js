@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, ToastAndroid, TouchableOpacity } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
@@ -15,7 +15,7 @@ const Navbar = () => {
         style={styles.icon}
         onPress={() => {
           if (userData) {
-            navigation.navigate('editUser', {
+            navigation.navigate('perfil', {
               id: userData?._id,
               email: userData?.email,
               cpf: userData?.cpf,

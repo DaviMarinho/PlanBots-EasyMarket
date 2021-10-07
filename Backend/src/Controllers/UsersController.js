@@ -22,6 +22,7 @@ const createUser = async (req, res) => {
 
   try {
     const user = await User.create({
+      username,
       email,
       phone,
       pass: cryptedPassword,
@@ -77,9 +78,9 @@ const deleteUser = async (req, res) => {
 
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
-
+  
   const user = await User.findOne({ email });
-
+  
   if (user == null) {
     return res.json({ message: "user not found" });
   }

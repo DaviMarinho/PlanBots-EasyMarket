@@ -7,6 +7,10 @@ const validatePhone = (phone) => {
   return (phone && phone.length === 11);
 }
 
+const validateUser = (username) => {
+  return (username != null)
+}
+
 const validatePassword = (pass) => {
   return (pass && pass.length >= 7)
 }

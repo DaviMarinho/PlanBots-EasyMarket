@@ -26,7 +26,8 @@ const createProduct = async (req, res) => {
             available,
             price
         });
-        return createProduct;
+        console.log(createProduct);
+        return res.json(createProduct);
     } catch (err) {
         return res.json(err);
     }
