@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, Button, TextInput, ToastAndroid } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { updateUser } from '../../services/apiservices';
 import { validateEmail, validatePhone, validatePassword } from '../../utils/validate';

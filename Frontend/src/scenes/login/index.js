@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, TextInput, Button, ToastAndroid, ActivityIndicator } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, View, Text, TextInput, Button, ToastAndroid } from 'react-native';
 import { loginUser, getStoreData } from '../../services/apiservices';
 import { useData } from '../../context/';
 

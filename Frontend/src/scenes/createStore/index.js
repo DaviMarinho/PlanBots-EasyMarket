@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, TextInput, Button } from 'react-native';
 import { registerStore } from '../../services/apiservices';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useData } from '../../context/';
 
 const createStore = ({ navigation }) => {

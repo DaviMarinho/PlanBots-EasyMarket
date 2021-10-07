@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, TextInput, Button, ToastAndroid, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, Text, TextInput, Button, ToastAndroid } from 'react-native';
 import { registerUser } from '../../services/apiservices';
 
 const Signup = ({ navigation }) => {
