@@ -101,3 +101,31 @@ export const deleteStore = async (storeID) => {
     return err;
   }
 };
+
+export const addProductToStore = async (productsIds, storeID) => {
+  try{
+    const r = await APIGeneral.put(`/store/addproduct/${storeID}`, {
+      productsIds
+    });
+    return r;
+  } catch (err) {
+    console.error(err);
+    return err;
+  }
+}
+// Produtos
+export const createProduct = async (productName, productDescription, category, available, price) => {
+  try {
+    const r = await APIGeneral.post("/product/create", {
+      productName,
+      productDescription,
+      category,
+      available,
+      price
+    });
+    return r;
+  } catch (err) {
+    console.error(err);
+    return err;
+  };
+};

@@ -30,6 +30,7 @@ routes.get('/store/:id', StoresController.getStoreByID);
 routes.post('/store/create', StoresController.createStore)
 routes.put('/store/edit/:id', StoresController.editStore);
 routes.delete('/store/delete/:id', StoresController.deleteStore)
+routes.put('/store/addproduct/:id', StoresController.addProducts)
 
 // Users
 routes.get('/user', UsersController.getUserList);
