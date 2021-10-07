@@ -1,32 +1,26 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { StyleSheet, View, ToastAndroid, TouchableOpacity } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 import { useNavigation } from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useData } from '../../context/';
 
 const Navbar = () => {
   const navigation = useNavigation();
-  const [userdata, setUserdata] = useState();
-
-  const getUserData = async () => {
-    try {
-      const value = await AsyncStorage.getItem('@storage_Key');
-      setUserdata(value ? JSON.parse(value) : null);
-    } catch (e) {
-      console.error(e);
-    }
-  };
+  const { userData, storeData } = useData();
 
   return (
     <View style={styles.container}>
       <TouchableOpacity
         style={styles.icon}
         onPress={() => {
-          userdata ? null : getUserData();
-          console.log(userdata);
-          if (userdata) {
-            navigation.navigate('editUser');
+          if (userData) {
+            navigation.navigate('editUser', {
+              id: userData?._id,
+              email: userData?.email,
+              cpf: userData?.cpf,
+              phone: userData?.phone
+            });
           } else {
             navigation.navigate('login')
           }
@@ -41,7 +35,7 @@ const Navbar = () => {
 
       <TouchableOpacity
         style={styles.icon}
-        onPress={() => navigation.navigate('home')}
+        onPress={() => navigation.navigate('home') }
       >
         <Ionicons
           name="home"
@@ -53,14 +47,10 @@ const Navbar = () => {
       <TouchableOpacity
         style={styles.icon}
         onPress={() => {
-          userdata ? null : getUserData();
-          console.log(userdata);
-          if (userdata) {
-            if (userdata.storeID === '') {
-              navigation.navigate('showStore');
-            } else {
-              navigation.navigate('storePage');
-            }
+          if (userData && !storeData) {
+            navigation.navigate('showStore');
+          } else if (userData && storeData) {
+            navigation.navigate('storePage', { name: storeData.storeName, description: storeData.storeDescription });
           } else {
             ToastAndroid.show("Para visualizar/cadastrar uma loja realize seu login", ToastAndroid.LONG);
             navigation.navigate('login');
@@ -73,7 +63,7 @@ const Navbar = () => {
           color="#FFF"
         />
       </TouchableOpacity>
-    </View>
+    </View >
   );
 };
 
@@ -91,7 +81,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 14,
     paddingBottom: 14,
-    width: `${100/3}%`,
+    width: `${100 / 3}%`,
   }
 });
 

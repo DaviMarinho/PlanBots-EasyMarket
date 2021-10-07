@@ -1,31 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View, Text, Button, TextInput, ToastAndroid } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { updateUser } from '../../services/apiservices';
 import { validateEmail, validatePhone, validatePassword } from '../../utils/validate';
+import { useData } from '../../context/';
 
-const editUser = () => {
-  const [userID, setUserID] = useState();
-  const [email, setEmail] = useState();
-  const [phone, setPhone] = useState();
-  const [cpf, setCPF] = useState();
+const editUser = ({ route, navigation }) => {
+  const userID = route.params.id;
+  const [email, setEmail] = useState(route.params.email);
+  const [phone, setPhone] = useState(route.params.phone);
+  const [cpf, setCPF] = useState(route.params.cpf);
   const [password, setPassword] = useState();
+  const { setUserData } = useData();
 
-  const getUserData = async () => {
-    try {
-      const value = await AsyncStorage.getItem('@storage_Key');
-      const data = JSON.parse(value);
-      setUserID(data?._id);
-      setEmail(data?.email);
-      setPhone(data?.phone);
-      setCPF(data?.cpf);
-    } catch (e) {
-      console.error(e);
-    }
-  }
-
-  const updateUserData = async () => {
+  const updateUserData = () => {
     if (!validatePassword(password)) {
       ToastAndroid.show("Senha muito curta.", ToastAndroid.LONG);
       return;
@@ -38,21 +26,16 @@ const editUser = () => {
       ToastAndroid.show("Telefone invalido. Utilize o formato DDD+Telefone (celular).", ToastAndroid.LONG);
       return;
     }
-    await updateUser(userID, email, cpf, phone, password)
-      .then(async (r) => {
+    updateUser(userID, email, cpf, phone, password)
+      .then((r) => {
         try {
-          const value = JSON.stringify(r.data);
-          await AsyncStorage.setItem("@storage_Key", value);
+          setUserData(r.data);
           navigation.navigate('home');
         } catch (e) {
           console.error(e);
         }
       });
   }
-
-  useEffect(() => {
-    getUserData();
-  }, []);
 
   return (
     <View style={styles.container}>
@@ -83,7 +66,7 @@ const editUser = () => {
             style={styles.input}
             onChangeText={setPhone}
             value={phone}
-            placeholder="(DDD) + Telefone"
+            placeholder="(DDD) Telefone"
             keyboardType="numeric"
             maxLength={11}
           />

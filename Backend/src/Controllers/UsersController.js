@@ -31,7 +31,7 @@ const createUser = async (req, res) => {
     });
     return res.json(user);
   } catch (error) {
-    return res.status(400).json({ duplicated: error.keyValue });
+    return res.status(400).json({ error });
   }
 }
 

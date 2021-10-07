@@ -80,7 +80,6 @@ export const registerStore = async (storeName, storeDescription, userId) => {
 };
 
 export const updateStore = async (storeID, storeName, storeDescription) => {
-  console.log(storeID, storeName, storeDescription);
   try {
     const r = await APIGeneral.put(`/store/edit/${storeID}`, {
       storeName,
@@ -91,4 +90,14 @@ export const updateStore = async (storeID, storeName, storeDescription) => {
     console.error(err);
     return err;
   };
+};
+
+export const deleteStore = async (storeID) => {
+  try {
+    const r = await APIGeneral.delete(`/store/delete/${storeID}`);
+    return r;
+  } catch (err) {
+    console.error(err);
+    return err;
+  }
 };
