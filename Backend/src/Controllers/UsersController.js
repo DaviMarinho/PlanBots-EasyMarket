@@ -8,10 +8,10 @@ const getUserList = async (req, res) => {
 
 const createUser = async (req, res) => {
   const {
-    email, phone, password, cpf, username,
+    email, phone, password, cpf,
   } = req.body;
 
-  const invalidValues = validate.validateValues(email, phone, password, cpf, username);
+  const invalidValues = validate.validateValues(email, phone, password, cpf);
 
   if (invalidValues.length) {
     return res.status(400).json({ 'invalid values': invalidValues });

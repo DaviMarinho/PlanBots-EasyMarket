@@ -20,7 +20,7 @@ const validateCpf = (cpf) => {
   return (cpf && regexRule.test(cpf))
 }
 
-const validateValues = (email, phone, pass, cpf, username) => {
+const validateValues = (email, phone, pass, cpf) => {
   const invalidValues = [];
   if (!validateEmail(email)) {
     invalidValues.push('email');
@@ -33,9 +33,6 @@ const validateValues = (email, phone, pass, cpf, username) => {
   } 
   if (!validateCpf(cpf)) {
     invalidValues.push('cpf');
-  }
-  if (!validateUser(username)) {
-    invalidValues.push('username');
   }
   return invalidValues;
 }
