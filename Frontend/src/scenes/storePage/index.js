@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, TextInput, ToastAndroid } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useData } from '../../context/';
-import { deleteStore } from '../../services/apiservices';
+import { deleteStore, addProductToStore, createProduct, getProduct } from '../../services/apiservices';
 import CreateButton from '../../components/createButton';
 import Modal from 'react-native-modal';
 
@@ -63,6 +63,31 @@ const storePage = ({ navigation }) => {
   useEffect(() => {
     getUserData();
   }, []);
+
+  const listProducts = () => {
+    if(storeData.products.length() === 0){
+      return(
+        <Text>Sua loja não possui nenhum produto, clique no botão abaixo para começar a adicionar.</Text>
+      )
+    }
+
+    const productsData = storeData.products.map(async (product) => {
+      return await getProduct(product._id);
+    })
+    return productsData.map((product) => {
+      <View style={styles.productCard}>
+        <Text style={styles.productName}>
+          {product.productName}
+        </Text>
+        <Text style={styles.productDescription}>  
+          {product.productDescription}
+        </Text>
+        <Text style={styles.productDescription}>
+          R${product.productPrice}
+        </Text>
+      </View>
+    })
+  }
 
   return (
     <View style={styles.container}>
@@ -137,6 +162,9 @@ const storePage = ({ navigation }) => {
         <View style={styles.hr} />
         <View style={styles.centralize}>
           <Text style={styles.label}>Produtos</Text>
+        </View>
+        <View>
+          {listProducts()}
         </View>
         <View style={styles.centralize}>
           <AntDesign
@@ -232,6 +260,25 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     textAlignVertical: 'top',
   },
+
+  productName: {
+    fontSize: 18,
+    color: 'rgb(117,136,236)',
+    fontWeight: 'bold',
+  },
+
+  productDescription: {
+    fontSize: 12,
+    color: 'rgb(117,136,236)',
+    fontWeight: 'bold',
+  },
+
+  productCard: {
+    width: "90%",
+    height: "30%",
+    marginLeft: "5%",
+    justifyContent: "flex-start",
+  }
 });
 
 export default storePage;

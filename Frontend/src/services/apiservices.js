@@ -1,4 +1,4 @@
-import APIGeneral from './baseService'; 
+import APIGeneral from './baseService';
 
 export const getUserList = async () => {
   try {
@@ -103,7 +103,7 @@ export const deleteStore = async (storeID) => {
 };
 
 export const addProductToStore = async (productsIds, storeID) => {
-  try{
+  try {
     const r = await APIGeneral.put(`/store/addproduct/${storeID}`, {
       productsIds
     });
@@ -123,6 +123,16 @@ export const createProduct = async (productName, productDescription, category, a
       available,
       price
     });
+    return r;
+  } catch (err) {
+    console.error(err);
+    return err;
+  };
+};
+
+export const getProduct = async (productID) => {
+  try {
+    const r = await APIGeneral.get(`/product/${productID}`);
     return r;
   } catch (err) {
     console.error(err);
