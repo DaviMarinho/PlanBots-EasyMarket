@@ -19,7 +19,7 @@
     "ios": {
       "supportsTablet": true,
       "config": {
-        "googleMapsApiKey": "AIzaSyDAivajfNXz2SvksaRnD5_pQQxs4FeQI0o"    
+        "googleMapsApiKey": "AIzaSyDAivajfNXz2SvksaRnD5_pQQxs4FeQI0o"
       }
     },
     "android": {
@@ -28,8 +28,11 @@
         "backgroundColor": "#FFFFFF"
       },
       "config": {
-          "googleMaps": { "apiKey": "AIzaSyDAivajfNXz2SvksaRnD5_pQQxs4FeQI0o" }   
-      }
+        "googleMaps": {
+          "apiKey": "AIzaSyDAivajfNXz2SvksaRnD5_pQQxs4FeQI0o"
+        }
+      },
+      "package": "com.planbots.easymarket"
     },
     "web": {
       "favicon": "./assets/favicon.png"

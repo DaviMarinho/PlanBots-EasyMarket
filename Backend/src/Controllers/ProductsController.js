@@ -6,31 +6,30 @@ const getProductData = async (req, res) => {
 };
 
 const createProduct = async (req, res) => {
-    const {
-        productName,
-        productDescription,
-        category,
-        available,
-        price
-    } = req.body;
+  const {
+    productName,
+    productDescription,
+    category,
+    available,
+    price
+  } = req.body;
 
-    if (!productName || !productDescription || !category || !available || !price) {
-        return res.json({ 'err': 'invalid values' });
-    }
+  if (!productName || !productDescription || !category || !available || !price) {
+    return res.json({ 'err': 'invalid values' });
+  }
 
-    try {
-        const createProduct = await Product.create({
-            productName,
-            productDescription,
-            category,
-            available,
-            price
-        });
-        console.log(createProduct);
-        return res.json(createProduct);
-    } catch (err) {
-        return res.json(err);
-    }
+  try {
+    const createProduct = await Product.create({
+      productName,
+      productDescription,
+      category,
+      available,
+      price
+    });
+    return res.json(createProduct);
+  } catch (err) {
+    return res.json(err);
+  }
 };
 
 const updateProduct = async (req, res) => {
