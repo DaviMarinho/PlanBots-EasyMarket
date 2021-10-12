@@ -20,7 +20,8 @@ routes.use((req, res, next) => {
 
 // Products
 routes.get('/product/:id', ProductController.getProductData);
-routes.post('/product/create', ProductController.createProduct)
+routes.get('/product/store/:id', ProductController.getProductByStoreID);
+routes.post('/product/create', ProductController.createProduct);
 routes.put('/product/update/:id', ProductController.updateProduct);
 routes.delete('/product/delete/:id', ProductController.deleteProduct);
 

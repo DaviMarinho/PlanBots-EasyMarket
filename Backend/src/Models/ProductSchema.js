@@ -10,6 +10,7 @@ const ProductSchema = new mongoose.Schema({
     },
     category: {
         type: String,
+        enum: ['SALGADO', 'DOCE', 'BEBIDA', 'DIVERSOS'],
         require: true,
     },
     available: {
@@ -19,7 +20,15 @@ const ProductSchema = new mongoose.Schema({
     price: {
         type: Number,
         require: true,
-    }
+    },
+    storeID: {
+        type: String,
+        require: true,
+    },
+    productImage: {
+      type: String,
+      require: false,
+    },
 });
 
 module.exports = mongoose.model('Product', ProductSchema);

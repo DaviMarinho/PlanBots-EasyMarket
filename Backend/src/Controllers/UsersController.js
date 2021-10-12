@@ -22,7 +22,6 @@ const createUser = async (req, res) => {
 
   try {
     const user = await User.create({
-      username,
       email,
       phone,
       pass: cryptedPassword,

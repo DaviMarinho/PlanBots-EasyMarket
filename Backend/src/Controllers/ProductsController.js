@@ -5,13 +5,20 @@ const getProductData = async (req, res) => {
     return res.json(await Product.findOne({ _id: id }));
 };
 
+const getProductByStoreID = async (req, res) => {
+    const { id } = req.params;
+    return res.json(await Product.find({storeID: id}));
+}
+
 const createProduct = async (req, res) => {
   const {
     productName,
     productDescription,
     category,
     available,
-    price
+    price,
+    storeID,
+    productImage,
   } = req.body;
 
   if (!productName || !productDescription || !category || !available || !price) {
@@ -24,7 +31,9 @@ const createProduct = async (req, res) => {
       productDescription,
       category,
       available,
-      price
+      price,
+      storeID,
+      productImage,
     });
     return res.json(createProduct);
   } catch (err) {
@@ -71,4 +80,5 @@ module.exports = {
     createProduct,
     updateProduct,
     deleteProduct,
+    getProductByStoreID,
 };
