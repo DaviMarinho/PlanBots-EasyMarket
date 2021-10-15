@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, TextInput, ToastAndroid } from 'react-native';
+import { StyleSheet, View, Text, TextInput, ToastAndroid, Switch } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useData } from '../../context/';
-import { deleteStore, getProductByStore, createProduct, getProduct } from '../../services/apiservices';
+import { deleteStore, getProductByStore, createProduct, addProductToStore, changeStoreStatus } from '../../services/apiservices';
 import CreateButton from '../../components/createButton';
 import Modal from 'react-native-modal';
 
@@ -16,6 +15,9 @@ const storePage = ({ navigation }) => {
   const [productPrice, setProductPrice] = useState('');
   const [productID, setProductID] = useState('');
   const [products, setProducts] = useState([]);
+  const [isOpen, setIsOpen] = useState(storeData.open);
+
+  console.log(storeData);
 
   const deleteStoreFromAPI = () => {
     deleteStore(storeData._id)
@@ -28,26 +30,11 @@ const storePage = ({ navigation }) => {
       })
   }
 
-  const createNewProduct = async () => {
-    await createProduct(productName, productDescription, productCategory, true, productPrice)
-      .then((r) => {
-        setProductID(r?.data?._id);
-      });
-  }
-
-  const addNewProductToStore = async () => {
-    await addProductToStore(productID, storeData._id)
-      .then((r) => {
-        setStoreData(r.data);
-        ToastAndroid.show('Cadastro realizado com sucesso.', ToastAndroid.SHORT);
-
-      });
-  }
-
-  const addProduct = () => {
-    createNewProduct();
-    addNewProductToStore();
+  const addProduct = async () => {
+    await createProduct(productName, productDescription, productCategory, true, productPrice, storeData._id, '');
     setModalVisibility(false);
+    ToastAndroid.show('Cadastro realizado com sucesso.', ToastAndroid.SHORT);
+    getProductsDataFromAPI();
   };
 
   const getProductsDataFromAPI = () => {
@@ -55,18 +42,15 @@ const storePage = ({ navigation }) => {
       .then((r) => {
         setProducts(r.data);
       });
-  }
+  };
 
   const listProducts = () => {
-    if (products.length === 0) {
+    if (products.length > 0) {
       return (
-        <Text>Sua loja não possui nenhum produto, clique no botão abaixo para começar a adicionar.</Text>
-      )
-    } else {
-      return (
-        products.map((product) => {
+        products.map((product, idx) => {
           return (
-            <View style={styles.productCard}>
+            <View style={styles.productCard} key={idx}>
+              <View style={styles.hr} />
               <Text style={styles.productName}>
                 {product.productName}
               </Text>
@@ -129,48 +113,40 @@ const storePage = ({ navigation }) => {
         </View>
       </Modal>
       <View>
-        <View style={styles.storeHeader}>
-          <View>
-            <Text style={styles.label}>Nome:</Text>
-            <Text style={styles.data}>{storeData.storeName}</Text>
-            <Text style={styles.label}>Descrição:</Text>
-            <Text style={styles.data}>{storeData.storeDescription}</Text>
+        <View style={styles.image}>
+          <Text style={{ fontSize: 28 }}>Imagem</Text>
+        </View>
+        <View style={{ paddingLeft: 12, paddingRight: 12, marginTop: 12 }}>
+          <View style={{ alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between' }}>
+            <Text style={styles.storeName}>{storeData.storeName}</Text>
+            <View style={{ alignItems: 'center' }}>
+              <Text>Loja</Text>
+              <Switch 
+                onValueChange={() => {
+                  changeStoreStatus(storeData._id, !isOpen);
+                  setStoreData({
+                    ...storeData,
+                    open: !isOpen
+                  });
+                  setIsOpen(!isOpen);
+                }}
+                value={isOpen}
+              />
+            </View>
           </View>
-          <View style={styles.icons}>
+          <Text style={styles.storeDescription}>{storeData.storeDescription}</Text>
+          <View style={{ marginTop: 18 }}>
+            {listProducts()}
+          </View>
+          <View style={styles.addProducts}>
+            <Text style={{ fontSize: 20, color: 'rgb(74,134,232)', marginBottom: 10, fontWeight: 'bold' }}>Adicionar produtos</Text>
             <AntDesign
-              name="edit"
-              size={30}
+              name="pluscircleo"
+              size={50}
               style={{ color: 'rgb(117,136,236)' }}
-              onPress={() =>
-                navigation.navigate('editStore', {
-                  storeID: storeData._id,
-                  storeName: storeData.storeName,
-                  storeDescription: storeData.storeDescription
-                })
-              } />
-            <FontAwesome
-              name="trash-o"
-              size={30}
-              style={{ color: 'rgb(117,136,236)', marginLeft: 6 }}
-              onPress={() => deleteStoreFromAPI()}
+              onPress={() => setModalVisibility(true)} // abrir modal
             />
           </View>
-
-        </View>
-        <View style={styles.hr} />
-        <View style={styles.centralize}>
-          <Text style={styles.label}>Produtos</Text>
-        </View>
-        <View>
-          {listProducts()}
-        </View>
-        <View style={styles.centralize}>
-          <AntDesign
-            name="pluscircleo"
-            size={50}
-            style={{ color: 'rgb(117,136,236)' }}
-            onPress={() => setModalVisibility(true)} // abrir modal
-          />
         </View>
       </View>
     </View>
@@ -178,6 +154,7 @@ const storePage = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
+  // Screen
   container: {
     flex: 1,
   },
@@ -185,25 +162,63 @@ const styles = StyleSheet.create({
     paddingTop: 12,
     paddingBottom: 12,
   },
-  label: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: 'rgb(117,136,236)',
+
+  // Store Information
+  image: {
+    backgroundColor: 'green',
+    height: 180,
+    justifyContent: 'center',   // remover
+    flexDirection: 'row',       // remover
   },
-  data: {
-    fontSize: 18,
-  },
-  hr: {
-    borderBottomColor: 'black',
-    borderBottomWidth: 1,
-  },
-  centralize: {
-    alignItems: 'center',
-  },
-  icons: {
+
+  header: {
     flexDirection: 'row',
   },
 
+  storeName: {
+    fontSize: 32,
+    fontWeight: "bold",
+    color: 'rgb(74,134,232)',
+  },
+
+  storeDescription: {
+    fontSize: 18,
+    color: 'rgb(74,134,232)',
+  },
+
+  // label: {
+  //   fontSize: 24,
+  //   fontWeight: "bold",
+  //   color: 'rgb(74,134,232)',
+  // },
+  // data: {
+  //   fontSize: 18,
+  // },
+  hr: {
+    borderBottomColor: 'black',
+    borderBottomWidth: 0.8,
+  },
+  addProducts: {
+    alignItems: 'center',
+    marginTop: 12
+  },
+  
+  addProductsText: {
+    fontSize: 16,
+  },
+  // icons: {
+  //   flexDirection: 'row',
+  // },
+  // storeHeader: {
+  //   paddingTop: 12,
+  //   paddingBottom: 12,
+  //   paddingRight: 12,
+  //   paddingLeft: 12,
+  //   flexDirection: 'row',
+  //   justifyContent: 'space-between',
+  // },
+
+  // Modal Styles
   modalContainer: {
     position: 'absolute',
     width: '100%',
@@ -211,21 +226,18 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 10,
   },
-
   pageTitle: {
     textAlign: 'center',
-    color: 'rgb(117,136,236)',
+    color: 'rgb(74,134,232)',
     fontSize: 22,
     padding: 16,
     fontWeight: 'bold',
   },
-
   inputView: {
     marginLeft: '10%',
     width: '100%',
     alignItems: 'flex-start',
   },
-
   input: {
     height: 40,
     marginTop: 12,
@@ -235,7 +247,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     width: '80%',
   },
-
   inputLabel: {
     fontSize: 14,
     backgroundColor: '#FFF',
@@ -247,7 +258,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 1,
   },
-
   descriptionInput: {
     width: '80%',
     height: 100,
@@ -259,24 +269,19 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
   },
 
+  // Product
   productName: {
-    fontSize: 18,
-    color: 'rgb(117,136,236)',
+    fontSize: 24,
+    color: 'rgb(74,134,232)',
     fontWeight: 'bold',
   },
-
   productDescription: {
     fontSize: 12,
-    color: 'rgb(117,136,236)',
+    color: 'rgb(74,134,232)',
     fontWeight: 'bold',
   },
-
   productCard: {
-    width: "90%",
-    height: "30%",
-    marginLeft: "5%",
     justifyContent: "flex-start",
-    backgroundColor: 'rgba(0,0,0,0.1)'
   }
 });
 

@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   icon: {
-    color: 'rgb(117,136,236)',
+    color: 'rgb(74,134,232)',
   },
   label: {
     fontWeight: 'bold',

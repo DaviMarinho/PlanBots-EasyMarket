@@ -26,7 +26,7 @@ const createProduct = async (req, res) => {
   }
 
   try {
-    const createProduct = await Product.create({
+    const newProduct = await Product.create({
       productName,
       productDescription,
       category,
@@ -35,7 +35,7 @@ const createProduct = async (req, res) => {
       storeID,
       productImage,
     });
-    return res.json(createProduct);
+    return res.json(newProduct);
   } catch (err) {
     return res.json(err);
   }

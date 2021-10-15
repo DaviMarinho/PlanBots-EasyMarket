@@ -50,7 +50,7 @@ const Navbar = () => {
           if (userData && !storeData) {
             navigation.navigate('showStore');
           } else if (userData && storeData) {
-            navigation.navigate('storePage', { name: storeData.storeName, description: storeData.storeDescription });
+            navigation.navigate('storePage');
           } else {
             ToastAndroid.show("Para visualizar/cadastrar uma loja realize seu login", ToastAndroid.LONG);
             navigation.navigate('login');
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    backgroundColor: 'rgb(117,136,236)',
+    backgroundColor: 'rgb(74,134,232)',
     bottom: 0,
     width: '100%',
     position: 'absolute',

@@ -30,8 +30,10 @@ routes.get('/store', StoresController.getStoreList);
 routes.get('/store/:id', StoresController.getStoreByID);
 routes.post('/store/create', StoresController.createStore)
 routes.put('/store/edit/:id', StoresController.editStore);
+routes.put('/store/status/:id', StoresController.changeStoreStatus);
 routes.delete('/store/delete/:id', StoresController.deleteStore)
-routes.put('/store/addproduct/:id', StoresController.addProducts)
+
+// routes.put('/store/addproduct/:id', StoresController.addProducts)
 
 // Users
 routes.get('/user', UsersController.getUserList);

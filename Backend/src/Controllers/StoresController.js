@@ -7,6 +7,23 @@ const getStoreList = async (req, res) => {
 
 const getStoreByID = async (req, res) => {
   return res.json(await Store.findOne({ _id: req.params.id }))
+};
+
+const changeStoreStatus = async (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+
+  console.log(id);
+  console.log(status);
+  
+  try {
+    const updatedStatus = await Store.findOneAndUpdate({ _id: id }, {
+      open: status,
+    }, { new: true });
+    return res.json(updatedStatus);
+  } catch (err) {
+    return res.json(err);
+  }
 }
 
 const createStore = async (req, res) => {
@@ -62,5 +79,5 @@ const deleteStore = async (req, res) => {
 };
 
 module.exports = {
-  getStoreList, createStore, editStore, deleteStore, getStoreByID, addProducts
+  getStoreList, createStore, editStore, deleteStore, getStoreByID, changeStoreStatus,
 };

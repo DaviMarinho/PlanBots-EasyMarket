@@ -23,7 +23,7 @@ const Header = () => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'rgb(117,136,236)',
+    backgroundColor: 'rgb(74,134,232)',
     flexDirection: 'row',
     alignItems: 'center',
     paddingLeft: 12,

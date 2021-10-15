@@ -55,7 +55,7 @@ const Login = ({ navigation }) => {
           />
         </View>
         <View style={styles.button}>
-          <Button onPress={() => login()} color='rgb(117,136,236)' title="Entrar" />
+          <Button onPress={() => login()} color='rgb(74,134,232)' title="Entrar" />
         </View>
         <View style={styles.additionalOptions}>
           <Text style={styles.additionalOptionsText}>
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     fontSize: 32,
     textAlign: 'center',
     fontWeight: 'bold',
-    color: 'rgb(117,136,236)',
+    color: 'rgb(74,134,232)',
     paddingTop: 12,
     paddingBottom: 12,
   },
