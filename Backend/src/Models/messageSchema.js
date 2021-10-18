@@ -1,11 +1,7 @@
 const mongoose = require('mongoose');
 
 const MessageSchema = new mongoose.Schema({
-    userID: {
-        type: String,
-        required: true,
-    },
-    contantID: {
+    chatID: {
         type: String,
         required: true,
     },
@@ -17,7 +13,6 @@ const MessageSchema = new mongoose.Schema({
         type: Date,
         require: true,
     },
-
 });
 
-module.exports = mongoose.model('Product', MessageSchema);
+module.exports = mongoose.model('Product', MessageSchema); 

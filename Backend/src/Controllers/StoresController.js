@@ -62,5 +62,5 @@ const deleteStore = async (req, res) => {
 };
 
 module.exports = {
-  getStoreList, createStore, editStore, deleteStore, getStoreByID, addProducts
+  getStoreList, createStore, editStore, deleteStore, getStoreByID,
 };

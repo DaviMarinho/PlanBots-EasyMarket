@@ -5,7 +5,7 @@ const ChatSchema = new mongoose.Schema({
         type: String,
         require: true,
     },
-    contantID: {
+    contactID: {
         type: String,
         require: true,
     },
