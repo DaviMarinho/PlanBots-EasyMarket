@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { StyleSheet, View, Text, TextInput, Button } from 'react-native';
 import { registerStore } from '../../services/apiservices';
 import { useData } from '../../context/';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import InputField from '../../components/inputField';
 
 const createStore = ({ navigation }) => {
   const [storeName, setStoreName] = useState('');
@@ -26,23 +28,25 @@ const createStore = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.imageField}>
+        <AntDesign
+          name="pluscircleo"
+          size={50}
+          style={{ color: '#FFF', marginTop: '5%' }}
+        />
+        <Text style={styles.ImageText}>Adicionar imagem da loja</Text>
+        <Text style={styles.imageSubtext}>(opcional)</Text>
+      </View>
       <View style={styles.content}>
-        <Text style={styles.header}>Criar loja</Text>
         <View style={styles.inputs}>
-          <Text style={styles.label}>Nome da Loja:</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={setStoreName}
-            value={storeName}
-            placeholder="Nome da loja"
-          />
-          <Text style={styles.label}>Descrição:</Text>
+          <InputField title="Nome da loja*" placeholder="Nome da loja" setText={setStoreName} text={storeName} large="80%" />
+          <Text style={styles.inputLabel}>Descrição*</Text>
           <TextInput
             style={styles.descriptionInput}
-            onChangeText={setStoreDescription}
-            value={storeDescription}
             placeholder="Descrição"
             multiline={true}
+            onChangeText={setStoreDescription}
+            value={storeDescription}
           />
         </View>
         <View style={styles.button}>
@@ -56,6 +60,7 @@ const createStore = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#FFF',
   },
   header: {
     fontSize: 32,
@@ -80,15 +85,32 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 8
   },
+  inputLabel: {
+    fontSize: 14,
+    backgroundColor: '#FFF',
+    marginBottom: -22,
+    marginLeft: '3%',
+    fontWeight: 'bold',
+    color: '#000',
+    elevation: 0.1,
+    alignItems: 'center',
+    padding: 1,
+    alignSelf: 'flex-start',
+},
   descriptionInput: {
+    width: '80%',
     height: 100,
     marginTop: 12,
-    marginBottom: 12,
+    marginBottom: 24,
     borderWidth: 1,
     padding: 10,
-    borderRadius: 8
+    borderRadius: 8,
+    textAlignVertical: 'top',
   },
   inputs: {
+    marginTop: '5%',
+    width: '100%',
+    marginLeft: "10%",
     paddingRight: 12,
     paddingLeft: 12,
   },
@@ -106,7 +128,24 @@ const styles = StyleSheet.create({
   },
   button: {
     alignItems: 'center',
-  }
+  },
+  imageField: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: "#6E6E6E",
+    width: "100%",
+    height: "25%",
+  },
+  ImageText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#FFF',
+  },
+  imageSubtext: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#FFF',
+  },
 });
 
 export default createStore;

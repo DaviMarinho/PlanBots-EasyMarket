@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
 
-const InputField = ({ setText, placeholder, text, title, large }) => {
+const InputField = ({ setText, placeholder, text, title, large, password, type, max, edit }) => {
 
     return (
         <View width={large}>
@@ -11,6 +11,10 @@ const InputField = ({ setText, placeholder, text, title, large }) => {
                 placeholder={placeholder}
                 onChangeText={setText}
                 value={text}
+                secureTextEntry={password}
+                keyboardType={type}
+                maxLength={max}
+                editable={edit}
             />
         </View>
     );
