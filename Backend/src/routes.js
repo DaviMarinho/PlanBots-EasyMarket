@@ -33,8 +33,6 @@ routes.put('/store/edit/:id', StoresController.editStore);
 routes.put('/store/status/:id', StoresController.changeStoreStatus);
 routes.delete('/store/delete/:id', StoresController.deleteStore)
 
-// routes.put('/store/addproduct/:id', StoresController.addProducts)
-
 // Users
 routes.get('/user', UsersController.getUserList);
 routes.post('/user/create', UsersController.createUser)
