@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, View, Text, TextInput, Button, ToastAndroid } from 'react-native';
 import { loginUser, getStoreData } from '../../services/apiservices';
 import { useData } from '../../context/';
+import InputField from '../../components/inputField';
 
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -36,23 +37,10 @@ const Login = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.header}>Login</Text>
+        <Text style={styles.header}>Entrar</Text>
         <View style={styles.inputs}>
-          <Text style={styles.label}>Email:</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={setEmail}
-            value={email}
-            placeholder="Email"
-          />
-          <Text style={styles.label}>Senha:</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={setPassword}
-            value={password}
-            placeholder="Senha"
-            secureTextEntry={true}
-          />
+          <InputField title="Email" placeholder="Email" text={email} setText={setEmail} large="90%" />
+          <InputField title="Senha" placeholder="********" text={password} setText={setPassword} large="90%" password={true} />
         </View>
         <View style={styles.button}>
           <Button onPress={() => login()} color='rgb(74,134,232)' title="Entrar" />
@@ -73,9 +61,10 @@ const Login = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#FFF',
   },
   header: {
-    fontSize: 32,
+    fontSize: 36,
     textAlign: 'center',
     fontWeight: 'bold',
     color: 'rgb(74,134,232)',
@@ -98,6 +87,7 @@ const styles = StyleSheet.create({
     borderRadius: 8
   },
   inputs: {
+    marginLeft: "10%",
     paddingRight: 12,
     paddingLeft: 12,
   },

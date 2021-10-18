@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, TextInput, ToastAndroid, Switch } from 'react-native';
+import { StyleSheet, View, Text, TextInput, ToastAndroid, Switch, ScrollView } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { useData } from '../../context/';
 import { deleteStore, getProductByStore, createProduct, addProductToStore, changeStoreStatus } from '../../services/apiservices';
 import CreateButton from '../../components/createButton';
+import InputField from '../../components/inputField';
 import Modal from 'react-native-modal';
 
 const storePage = ({ navigation }) => {
@@ -33,6 +35,10 @@ const storePage = ({ navigation }) => {
   const addProduct = async () => {
     await createProduct(productName, productDescription, productCategory, true, productPrice, storeData._id, '');
     setModalVisibility(false);
+    setProductCategory('');
+    setProductDescription('');
+    setProductName('');
+    setProductPrice('');
     ToastAndroid.show('Cadastro realizado com sucesso.', ToastAndroid.SHORT);
     getProductsDataFromAPI();
   };
@@ -73,82 +79,86 @@ const storePage = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Modal isVisible={modalVisibility} onBackdropPress={() => setModalVisibility(false)} avoidKeyboard={false}>
-        <View style={styles.modalContainer}>
-          <Text style={styles.pageTitle}>
-            Adicionar novo produto
-          </Text>
-          <View style={styles.inputView}>
-            <Text style={styles.inputLabel}>Nome do produto*</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Nome do produto"
-              onChangeText={setProductName}
-              value={productName}
-            />
-            <Text style={styles.inputLabel}>Categoria do produto*</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Categoria do produto"
-              onChangeText={setProductCategory}
-              value={productCategory}
-            />
-            <Text style={styles.inputLabel}>Preço*</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="R$ 00.00"
-              onChangeText={setProductPrice}
-              value={productPrice}
-            />
-            <Text style={styles.inputLabel}>Descrição*</Text>
-            <TextInput
-              style={styles.descriptionInput}
-              placeholder="Descrição"
-              multiline={true}
-              onChangeText={setProductDescription}
-              value={productDescription}
-            />
+      <ScrollView>
+        <Modal isVisible={modalVisibility} onBackdropPress={() => setModalVisibility(false)} avoidKeyboard={false}>
+          <View style={styles.modalContainer}>
+            <View style={styles.closeModal}>
+              <AntDesign
+                name="closecircleo"
+                size={30}
+                style={{ color: 'rgb(117,136,236)' }}
+                onPress={() => setModalVisibility(false)}
+              />
+            </View>
+            <Text style={styles.pageTitle}>
+              Adicionar novo produto
+            </Text>
+            <View style={styles.inputView}>
+              <InputField title="Nome do produto*" placeholder="Nome do produto" setText={setProductName} text={productName} large="80%" />
+              <Text style={styles.inputLabel}>Categoria do produto*</Text>
+              <View style={styles.pickerView}>
+                <Picker
+                  style={styles.picker}
+                  selectedValue={productCategory}
+                  onValueChange={(itemValue) =>
+                    setProductCategory(itemValue)
+                  }>
+                  <Picker.Item label="Categoria do produto" value="0" color="#9A9A9A" style={styles.pickerItem} />
+                  <Picker.Item label="Salgado" value="SALGADO" style={styles.pickerItem} />
+                  <Picker.Item label="Doce" value="DOCE" style={styles.pickerItem} />
+                </Picker>
+              </View>
+              <InputField title="Preço*" placeholder="R$ 00.00" setText={setProductPrice} text={productPrice} large="80%" type="numerical" />
+              <Text style={styles.inputLabel}>Descrição*</Text>
+              <TextInput
+                style={styles.descriptionInput}
+                placeholder="Descrição"
+                multiline={true}
+                onChangeText={setProductDescription}
+                value={productDescription}
+              />
+            </View>
+            <CreateButton create={addProduct} text='Cadastrar produto' />
           </View>
-          <CreateButton create={addProduct} text='Cadastrar produto' />
-        </View>
-      </Modal>
-      <View>
-        <View style={styles.image}>
-          <Text style={{ fontSize: 28 }}>Imagem</Text>
-        </View>
-        <View style={{ paddingLeft: 12, paddingRight: 12, marginTop: 12 }}>
-          <View style={{ alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between' }}>
-            <Text style={styles.storeName}>{storeData.storeName}</Text>
-            <View style={{ alignItems: 'center' }}>
-              <Text>Loja</Text>
-              <Switch 
-                onValueChange={() => {
-                  changeStoreStatus(storeData._id, !isOpen);
-                  setStoreData({
-                    ...storeData,
-                    open: !isOpen
-                  });
-                  setIsOpen(!isOpen);
-                }}
-                value={isOpen}
+        </Modal>
+        <View>
+          <View style={styles.image}>
+            <Text style={{ fontSize: 28 }}>Imagem</Text>
+          </View>
+          <View style={{ paddingLeft: 12, paddingRight: 12, marginTop: 12 }}>
+            <View style={{ alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between' }}>
+              <Text style={styles.storeName}>{storeData.storeName}</Text>
+              <View style={{ alignItems: 'center' }}>
+                <Text>Loja</Text>
+                <Switch
+                  onValueChange={() => {
+                    changeStoreStatus(storeData._id, !isOpen);
+                    setStoreData({
+                      ...storeData,
+                      open: !isOpen
+                    });
+                    setIsOpen(!isOpen);
+                  }}
+                  value={isOpen}
+                />
+              </View>
+            </View>
+            <Text style={styles.storeDescription}>{storeData.storeDescription}</Text>
+            <View style={{ marginTop: 18 }}>
+              {listProducts()}
+            </View>
+            <View style={styles.addProducts}>
+              <Text style={{ fontSize: 20, color: 'rgb(74,134,232)', marginBottom: 10, fontWeight: 'bold' }}>Adicionar produtos</Text>
+              <AntDesign
+                name="pluscircleo"
+                size={50}
+                style={{ color: 'rgb(117,136,236)' }}
+                onPress={() => setModalVisibility(true)} // abrir modal
               />
             </View>
           </View>
-          <Text style={styles.storeDescription}>{storeData.storeDescription}</Text>
-          <View style={{ marginTop: 18 }}>
-            {listProducts()}
-          </View>
-          <View style={styles.addProducts}>
-            <Text style={{ fontSize: 20, color: 'rgb(74,134,232)', marginBottom: 10, fontWeight: 'bold' }}>Adicionar produtos</Text>
-            <AntDesign
-              name="pluscircleo"
-              size={50}
-              style={{ color: 'rgb(117,136,236)' }}
-              onPress={() => setModalVisibility(true)} // abrir modal
-            />
-          </View>
         </View>
-      </View>
+      </ScrollView>
     </View>
   );
 };
@@ -200,9 +210,10 @@ const styles = StyleSheet.create({
   },
   addProducts: {
     alignItems: 'center',
-    marginTop: 12
+    marginTop: 12,
+    marginBottom: 100,
   },
-  
+
   addProductsText: {
     fontSize: 16,
   },
@@ -219,6 +230,11 @@ const styles = StyleSheet.create({
   // },
 
   // Modal Styles
+  closeModal: {
+    alignItems: 'flex-end',
+    padding: 8,
+    marginBottom: "-8%",
+  },
   modalContainer: {
     position: 'absolute',
     width: '100%',
@@ -268,7 +284,22 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     textAlignVertical: 'top',
   },
-
+  picker: {
+    width: "110%",
+    marginLeft: "-3%"
+  },
+  pickerView: {
+    height: 40,
+    marginTop: 12,
+    marginBottom: 12,
+    borderWidth: 1,
+    padding: 10,
+    borderRadius: 8,
+    width: '80%',
+  },
+  pickerItem: {
+    fontSize: 14,
+  },
   // Product
   productName: {
     fontSize: 24,

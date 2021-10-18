@@ -4,6 +4,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { updateUser } from '../../services/apiservices';
 import { validateEmail, validatePhone, validatePassword } from '../../utils/validate';
 import { useData } from '../../context/';
+import InputField from '../../components/inputField';
 
 const editUser = ({ route, navigation }) => {
   const userID = route.params.id;
@@ -11,6 +12,7 @@ const editUser = ({ route, navigation }) => {
   const [phone, setPhone] = useState(route.params.phone);
   const [cpf, setCPF] = useState(route.params.cpf);
   const [password, setPassword] = useState();
+  const [confirmPassword, setConfirmPassword] = useState('');
   const { setUserData } = useData();
 
   const updateUserData = () => {
@@ -41,43 +43,14 @@ const editUser = ({ route, navigation }) => {
     <View style={styles.container}>
       <View style={styles.content}>
         <View style={styles.iconView}>
-          <Ionicons name="person" style={styles.icon} size={80} />
+          <Ionicons name="person-circle-outline" size={175} style={styles.icon} />
         </View>
         <View style={styles.inputs}>
-          <Text style={styles.label}>Email:</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={setEmail}
-            value={email}
-            placeholder="Email"
-          />
-          <Text style={styles.label}>CPF:</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={setCPF}
-            value={cpf}
-            editable={false}
-            placeholder="CPF"
-            maxLength={11}
-            keyboardType="numeric"
-          />
-          <Text style={styles.label}>Telefone:</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={setPhone}
-            value={phone}
-            placeholder="(DDD) Telefone"
-            keyboardType="numeric"
-            maxLength={11}
-          />
-          <Text style={styles.label}>Senha:</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={setPassword}
-            value={password}
-            placeholder="Senha"
-            secureTextEntry={true}
-          />
+          <InputField title="Email" placeholder="Email" text={email} setText={setEmail} large="90%" />
+          <InputField title="Telefone" placeholder="(99) 99999-9999" text={phone} setText={setPhone} large="90%" type="numeric" max={11} />
+          <InputField title="CPF" placeholder="___.___.___-__" text={cpf} setText={setCPF} large="90%" type="numeric" max={11} edit={false} />
+          <InputField title="Alterar Senha" placeholder="********" text={password} setText={setPassword} large="90%" password={true} />
+          <InputField title="Confirmar Nova Senha" placeholder="********" text={confirmPassword} setText={setConfirmPassword} large="90%" password={true} />
         </View>
         <View style={styles.button}>
           <Button title="Editar" onPress={() => updateUserData()} />
@@ -90,6 +63,7 @@ const editUser = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#FFF",
   },
   content: {
     paddingTop: 12,
@@ -115,6 +89,7 @@ const styles = StyleSheet.create({
   inputs: {
     paddingRight: 12,
     paddingLeft: 12,
+    alignItems: 'center',
   },
   button: {
     alignItems: 'center',
