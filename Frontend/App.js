@@ -23,6 +23,11 @@ const App = () => {
         <Header />
         <Stack.Navigator>
           <Stack.Screen
+            name="login"
+            component={Login}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
             name="home"
             component={HomePage}
             options={{ headerShown: false }}
@@ -30,11 +35,6 @@ const App = () => {
           <Stack.Screen
             name="showStore"
             component={showStore}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="login"
-            component={Login}
             options={{ headerShown: false }}
           />
           <Stack.Screen

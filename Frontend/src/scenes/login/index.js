@@ -8,6 +8,13 @@ const Login = ({ navigation }) => {
   const [password, setPassword] = useState('');
   const { userData, setUserData, setStoreData, storeData } = useData();
 
+  const getStoreDataFromAPI = (storeID) => {
+    getStoreData(storeID)
+      .then((r) => {
+        setStoreData(r.data);
+      });
+  };
+
   const login = async () => {
     await loginUser(email, password)
       .then((r) => {
@@ -23,13 +30,6 @@ const Login = ({ navigation }) => {
           getStoreDataFromAPI(r.data.storeID);
         }
         navigation.navigate('home');
-      });
-  };
-
-  const getStoreDataFromAPI = (storeID) => {
-    getStoreData(storeID)
-      .then((r) => {
-        setStoreData(r.data);
       });
   };
 

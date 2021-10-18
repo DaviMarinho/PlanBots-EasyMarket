@@ -20,7 +20,8 @@ routes.use((req, res, next) => {
 
 // Products
 routes.get('/product/:id', ProductController.getProductData);
-routes.post('/product/create', ProductController.createProduct)
+routes.get('/product/store/:id', ProductController.getProductByStoreID);
+routes.post('/product/create', ProductController.createProduct);
 routes.put('/product/update/:id', ProductController.updateProduct);
 routes.delete('/product/delete/:id', ProductController.deleteProduct);
 
@@ -29,8 +30,7 @@ routes.get('/store', StoresController.getStoreList);
 routes.get('/store/:id', StoresController.getStoreByID);
 routes.post('/store/create', StoresController.createStore)
 routes.put('/store/edit/:id', StoresController.editStore);
-routes.delete('/store/delete/:id', StoresController.deleteStore)
-routes.put('/store/addproduct/:id', StoresController.addProducts)
+routes.delete('/store/delete/:id', StoresController.deleteStore);
 
 // Users
 routes.get('/user', UsersController.getUserList);

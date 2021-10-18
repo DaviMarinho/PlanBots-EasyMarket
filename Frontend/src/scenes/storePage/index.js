@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, TextInput, ToastAndroid } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useData } from '../../context/';
-import { deleteStore, addProductToStore, createProduct, getProduct } from '../../services/apiservices';
+import { deleteStore, getProductByStore, createProduct, getProduct } from '../../services/apiservices';
 import CreateButton from '../../components/createButton';
 import Modal from 'react-native-modal';
 
@@ -40,7 +40,7 @@ const storePage = ({ navigation }) => {
       .then((r) => {
         setStoreData(r.data);
         ToastAndroid.show('Cadastro realizado com sucesso.', ToastAndroid.SHORT);
-      
+
       });
   }
 
@@ -51,19 +51,18 @@ const storePage = ({ navigation }) => {
   };
 
   const getProductsDataFromAPI = () => {
-    getProduct(storeData.products)
+    getProductByStore(storeData._id)
       .then((r) => {
         setProducts(r.data);
       });
   }
 
   const listProducts = () => {
-    if (storeData.products.length === 0) {
+    if (products.length === 0) {
       return (
         <Text>Sua loja não possui nenhum produto, clique no botão abaixo para começar a adicionar.</Text>
       )
     } else {
-      getProductsDataFromAPI(storeData.products);
       return (
         products.map((product) => {
           return (

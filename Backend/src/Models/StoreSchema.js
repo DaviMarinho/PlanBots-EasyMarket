@@ -6,15 +6,14 @@ const StoreSchema = new mongoose.Schema({
     require: true,
     unique: true,
   },
+  storeImage: {
+    type: String,
+    require: false,
+  },
   storeDescription: {
     type: String,
     require: true,
   },
-  products: [{
-    productsIds: {
-      type: String,
-    }
-  }],
   open: {
     type: Boolean,
   },

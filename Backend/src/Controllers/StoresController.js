@@ -61,24 +61,6 @@ const deleteStore = async (req, res) => {
   }
 };
 
-const addProducts = async (req, res) => {
-  const { id } = req.params;
-  const { productsIds } = req.body;
-
-  const store = await Store.findOne({ _id: req.params.id })
-
-  store.products.push(productsIds)
-  try {
-    const updatedStore = await Store.findOneAndUpdate({ _id: id }, {
-      products: store,
-    }, { new: true });
-    return res.json(updatedStore);
-  } catch (err) {
-    return res.json(err);
-  }
-};
-
-
 module.exports = {
-  getStoreList, createStore, editStore, deleteStore, getStoreByID, addProducts
+  getStoreList, createStore, editStore, deleteStore, getStoreByID,
 };

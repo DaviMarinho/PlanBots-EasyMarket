@@ -114,14 +114,24 @@ export const addProductToStore = async (productsIds, storeID) => {
   }
 }
 // Produtos
-export const createProduct = async (productName, productDescription, category, available, price) => {
+export const createProduct = async (
+  productName,
+  productDescription,
+  category,
+  available,
+  price,
+  storeID,
+  productImage
+) => {
   try {
     const r = await APIGeneral.post("/product/create", {
       productName,
       productDescription,
       category,
       available,
-      price
+      price,
+      storeID,
+      productImage
     });
     return r;
   } catch (err) {
@@ -130,11 +140,9 @@ export const createProduct = async (productName, productDescription, category, a
   };
 };
 
-export const getProduct = async (productList) => {
+export const getProductByStore = async (storeID) => {
   try {
-    const r = await APIGeneral.post(`/product`, {
-      productsIdsList: productList,
-    });
+    const r = await APIGeneral.get(`/product/store/${storeID}`);
     return r;
   } catch (err) {
     console.error(err);
