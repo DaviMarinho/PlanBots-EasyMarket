@@ -12,6 +12,7 @@ const {
   PORT,
 } = process.env;
 
+
 const url = `mongodb+srv://${DB_USER}:${DB_PASS}@${DB_HOST}/${DB_NAME}`
 
 mongoose

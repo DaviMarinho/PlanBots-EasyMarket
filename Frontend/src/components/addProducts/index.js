@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
 
     pageTitle: {
         textAlign: 'center',
-        color: 'rgb(117,136,236)',
+        color: 'rgb(74,134,232)',
         fontSize: 22,
         padding: 16,
         fontWeight: 'bold',

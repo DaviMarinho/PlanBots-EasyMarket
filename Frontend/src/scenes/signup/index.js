@@ -56,7 +56,7 @@ const Signup = ({ navigation }) => {
           />
         </View>
         <View style={styles.button}>
-          <Button color='rgb(117,136,236)' onPress={() => registrar()} title="Cadastrar" />
+          <Button color='rgb(74,134,232)' onPress={() => registrar()} title="Cadastrar" />
         </View>
         <View style={styles.additionalOptions}>
           <Text style={styles.additionalOptionsText} onPress={() => navigation.navigate('login')}>
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     fontSize: 32,
     textAlign: 'center',
     fontWeight: 'bold',
-    color: 'rgb(117,136,236)',
+    color: 'rgb(74,134,232)',
     paddingTop: 12,
     paddingBottom: 12,
   },

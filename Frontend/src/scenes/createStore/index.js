@@ -46,7 +46,7 @@ const createStore = ({ navigation }) => {
           />
         </View>
         <View style={styles.button}>
-          <Button onPress={() => cadastrarLoja()} color='rgb(117,136,236)' title="Criar loja" />
+          <Button onPress={() => cadastrarLoja()} color='rgb(74,134,232)' title="Criar loja" />
         </View>
       </View>
     </View>
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     fontSize: 32,
     textAlign: 'center',
     fontWeight: 'bold',
-    color: 'rgb(117,136,236)',
+    color: 'rgb(74,134,232)',
     paddingTop: 12,
     paddingBottom: 12,
   },

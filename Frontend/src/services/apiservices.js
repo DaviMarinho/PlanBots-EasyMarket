@@ -113,6 +113,18 @@ export const addProductToStore = async (productsIds, storeID) => {
     return err;
   }
 }
+
+export const changeStoreStatus = async (storeID, status) => {
+  console.log(status);
+  try {
+    const r = await APIGeneral.put(`/store/status/${storeID}`, { status });
+    return r;
+  } catch (err) {
+    console.warn(err);
+    return err;
+  }
+}
+
 // Produtos
 export const createProduct = async (
   productName,
