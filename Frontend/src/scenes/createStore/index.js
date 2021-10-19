@@ -43,7 +43,7 @@ const createStore = ({ navigation }) => {
           <Text style={styles.inputLabel}>Descrição*</Text>
           <TextInput
             style={styles.descriptionInput}
-            placeholder="Descrição"
+            placeholder="Descrição*"
             multiline={true}
             onChangeText={setStoreDescription}
             value={storeDescription}

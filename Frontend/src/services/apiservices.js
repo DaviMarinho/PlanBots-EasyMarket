@@ -161,3 +161,13 @@ export const getProductByStore = async (storeID) => {
     return err;
   };
 };
+
+export const deleteProduct = async (productID) => {
+  try {
+    const r = await APIGeneral.delete(`/product/delete/${productID}`);
+    return r;
+  } catch (err) {
+    console.error(err);
+    return err;
+  }
+};
