@@ -2,38 +2,45 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, TextInput, ToastAndroid, Switch, ScrollView } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import { useData } from '../../context/';
 import { deleteStore, getProductByStore, createProduct, deleteProduct, changeStoreStatus } from '../../services/apiservices';
 import CreateButton from '../../components/createButton';
 import InputField from '../../components/inputField';
 import Modal from 'react-native-modal';
+import { useData } from "../../context/";
+import CreateButton from "../../components/createButton";
 
 const storePage = ({ navigation }) => {
   const { userData, storeData, setUserData, setStoreData } = useData();
   const [modalVisibility, setModalVisibility] = useState(false);
-  const [productName, setProductName] = useState('');
-  const [productDescription, setProductDescription] = useState('');
-  const [productCategory, setProductCategory] = useState('');
-  const [productPrice, setProductPrice] = useState('');
-  const [productID, setProductID] = useState('');
+  const [productName, setProductName] = useState("");
+  const [productDescription, setProductDescription] = useState("");
+  const [productCategory, setProductCategory] = useState("");
+  const [productPrice, setProductPrice] = useState("");
   const [products, setProducts] = useState([]);
   const [isOpen, setIsOpen] = useState(storeData.open);
 
   console.log(storeData);
 
   const deleteStoreFromAPI = () => {
-    deleteStore(storeData._id)
-      .then((r) => {
-        const deletedStoreUser = userData;
-        deletedStoreUser.storeID = '';
-        setUserData(deletedStoreUser);
-        setStoreData();
-        navigation.navigate('home');
-      })
-  }
+    deleteStore(storeData._id).then((r) => {
+      const deletedStoreUser = userData;
+      deletedStoreUser.storeID = "";
+      setUserData(deletedStoreUser);
+      setStoreData();
+      navigation.navigate("home");
+    });
+  };
 
   const addProduct = async () => {
-    await createProduct(productName, productDescription, productCategory, true, productPrice, storeData._id, '');
+    await createProduct(
+      productName,
+      productDescription,
+      productCategory,
+      true,
+      productPrice,
+      storeData._id,
+      ""
+    );
     setModalVisibility(false);
     setProductCategory('');
     setProductDescription('');
@@ -44,10 +51,32 @@ const storePage = ({ navigation }) => {
   };
 
   const getProductsDataFromAPI = () => {
-    getProductByStore(storeData._id)
-      .then((r) => {
-        setProducts(r.data);
-      });
+    getProductByStore(storeData._id).then((r) => {
+      setProducts(r.data);
+    });
+  };
+
+  const openStore = () => {
+    navigator.geolocation.getCurrentPosition(
+      // success
+      async ({ coords: { latitude, longitude } }) => {
+        changeStoreStatus(storeData._id, !isOpen, latitude, longitude);
+        setStoreData({
+          ...storeData,
+          open: !isOpen,
+          storeLatitude: latitude,
+          storeLongitude: longitude
+        });
+        setIsOpen(!isOpen);
+      },
+      // error
+      () => {},
+      {
+        timeout: 2000,
+        enableHighAccuracy: true,
+        maximumAge: 1000,
+      }
+    );
   };
 
   const deleteProductFromAPI = async (id) => {
@@ -202,23 +231,23 @@ const styles = StyleSheet.create({
   image: {
     backgroundColor: '#6E6E6E',
     height: 180,
-    justifyContent: 'center',   // remover
-    flexDirection: 'row',       // remover
+    justifyContent: "center", // remover
+    flexDirection: "row", // remover
   },
 
   header: {
-    flexDirection: 'row',
+    flexDirection: "row",
   },
 
   storeName: {
     fontSize: 32,
     fontWeight: "bold",
-    color: 'rgb(74,134,232)',
+    color: "rgb(74,134,232)",
   },
 
   storeDescription: {
     fontSize: 18,
-    color: 'rgb(74,134,232)',
+    color: "rgb(74,134,232)",
   },
 
   storeDescriptionView: {
@@ -270,23 +299,23 @@ const styles = StyleSheet.create({
     marginBottom: "-8%",
   },
   modalContainer: {
-    position: 'absolute',
-    width: '100%',
+    position: "absolute",
+    width: "100%",
     height: 445,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 10,
   },
   pageTitle: {
-    textAlign: 'center',
-    color: 'rgb(74,134,232)',
+    textAlign: "center",
+    color: "rgb(74,134,232)",
     fontSize: 22,
     padding: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   inputView: {
-    marginLeft: '10%',
-    width: '100%',
-    alignItems: 'flex-start',
+    marginLeft: "10%",
+    width: "100%",
+    alignItems: "flex-start",
   },
   input: {
     height: 40,
@@ -295,28 +324,28 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     borderRadius: 8,
-    width: '80%',
+    width: "80%",
   },
   inputLabel: {
     fontSize: 14,
-    backgroundColor: '#FFF',
+    backgroundColor: "#FFF",
     marginBottom: -22,
-    marginLeft: '3%',
-    fontWeight: 'bold',
-    color: '#000',
+    marginLeft: "3%",
+    fontWeight: "bold",
+    color: "#000",
     elevation: 0.1,
-    alignItems: 'center',
+    alignItems: "center",
     padding: 1,
   },
   descriptionInput: {
-    width: '80%',
+    width: "80%",
     height: 100,
     marginTop: 12,
     marginBottom: 24,
     borderWidth: 1,
     padding: 10,
     borderRadius: 8,
-    textAlignVertical: 'top',
+    textAlignVertical: "top",
   },
   picker: {
     width: "110%",
