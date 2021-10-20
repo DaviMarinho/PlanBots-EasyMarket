@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, TextInput, Button, ToastAndroid } from 'react-native';
 import { registerUser } from '../../services/apiservices';
+import InputField from '../../components/inputField';
 
 const Signup = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [cpf, setCPF] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   const registrar = async () => {
     await registerUser(email, phone, cpf, password)
@@ -20,40 +22,11 @@ const Signup = ({ navigation }) => {
       <View style={styles.content}>
         <Text style={styles.header}>Cadastro</Text>
         <View style={styles.inputs}>
-          <Text style={styles.label}>Email:</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={setEmail}
-            value={email}
-            placeholder="Email"
-            autoCompleteType="email"
-          />
-          <Text style={styles.label}>Telefone:</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={setPhone}
-            value={phone}
-            placeholder="(DDD) Telefone"
-            keyboardType="numeric"
-            maxLength={11}
-          />
-          <Text style={styles.label}>CPF:</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={setCPF}
-            value={cpf}
-            placeholder="CPF"
-            keyboardType="numeric"
-            maxLength={11}
-          />
-          <Text style={styles.label}>Senha:</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={setPassword}
-            value={password}
-            placeholder="Senha"
-            secureTextEntry={true}
-          />
+          <InputField title="Email*" placeholder="Email" text={email} setText={setEmail} large="90%" />
+          <InputField title="Telefone*" placeholder="(99) 99999-9999" text={phone} setText={setPhone} large="90%" type="numeric" max={11}/>
+          <InputField title="CPF*" placeholder="___.___.___-__" text={cpf} setText={setCPF} large="90%" type="numeric" max={11}/>
+          <InputField title="Senha*" placeholder="********" text={password} setText={setPassword} large="90%" password={true} />
+          <InputField title="Confirmar Senha*" placeholder="********" text={confirmPassword} setText={setConfirmPassword} large="90%" password={true} />
         </View>
         <View style={styles.button}>
           <Button color='rgb(74,134,232)' onPress={() => registrar()} title="Cadastrar" />
@@ -71,9 +44,10 @@ const Signup = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#FFF',
   },
   header: {
-    fontSize: 32,
+    fontSize: 36,
     textAlign: 'center',
     fontWeight: 'bold',
     color: 'rgb(74,134,232)',
@@ -93,11 +67,12 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     borderWidth: 1,
     padding: 10,
-    borderRadius: 8
+    borderRadius: 8,
   },
   inputs: {
     paddingRight: 12,
     paddingLeft: 12,
+    alignItems: 'center',
   },
   additionalOptions: {
     marginTop: 12,
