@@ -124,7 +124,6 @@ export const addProductToStore = async (productsIds, storeID) => {
 }
 
 export const changeStoreStatus = async (storeID, status, latitude, longitude) => {
-  console.log(status);
   try {
     const r = await APIGeneral.put(`/store/status/${storeID}`, { 
       status,

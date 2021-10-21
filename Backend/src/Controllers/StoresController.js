@@ -11,7 +11,6 @@ const getOpenStores = async (req, res) => {
 }
 
 const getStoreByID = async (req, res) => {
-  console.log(req.params.id);
   return res.json(await Store.findOne({ _id: req.params.id }))
 };
 

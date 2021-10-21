@@ -1,99 +1,42 @@
 import React, { useEffect, useState } from "react";
 import MapView, { Marker, Circle } from "react-native-maps";
-import { StyleSheet, Text, View, Dimensions, ToastAndroid } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Dimensions,
+  ActivityIndicator,
+} from "react-native";
+import { useData } from '../../context/';
 import * as Location from "expo-location";
-import { openStores } from "../../services/apiservices";
 
 const HomePage = () => {
   const [initialPosition, setInitialPosition] = useState(null);
-  const [markers, setMarkers] = useState([]);
-  // const [markers, setMarkers] = useState(
-  // [
-  //   {
-  //     coordinates: {
-  //       latitude: -15.832120,
-  //       longitude: -47.914840,
-  //     },
-  //     title: "Churrasco",
-  //     description: "No domingo",
-  //   },
-  // ]);
+  const { markers, getStoreLocations } = useData();
 
-  // {
-  //   coordinates: {
-  //     latitude: 35.524548,
-  //     longitude: 139.6749817,
-  //   },
-  //   title: "Best Place",
-  //   description: "This is the best place in Japan",
-  // },
-
-  // {
-  //   coordinates: {
-  //     latitude: 35.524698,
-  //     longitude: 139.6655507,
-  //   },
-  //   title: "Second Best Place",
-  //   description: "This is the second best place in Japan",
-  // },
-  // {
-  //   coordinates: {
-  //     latitude: 35.5230786,
-  //     longitude: 139.6701034,
-  //   },
-  //   title: "Third Best Place",
-  //   description: "This is the third best place in Japan",
-  // },
-  // {
-  //   coordinates: {
-  //     latitude: 35.521016,
-  //     longitude: 139.6561917,
-  //   },
-  //   title: "Fourth Best Place",
-  //   description: "This is the fourth best place in Japan",
-  // },
-
-  const getStoresPositions = () => {
-    openStores().then((r) => {
-      setMarkers(r.data);
-    });
-  };
-
-  console.log(markers);
-
-  useEffect(() => {
+  const getUserLocation = () => {
     Location.installWebGeolocationPolyfill();
     navigator.geolocation.getCurrentPosition(
-      // success
-      async ({ coords: { latitude, longitude } }) => {
+      (p) => {
         setInitialPosition({
-          latitude,
-          longitude,
+          latitude: p.coords.latitude,
+          longitude: p.coords.longitude,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         });
       },
-      // error
-      () => {},
+      (e) => console.error(e),
       {
-        timeout: 2000,
         enableHighAccuracy: true,
-        maximumAge: 1000,
+        timeout: 5000,
+        maximumAge: 0,
       }
     );
-  }, []);
+  };
 
-  useEffect(() => {
-    if (initialPosition) {
-      getStoresPositions();
-    }
-  }, [initialPosition]);
-
-  return (
-    <View style={styles.container}>
-      <MapView style={styles.mapStyle} initialRegion={initialPosition}>
-        {markers.map((marker, idx) => {
-          console.log(marker);
+  const renderMarkers = () => {
+    if (markers?.length) {
+      return markers.map((marker, idx) => {
+        if (marker.storeLatitude && marker.storeLongitude) { // remover depois que todas as lojas estejam usando o storeLatitude e storeLongitude
           return (
             <Marker
               coordinate={{
@@ -104,20 +47,39 @@ const HomePage = () => {
               title={marker.storeName}
               description={marker.storeDescription}
               key={idx}
-              onPress={() => console.log('testando')}
+              onPress={() => console.log("testando")}
             />
           );
-        })}
+        }
+      });
+    }
+  };
 
-        {initialPosition && (
+  useEffect(() => {
+    getUserLocation();
+  }, []);
+
+  useEffect(() => {
+    if (initialPosition) {
+      getStoreLocations();
+    }
+  }, [initialPosition]);
+
+  return (
+    <View style={styles.container}>
+      {initialPosition ? (
+        <MapView style={styles.mapStyle} initialRegion={initialPosition}>
+          {renderMarkers()}
           <Circle
             radius={1500}
             center={initialPosition}
             fillColor="rgba(180,0,0,0.3)"
             strokeWidth={2}
           />
-        )}
-      </MapView>
+        </MapView>
+      ) : (
+        <ActivityIndicator size="large" color="red" />
+      )}
     </View>
   );
 };
