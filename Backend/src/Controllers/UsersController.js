@@ -8,7 +8,7 @@ const getUserList = async (req, res) => {
 
 const createUser = async (req, res) => {
   const {
-    email, phone, password, cpf,
+    email, phone, password, cpf, image,
   } = req.body;
 
   const invalidValues = validate.validateValues(email, phone, password, cpf);
@@ -28,6 +28,7 @@ const createUser = async (req, res) => {
       storeID: '',
       rating: 0,
       cpf,
+      image
     });
     return res.json(user);
   } catch (error) {
@@ -38,7 +39,7 @@ const createUser = async (req, res) => {
 const editUser = async (req, res) => {
   const { id } = req.params;
   const {
-    email, cpf, phone, pass,
+    email, cpf, phone, pass, image,
   } = req.body;
 
   const invalidValues = validate.validateValues(email, phone, pass, cpf);
@@ -58,6 +59,7 @@ const editUser = async (req, res) => {
       phone,
       pass: cryptedPassword,
       cpf,
+      image,
     }, { new: true });
     return res.json(updatedUser);
   } catch (err) {

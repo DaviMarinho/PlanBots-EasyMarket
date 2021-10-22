@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, Button, TextInput, ToastAndroid } from 'react-native';
+import { StyleSheet, View, Text, Button, Image, ToastAndroid } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { updateUser } from '../../services/apiservices';
 import { validateEmail, validatePhone, validatePassword } from '../../utils/validate';
 import { useData } from '../../context/';
 import InputField from '../../components/inputField';
+import * as ImagePicker from 'expo-image-picker';
 
 const editUser = ({ route, navigation }) => {
   const userID = route.params.id;
@@ -13,6 +14,7 @@ const editUser = ({ route, navigation }) => {
   const [cpf, setCPF] = useState(route.params.cpf);
   const [password, setPassword] = useState();
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [image, setImage] = useState(route.params.image);
   const { setUserData } = useData();
 
   const updateUserData = () => {
@@ -28,7 +30,7 @@ const editUser = ({ route, navigation }) => {
       ToastAndroid.show("Telefone invalido. Utilize o formato DDD+Telefone (celular).", ToastAndroid.LONG);
       return;
     }
-    updateUser(userID, email, cpf, phone, password)
+    updateUser(userID, email, cpf, phone, password, image)
       .then((r) => {
         try {
           setUserData(r.data);
@@ -39,11 +41,25 @@ const editUser = ({ route, navigation }) => {
       });
   }
 
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      base64: true,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.cancelled) {
+      setImage(`data:image/png;base64,${result.base64}`);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.content}>
         <View style={styles.iconView}>
-          <Ionicons name="person-circle-outline" size={175} style={styles.icon} />
+        {image ? <Image source={{ uri: image}} style={{ width: 200, height: 200, borderRadius: 100 }} onPress={pickImage} /> : <Ionicons name="person-circle-outline" size={175} style={styles.icon} onPress={pickImage} />}
         </View>
         <View style={styles.inputs}>
           <InputField title="Email" placeholder="Email" text={email} setText={setEmail} large="90%" />

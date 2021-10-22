@@ -10,13 +10,14 @@ export const getUserList = async () => {
   }
 }
 
-export const registerUser = async (email, phone, cpf, password) => {
+export const registerUser = async (email, phone, cpf, password, image) => {
   try {
     const r = await APIGeneral.post('/user/create', {
       email,
       phone,
       cpf,
-      password
+      password,
+      image,
     });
     return r;
   } catch (err) {
@@ -25,13 +26,14 @@ export const registerUser = async (email, phone, cpf, password) => {
   }
 };
 
-export const updateUser = async (userID, email, cpf, phone, pass) => {
+export const updateUser = async (userID, email, cpf, phone, pass, image) => {
   try {
     const r = await APIGeneral.put(`/user/edit/${userID}`, {
       email,
       cpf,
       phone,
-      pass
+      pass,
+      image,
     });
     return r;
   } catch (err) {

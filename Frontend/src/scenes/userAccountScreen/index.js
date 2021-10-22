@@ -17,9 +17,12 @@ const UserAccountScreen = ({route, navigation}) => {
   const [userPhone, setUserPhone] = useState(route.params.phone);
   const [userEmail, setUserEmail] = useState(route.params.email);
   const [userCPF, setUserCPF] = useState(route.params.cpf);
-  const [userImage, setUserImage] = useState();
+  const [userImage, setUserImage] = useState(route.params.image);
 
   const renderPhoto = () => {
+
+    console.log(route.params);
+
     if (userImage == null) {
       return <Ionicons name="person-circle-outline" size={120} color="#4A86E8" />
     }

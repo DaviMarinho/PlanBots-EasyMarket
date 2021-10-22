@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, TextInput, Button, ToastAndroid } from 'react-native';
+import { StyleSheet, View, Text, ScrollView, Button, ToastAndroid, Image } from 'react-native';
 import { registerUser } from '../../services/apiservices';
 import InputField from '../../components/inputField';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import * as ImagePicker from 'expo-image-picker';
 
 const Signup = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -9,22 +11,38 @@ const Signup = ({ navigation }) => {
   const [cpf, setCPF] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [image, setImage] = useState(null);
 
   const registrar = async () => {
-    await registerUser(email, phone, cpf, password)
+    await registerUser(email, phone, cpf, password, image)
       .then((r) => r);
     ToastAndroid.show('Cadastro realizado com sucesso.', ToastAndroid.SHORT);
     navigation.navigate('home');
   };
 
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      base64: true,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.cancelled) {
+      setImage(`data:image/png;base64,${result.base64}`);
+    }
+  };
+
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.content}>
         <Text style={styles.header}>Cadastro</Text>
         <View style={styles.inputs}>
+          {image ? <Image source={{ uri: image}} style={{ width: 200, height: 200, borderRadius: 100 }} onPress={pickImage} /> : <Ionicons name="person-circle-outline" size={120} color="#4A86E8" onPress={pickImage} />}
           <InputField title="Email*" placeholder="Email" text={email} setText={setEmail} large="90%" />
-          <InputField title="Telefone*" placeholder="(99) 99999-9999" text={phone} setText={setPhone} large="90%" type="numeric" max={11}/>
-          <InputField title="CPF*" placeholder="___.___.___-__" text={cpf} setText={setCPF} large="90%" type="numeric" max={11}/>
+          <InputField title="Telefone*" placeholder="(99) 99999-9999" text={phone} setText={setPhone} large="90%" type="numeric" max={11} />
+          <InputField title="CPF*" placeholder="___.___.___-__" text={cpf} setText={setCPF} large="90%" type="numeric" max={11} />
           <InputField title="Senha*" placeholder="********" text={password} setText={setPassword} large="90%" password={true} />
           <InputField title="Confirmar Senha*" placeholder="********" text={confirmPassword} setText={setConfirmPassword} large="90%" password={true} />
         </View>
@@ -37,7 +55,7 @@ const Signup = ({ navigation }) => {
           </Text>
         </View>
       </View>
-    </View>
+    </ScrollView>
   )
 }
 
