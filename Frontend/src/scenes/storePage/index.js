@@ -23,19 +23,26 @@ import Modal from "react-native-modal";
 import { useData } from "../../context/";
 import CreateButton from "../../components/createButton";
 
-const storePage = ({ navigation }) => {
+const storePage = ({ route, navigation }) => {
   const { userData, storeData, setUserData, setStoreData } = useData();
   const [modalVisibility, setModalVisibility] = useState(false);
+  // Store
+  const [storeID, setStoreID] = useState(route.params ? route.params._id : storeData._id)
+  const [storeName, setStoreName] = useState();
+  const [storeDescription, setStoreDescription] = useState();
+  const [storeImage, setStoreImage] = useState();
+  const [isOpen, setIsOpen] = useState();
+  // Products
   const [productName, setProductName] = useState("");
   const [productDescription, setProductDescription] = useState("");
   const [productCategory, setProductCategory] = useState("");
   const [productPrice, setProductPrice] = useState("");
   const [products, setProducts] = useState([]);
-  const [isOpen, setIsOpen] = useState(storeData.open);
   const { setMarkers, getStoreLocations } = useData();
 
+
   const deleteStoreFromAPI = () => {
-    deleteStore(storeData._id).then((r) => {
+    deleteStore(storeData?._id).then((r) => {
       const deletedStoreUser = userData;
       deletedStoreUser.storeID = "";
       setUserData(deletedStoreUser);
@@ -51,7 +58,7 @@ const storePage = ({ navigation }) => {
       productCategory,
       true,
       productPrice,
-      storeData._id,
+      storeData?._id,
       ""
     );
     setModalVisibility(false);
@@ -61,12 +68,6 @@ const storePage = ({ navigation }) => {
     setProductPrice("");
     ToastAndroid.show("Cadastro realizado com sucesso.", ToastAndroid.SHORT);
     getProductsDataFromAPI();
-  };
-
-  const getProductsDataFromAPI = () => {
-    getProductByStore(storeData._id).then((r) => {
-      setProducts(r.data);
-    });
   };
 
   const openStore = () => {
@@ -93,7 +94,7 @@ const storePage = ({ navigation }) => {
     navigator.geolocation.getCurrentPosition(
       (p) => {
         changeStoreStatus(
-          storeData._id,
+          storeData?._id,
           !isOpen,
           p.coords.latitude,
           p.coords.longitude
@@ -165,8 +166,26 @@ const storePage = ({ navigation }) => {
   };
 
   useEffect(() => {
-    getProductsDataFromAPI();
+    console.log('ID', storeID);
+    getProductByStore(storeID).then((r) => {
+      console.log(r.data);
+      setProducts(r.data);
+    });
   }, []);
+
+  useEffect(() => {
+    if (route.params) {     // Loja de outra pessoa
+      setStoreName(route.params.storeName);
+      setStoreDescription(route.params.storeDescription);
+      // setStoreName(route.params.storeImage);
+      setIsOpen(true);
+    } else {                // Minha loja
+      setStoreName(storeData.storeName);
+      setStoreDescription(storeData.storeDescription);
+      // setStoreName(storeData.storeImage);
+      setIsOpen(storeData.open);
+    }
+  }, [])
 
   return (
     <View style={styles.container}>
