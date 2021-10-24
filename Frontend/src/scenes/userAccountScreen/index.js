@@ -4,14 +4,16 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  Image,
 } from "react-native";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
+import { useData } from '../../context/';
 
 const UserAccountScreen = ({route, navigation}) => {
 
   const reqNavigation = useNavigation();
-
+  const { userData, setUserData } = useData();
   const userID = route.params.id;
   const [userName, setUserName] = useState('Perfil');
   const [userPhone, setUserPhone] = useState(route.params.phone);
@@ -21,20 +23,18 @@ const UserAccountScreen = ({route, navigation}) => {
 
   const renderPhoto = () => {
 
-    console.log(route.params);
-
-    if (userImage == null) {
+    if (userData.image == null) {
       return <Ionicons name="person-circle-outline" size={120} color="#4A86E8" />
     }
 
     else {
-      return <Text>teste</Text>
+      return <Image source={{ uri: userData.image }} style={{ width: 100, height: 100, borderRadius: 50 }} />
     }
   }
 
   return (
-    <View style={{ flex: 1 }}>
-      <ScrollView style={style.container}>
+    <View style={style.container}>
+      <ScrollView>
 
         <View style={style.teste}>
           {renderPhoto()}
@@ -79,6 +79,7 @@ const UserAccountScreen = ({route, navigation}) => {
 
 const style = StyleSheet.create({
   container: {
+    flex: 1
   },
   teste: {
     padding: 20,
@@ -112,6 +113,7 @@ const style = StyleSheet.create({
   },
   dataInput: {
     alignSelf: 'flex-start',
+    marginLeft: 15,
   },
   label: {
     fontWeight: 'bold',

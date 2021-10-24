@@ -26,6 +26,21 @@ const changeStoreStatus = async (req, res) => {
   }
 }
 
+const editStoreImage = async (req, res) => {
+  const { id } = req.params;
+  const { storeImage } = req.body;
+
+  try {
+    const newStore = await Store.findOneAndUpdate({ _id: id }, {
+      storeImage,
+    }, {new: true});
+    return res.json(newStore);
+  } catch (err) {
+    return res.json(err);
+  }
+
+}
+
 const createStore = async (req, res) => {
   const {
     storeName,
@@ -50,7 +65,7 @@ const createStore = async (req, res) => {
 
 const editStore = async (req, res) => {
   const { id } = req.params;
-  const { storeName, storeDescription } = req.body;
+  const { storeName, storeDescription, storeImage } = req.body;
 
   if (!storeName) {
     return res.json({ 'err': 'invalid name' });
@@ -59,7 +74,8 @@ const editStore = async (req, res) => {
   try {
     const updatedStore = await Store.findOneAndUpdate({ _id: id }, {
       storeName,
-      storeDescription
+      storeDescription,
+      storeImage,
     }, { new: true });
     return res.json(updatedStore);
   } catch (err) {
@@ -79,5 +95,5 @@ const deleteStore = async (req, res) => {
 };
 
 module.exports = {
-  getStoreList, createStore, editStore, deleteStore, getStoreByID, changeStoreStatus,
+  getStoreList, createStore, editStore, deleteStore, getStoreByID, changeStoreStatus, editStoreImage,
 };

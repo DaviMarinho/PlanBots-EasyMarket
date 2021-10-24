@@ -127,6 +127,19 @@ export const changeStoreStatus = async (storeID, status) => {
   }
 }
 
+export const editStoreImage = async (storeID, storeImage) => {
+
+  console.log(storeID, storeImage, 'aki');
+
+  try {
+    const r = await APIGeneral.put(`/store/image/${storeID}`, { storeImage });
+    return r;
+  } catch (err) {
+    console.warn(err);
+    return err;
+  }
+}
+
 // Produtos
 export const createProduct = async (
   productName,
