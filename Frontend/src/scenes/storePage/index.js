@@ -21,13 +21,14 @@ import CreateButton from "../../components/createButton";
 import InputField from "../../components/inputField";
 import Modal from "react-native-modal";
 import { useData } from "../../context/";
-import CreateButton from "../../components/createButton";
 
 const storePage = ({ route, navigation }) => {
   const { userData, storeData, setUserData, setStoreData } = useData();
   const [modalVisibility, setModalVisibility] = useState(false);
   // Store
-  const [storeID, setStoreID] = useState(route.params ? route.params._id : storeData._id)
+  const [storeID, setStoreID] = useState(
+    route.params ? route.params._id : storeData._id
+  );
   const [storeName, setStoreName] = useState();
   const [storeDescription, setStoreDescription] = useState();
   const [storeImage, setStoreImage] = useState();
@@ -39,7 +40,6 @@ const storePage = ({ route, navigation }) => {
   const [productPrice, setProductPrice] = useState("");
   const [products, setProducts] = useState([]);
   const { setMarkers, getStoreLocations } = useData();
-
 
   const deleteStoreFromAPI = () => {
     deleteStore(storeData?._id).then((r) => {
@@ -166,26 +166,27 @@ const storePage = ({ route, navigation }) => {
   };
 
   useEffect(() => {
-    console.log('ID', storeID);
     getProductByStore(storeID).then((r) => {
-      console.log(r.data);
       setProducts(r.data);
     });
   }, []);
 
   useEffect(() => {
-    if (route.params) {     // Loja de outra pessoa
+    console.log(route.params);
+    if (route.params) {
+      // Loja de outra pessoa
       setStoreName(route.params.storeName);
       setStoreDescription(route.params.storeDescription);
       // setStoreName(route.params.storeImage);
       setIsOpen(true);
-    } else {                // Minha loja
+    } else {
+      // Minha loja
       setStoreName(storeData.storeName);
       setStoreDescription(storeData.storeDescription);
       // setStoreName(storeData.storeImage);
       setIsOpen(storeData.open);
     }
-  }, [])
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -270,31 +271,31 @@ const storePage = ({ route, navigation }) => {
                 justifyContent: "space-between",
               }}
             >
-              <Text style={styles.storeName}>{storeData.storeName}</Text>
-              <View style={{ alignItems: "center" }}>
-                <Text>Loja</Text>
-                <Switch
-                  onValueChange={() => {
-                    changeStoreStatus(storeData._id, !isOpen);
-                    setStoreData({
-                      ...storeData,
-                      open: !isOpen,
-                    });
-                    setIsOpen(!isOpen);
-                  }}
-                  value={isOpen}
-                />
-              </View>
+              <Text style={styles.storeName}>{storeName}</Text>
+              {!route.params && (
+                <View style={{ alignItems: "center" }}>
+                  <Text>Loja</Text>
+                  <Switch
+                    onValueChange={() => {
+                      openStore();
+                      setStoreData({
+                        ...storeData,
+                        open: !isOpen,
+                      });
+                      setIsOpen(!isOpen);
+                    }}
+                    value={isOpen}
+                  />
+                </View>
+              )}
             </View>
             <View style={styles.storeDescriptionView}>
               <Text numberOfLines={3} style={styles.storeDescription}>
-                {storeData.storeDescription}
+                {storeDescription}
               </Text>
             </View>
             <View style={{ marginTop: 18 }}>{listProducts()}</View>
-            {isOpen ? (
-              <View style={{ marginBottom: 100 }} />
-            ) : (
+            {!route.params && (
               <>
                 <View style={styles.hr} />
                 <View style={styles.addProducts}>
