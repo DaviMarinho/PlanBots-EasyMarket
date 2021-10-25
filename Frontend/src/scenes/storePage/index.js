@@ -100,7 +100,7 @@ const storePage = ({ route, navigation }) => {
       setLoading(false);
     });
   };
-  
+
   const addProduct = async () => {
     await createProduct(
       productName,
@@ -374,9 +374,7 @@ const storePage = ({ route, navigation }) => {
                     <Picker
                       style={styles.picker}
                       selectedValue={productCategory}
-                      onValueChange={(itemValue) =>
-                        setProductCategory(itemValue)
-                      }
+                      onValueChange={(itemValue) => setProductCategory(itemValue)}
                     >
                       <Picker.Item
                         label="Categoria do produto"
@@ -385,13 +383,33 @@ const storePage = ({ route, navigation }) => {
                         style={styles.pickerItem}
                       />
                       <Picker.Item
-                        label="Salgado"
-                        value="SALGADO"
+                        label="Artesanato"
+                        value="ARTESANATO"
+                        style={styles.pickerItem}
+                      />
+                      <Picker.Item
+                        label="Bebida"
+                        value="BEBIDA"
+                        style={styles.pickerItem}
+                      />
+                      <Picker.Item
+                        label="Diversos"
+                        value="DIVERSOS"
                         style={styles.pickerItem}
                       />
                       <Picker.Item
                         label="Doce"
                         value="DOCE"
+                        style={styles.pickerItem}
+                      />
+                      <Picker.Item
+                        label="Marmita"
+                        value="MARMITA"
+                        style={styles.pickerItem}
+                      />
+                      <Picker.Item
+                        label="Salgado"
+                        value="SALGADO"
                         style={styles.pickerItem}
                       />
                     </Picker>
@@ -545,7 +563,12 @@ const styles = StyleSheet.create({
   addProductsText: {
     fontSize: 16,
   },
-
+  stars: {
+    color: '#FFF',
+    alignSelf: 'flex-end',
+    marginBottom: '2%',
+    marginRight: '2%',
+  },
   // Modal Styles
   closeModal: {
     alignItems: "flex-end",
