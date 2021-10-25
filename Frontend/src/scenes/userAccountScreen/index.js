@@ -1,51 +1,43 @@
-import React, { useState } from "react";
-import {
-  View,
-  ScrollView,
-  StyleSheet,
-  Text,
-} from "react-native";
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import { useNavigation } from '@react-navigation/native';
+import React from "react";
+import { View, ScrollView, StyleSheet, Text } from "react-native";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import { useData } from "../../context/";
 
-const UserAccountScreen = ({route, navigation}) => {
-
-  const reqNavigation = useNavigation();
-
-  const userID = route.params.id;
-  const [userName, setUserName] = useState('Perfil');
-  const [userPhone, setUserPhone] = useState(route.params.phone);
-  const [userEmail, setUserEmail] = useState(route.params.email);
-  const [userCPF, setUserCPF] = useState(route.params.cpf);
-  const [userImage, setUserImage] = useState();
+const UserAccountScreen = ({ navigation }) => {
+  const { userData } = useData();
+  const userPhone = userData.phone;
+  const userEmail = userData.email;
+  const userCPF = userData.cpf;
+  const userImage = userData.image;
 
   const renderPhoto = () => {
     if (userImage == null) {
-      return <Ionicons name="person-circle-outline" size={120} color="#4A86E8" />
+      return (
+        <Ionicons name="person-circle-outline" size={120} color="#4A86E8" />
+      );
+    } else {
+      return <Text>teste</Text>;
     }
-
-    else {
-      return <Text>teste</Text>
-    }
-  }
+  };
 
   return (
     <View style={{ flex: 1 }}>
       <ScrollView style={style.container}>
-
         <View style={style.teste}>
           {renderPhoto()}
-          <Ionicons onPress={() => { reqNavigation.navigate("editUser", {
-              id: userID,
-              email: userEmail,
-              cpf: userCPF,
-              phone: userPhone
-            }) }} name="create-outline" size={30} color="#4A86E8" style={{ position: "absolute", right: 0, top: 25 }} />
+          <Ionicons
+            onPress={() => {
+              navigation.navigate("editUser");
+            }}
+            name="create-outline"
+            size={30}
+            color="#4A86E8"
+            style={{ position: "absolute", right: 0, top: 25 }}
+          />
         </View>
 
-        <View style={{ alignSelf: 'center', width: '100%' }}>
-
-          <Text style={style.textName}>{userName}</Text>
+        <View style={{ alignSelf: "center", width: "100%" }}>
+          <Text style={style.textName}>Perfil</Text>
 
           <View style={style.line} />
 
@@ -67,7 +59,6 @@ const UserAccountScreen = ({route, navigation}) => {
             <Text style={style.label}>CPF</Text>
             <Text style={style.textformat}>{userCPF}</Text>
           </View>
-
         </View>
       </ScrollView>
     </View>
@@ -75,11 +66,10 @@ const UserAccountScreen = ({route, navigation}) => {
 };
 
 const style = StyleSheet.create({
-  container: {
-  },
+  container: {},
   teste: {
     padding: 20,
-    alignItems: 'center',
+    alignItems: "center",
     width: 150,
     alignSelf: "center",
   },
@@ -89,38 +79,37 @@ const style = StyleSheet.create({
     marginBottom: 12,
     borderWidth: 1,
     padding: 10,
-    borderRadius: 8
+    borderRadius: 8,
   },
   icon: {
-    color: '#4A86E8'
+    color: "#4A86E8",
   },
   textName: {
     fontSize: 30,
-    textAlign: 'center',
-    color: '#4A86E8',
-    fontWeight: 'bold'
+    textAlign: "center",
+    color: "#4A86E8",
+    fontWeight: "bold",
   },
   line: {
-    backgroundColor: 'black',
+    backgroundColor: "black",
     height: 1,
-    width: '90%',
+    width: "90%",
     margin: 10,
-    alignSelf: 'center'
+    alignSelf: "center",
   },
   dataInput: {
-    alignSelf: 'flex-start',
+    alignSelf: "flex-start",
   },
   label: {
-    fontWeight: 'bold',
-    color: '#4A86E8',
+    fontWeight: "bold",
+    color: "#4A86E8",
     fontSize: 24,
     margin: 10,
   },
   textformat: {
     margin: 10,
     fontSize: 18,
-  }
-
-})
+  },
+});
 
 export default UserAccountScreen;

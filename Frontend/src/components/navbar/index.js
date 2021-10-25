@@ -15,12 +15,7 @@ const Navbar = () => {
         style={styles.icon}
         onPress={() => {
           if (userData) {
-            navigation.navigate('perfil', {
-              id: userData?._id,
-              email: userData?.email,
-              cpf: userData?.cpf,
-              phone: userData?.phone
-            });
+            navigation.navigate('perfil');
           } else {
             navigation.navigate('login')
           }

@@ -10,11 +10,17 @@ const Signup = ({ navigation }) => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const registrar = async () => {
-    await registerUser(email, phone, cpf, password)
-      .then((r) => r);
-    ToastAndroid.show('Cadastro realizado com sucesso.', ToastAndroid.SHORT);
-    navigation.navigate('home');
+  const registrar = () => {
+    registerUser(email, phone, cpf, password)
+      .then((r) => {
+        if (r.duplicated) {
+          console.log(r.duplicated);
+          ToastAndroid.show(`${Object.keys(r.duplicated).join(', ')} ja cadastrados.`, ToastAndroid.SHORT);
+        } else {          
+          ToastAndroid.show('Cadastro realizado com sucesso.', ToastAndroid.SHORT);
+          navigation.navigate('home');
+        }
+      });
   };
 
   return (

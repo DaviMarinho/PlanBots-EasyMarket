@@ -51,6 +51,12 @@ const storePage = ({ route, navigation }) => {
     });
   };
 
+  const getProductsDataFromAPI = () => {
+    getProductByStore(storeID).then((r) => {
+      setProducts(r.data);
+    });
+  }
+
   const addProduct = async () => {
     await createProduct(
       productName,
@@ -127,7 +133,7 @@ const storePage = ({ route, navigation }) => {
       return products.map((product, idx) => {
         return (
           <View style={styles.productCard} key={idx}>
-            {isOpen ? (
+            {route.params ? (
               <View style={styles.hr} />
             ) : (
               <>
@@ -166,25 +172,19 @@ const storePage = ({ route, navigation }) => {
   };
 
   useEffect(() => {
-    getProductByStore(storeID).then((r) => {
-      setProducts(r.data);
-    });
+    getProductsDataFromAPI();
   }, []);
 
   useEffect(() => {
-    console.log(route.params);
+    console.log(route);
     if (route.params) {
-      // Loja de outra pessoa
       setStoreName(route.params.storeName);
       setStoreDescription(route.params.storeDescription);
-      // setStoreName(route.params.storeImage);
-      setIsOpen(true);
+      // setStoreImage(route.params.storeImage);
     } else {
-      // Minha loja
       setStoreName(storeData.storeName);
       setStoreDescription(storeData.storeDescription);
-      // setStoreName(storeData.storeImage);
-      setIsOpen(storeData.open);
+      // setStoreImage(storeData.storeImage);
     }
   }, []);
 

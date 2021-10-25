@@ -6,14 +6,13 @@ import { validateEmail, validatePhone, validatePassword } from '../../utils/vali
 import { useData } from '../../context/';
 import InputField from '../../components/inputField';
 
-const editUser = ({ route, navigation }) => {
-  const userID = route.params.id;
-  const [email, setEmail] = useState(route.params.email);
-  const [phone, setPhone] = useState(route.params.phone);
-  const [cpf, setCPF] = useState(route.params.cpf);
+const editUser = ({ navigation }) => {
+  const { userData, setUserData } = useData();
+  const [email, setEmail] = useState(userData.email);
+  const [phone, setPhone] = useState(userData.phone);
+  const [cpf, setCPF] = useState(userData.cpf);
   const [password, setPassword] = useState();
   const [confirmPassword, setConfirmPassword] = useState('');
-  const { setUserData } = useData();
 
   const updateUserData = () => {
     if (!validatePassword(password)) {
@@ -28,7 +27,7 @@ const editUser = ({ route, navigation }) => {
       ToastAndroid.show("Telefone invalido. Utilize o formato DDD+Telefone (celular).", ToastAndroid.LONG);
       return;
     }
-    updateUser(userID, email, cpf, phone, password)
+    updateUser(userData._id, email, cpf, phone, password)
       .then((r) => {
         try {
           setUserData(r.data);

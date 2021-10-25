@@ -20,8 +20,8 @@ export const registerUser = async (email, phone, cpf, password) => {
     });
     return r;
   } catch (err) {
-    console.error(err);
-    return err;
+    console.warn(err);
+    return err.response.data;
   }
 };
 

@@ -16,12 +16,15 @@ const StoreSchema = new mongoose.Schema({
   },
   open: {
     type: Boolean,
+    default: false,
   },
   storeLatitude: {
     type: String,
+    default: ''
   },
   storeLongitude: {
     type: String,
+    default: '',
   }
 });
 

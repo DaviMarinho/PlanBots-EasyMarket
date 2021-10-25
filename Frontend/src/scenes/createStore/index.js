@@ -14,9 +14,10 @@ const createStore = ({ navigation }) => {
     try {
       registerStore(storeName, storeDescription, userData._id)
         .then((r) => {
-          const updatedUserData = userData;
-          updatedUserData.storeID = r.data._id;
-          setUserData(updatedUserData);
+          setUserData({
+            ...userData,
+            storeID: r.data._id
+          });
           setStoreData(r.data);
         });
       navigation.navigate('home');

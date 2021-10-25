@@ -42,7 +42,7 @@ const createStore = async (req, res) => {
   }
 
   try {
-    const newStore = await Store.create({ storeName, storeDescription, open: false });
+    const newStore = await Store.create({ storeName, storeDescription });
     await User.findOneAndUpdate({ _id: userId }, {
       storeID: newStore._id
     }, { new: true });
