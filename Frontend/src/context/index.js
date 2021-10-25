@@ -1,11 +1,13 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { createContext, useState, useContext, useEffect } from 'react';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { createContext, useState, useContext, useEffect } from "react";
+import { openStores } from "../services/apiservices";
 
 const DataContext = createContext({});
 
 const DataProvider = ({ children }) => {
   const [userData, setUserData] = useState();
   const [storeData, setStoreData] = useState();
+  const [markers, setMarkers] = useState();
 
   // const onDataDidChange = (data) => {
   //   if (data) {
@@ -15,13 +17,19 @@ const DataProvider = ({ children }) => {
 
   const userClean = () => {
     setUserData();
-  }
+  };
+  
+  const getStoreLocations = () => {
+    openStores().then((r) => {
+      setMarkers(r.data);
+    });
+  };
 
   useEffect(() => {
     if (userData) {
       try {
         const value = JSON.stringify(userData);
-        AsyncStorage.setItem('@data', value); 
+        AsyncStorage.setItem("@data", value);
       } catch (err) {
         console.error(err);
       }
@@ -29,7 +37,7 @@ const DataProvider = ({ children }) => {
       setStoreData();
       AsyncStorage.clear();
     }
-  }, [userData])
+  }, [userData]);
 
   return (
     <DataContext.Provider
@@ -38,9 +46,12 @@ const DataProvider = ({ children }) => {
         setUserData,
         userClean,
         storeData,
-        setStoreData
-      }}>
-      {children} 
+        setStoreData,
+        markers,
+        getStoreLocations
+      }}
+    >
+      {children}
     </DataContext.Provider>
   );
 };
@@ -48,7 +59,7 @@ const DataProvider = ({ children }) => {
 export const useData = () => {
   const context = useContext(DataContext);
   if (!context) return;
-  return {...context};
+  return { ...context };
 };
 
 export default DataProvider;

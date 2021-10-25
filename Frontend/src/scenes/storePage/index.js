@@ -13,40 +13,42 @@ import {
   createProduct, deleteProduct,
   changeStoreStatus,
   editStoreImage,
+  changeStoreStatus,
 } from '../../services/apiservices';
 import CreateButton from '../../components/createButton';
 import InputField from '../../components/inputField';
 import Modal from 'react-native-modal';
 import * as ImagePicker from 'expo-image-picker';
 
-const storePage = ({ navigation }) => {
+const storePage = ({ route, navigation }) => {
   const { userData, storeData, setUserData, setStoreData } = useData();
   const [modalVisibility, setModalVisibility] = useState(false);
-  const [productName, setProductName] = useState('');
-  const [productDescription, setProductDescription] = useState('');
-  const [productCategory, setProductCategory] = useState('');
-  const [productPrice, setProductPrice] = useState('');
+  // Store
+  const [storeID, setStoreID] = useState(
+    route.params ? route.params._id : storeData._id
+  );
+  const [storeName, setStoreName] = useState();
+  const [storeDescription, setStoreDescription] = useState();
+  const [storeImage, setStoreImage] = useState(storeData.storeImage);
+  const [isOpen, setIsOpen] = useState(storeData.open);
+  const { setMarkers, getStoreLocations } = useData();
+  // Products
+  const [productName, setProductName] = useState("");
+  const [productDescription, setProductDescription] = useState("");
+  const [productCategory, setProductCategory] = useState("");
+  const [productPrice, setProductPrice] = useState("");
   const [productImage, setProductImage] = useState(null);
   const [products, setProducts] = useState([]);
-  const [isOpen, setIsOpen] = useState(storeData.open);
-  const [storeImage, setStoreImage] = useState(storeData.storeImage);
 
   const deleteStoreFromAPI = () => {
-    deleteStore(storeData._id)
-      .then((r) => {
-        const deletedStoreUser = userData;
-        deletedStoreUser.storeID = '';
-        setUserData(deletedStoreUser);
-        setStoreData();
-        navigation.navigate('home');
-      })
-  }
-
-  // const addStoreImage = async () => {
-  //   await editStoreImage(storeData._id, storeImage);
-  //   storeData.image = storeImage;
-  //   ToastAndroid.show('Imagem adicionada com sucesso.', ToastAndroid.SHORT);
-  // }
+    deleteStore(storeData?._id).then((r) => {
+      const deletedStoreUser = userData;
+      deletedStoreUser.storeID = "";
+      setUserData(deletedStoreUser);
+      setStoreData();
+      navigation.navigate("home");
+    });
+  };
 
   const pickStoreImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -92,17 +94,37 @@ const storePage = ({ navigation }) => {
     getProductsDataFromAPI();
   };
 
-  const getProductsDataFromAPI = () => {
-    getProductByStore(storeData._id)
-      .then((r) => {
-        setProducts(r.data);
-      });
+  const openStore = () => {
+    navigator.geolocation.getCurrentPosition(
+      (p) => {
+        changeStoreStatus(
+          storeData?._id,
+          !isOpen,
+          p.coords.latitude,
+          p.coords.longitude
+        ).then((r) => getStoreLocations());
+        setStoreData({
+          ...storeData,
+          open: !isOpen,
+          storeLatitude: p.coords.latitude,
+          storeLongitude: p.coords.longitude,
+        });
+      },
+      (e) => console.error(e),
+      {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0,
+      }
+    );
+
+    setIsOpen(!isOpen);
   };
 
   const deleteProductFromAPI = async (id) => {
     await deleteProduct(id);
     getProductsDataFromAPI();
-  }
+  };
 
   const renderStoreImage = () => {
 
@@ -161,7 +183,7 @@ const storePage = ({ navigation }) => {
           return (
             <View style={styles.productCard} key={idx}>
               {
-                isOpen ? <View style={styles.hr} /> : <><View style={styles.productHr} />
+                (isOpen || route.params) ? <View style={styles.hr} /> : <><View style={styles.productHr} />
                   <AntDesign
                     name="closecircleo"
                     size={30}
@@ -187,21 +209,42 @@ const storePage = ({ navigation }) => {
                 </View>
                 {product.productImage ? <Image source={{ uri: product.productImage }} style={styles.productWithImage} /> : <View style={styles.productImage} />}
               </View>
+              <View style={styles.productImage} />
             </View>
           );
         })
       );
-    };
+    }
   };
 
   useEffect(() => {
-    getProductsDataFromAPI();
+    getProductByStore(storeID).then((r) => {
+      setProducts(r.data);
+    });
+  }, []);
+
+  useEffect(() => {
+    console.log(route.params);
+    if (route.params) {
+      // Loja de outra pessoa
+      setStoreName(route.params.storeName);
+      setStoreDescription(route.params.storeDescription);
+      setIsOpen(true);
+    } else {
+      // Minha loja
+      setStoreName(storeData.storeName);
+      setStoreDescription(storeData.storeDescription);
+    }
   }, []);
 
   return (
     <View style={styles.container}>
       <ScrollView>
-        <Modal isVisible={modalVisibility} onBackdropPress={() => setModalVisibility(false)} avoidKeyboard={false}>
+        <Modal
+          isVisible={modalVisibility}
+          onBackdropPress={() => setModalVisibility(false)}
+          avoidKeyboard={false}
+        >
           <View style={styles.modalContainer}>
             <ScrollView>
               <TouchableOpacity>
@@ -245,49 +288,63 @@ const storePage = ({ navigation }) => {
                 <CreateButton create={addProduct} text='Cadastrar produto' />
               </TouchableOpacity>
             </ScrollView>
-          </View>
-        </Modal>
+          </View >
+        </Modal >
         <View>
           {renderStoreImage()}
           <View style={{ paddingLeft: 12, paddingRight: 12, marginTop: 12 }}>
-            <View style={{ alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between' }}>
-              <Text style={styles.storeName}>{storeData.storeName}</Text>
-              <View style={{ alignItems: 'center' }}>
-                <Text>Loja</Text>
-                <Switch
-                  onValueChange={() => {
-                    changeStoreStatus(storeData._id, !isOpen);
-                    setStoreData({
-                      ...storeData,
-                      open: !isOpen
-                    });
-                    setIsOpen(!isOpen);
-                  }}
-                  value={isOpen}
-                />
-              </View>
+            <View
+              style={{
+                alignItems: "center",
+                flexDirection: "row",
+                justifyContent: "space-between",
+              }}
+            >
+              <Text style={styles.storeName}>{storeName}</Text>
+              {!route.params && (
+                <View style={{ alignItems: "center" }}>
+                  <Text>Loja</Text>
+                  <Switch
+                    onValueChange={() => {
+                      openStore();
+                      setStoreData({
+                        ...storeData,
+                        open: !isOpen,
+                      });
+                      setIsOpen(!isOpen);
+                    }}
+                    value={isOpen}
+                  />
+                </View>
+              )}
             </View>
             <View style={styles.storeDescriptionView}>
-              <Text numberOfLines={3} style={styles.storeDescription}>{storeData.storeDescription}</Text>
+              <Text numberOfLines={3} style={styles.storeDescription}>
+                {storeDescription}
+              </Text>
             </View>
             <View style={{ marginTop: 18 }}>
               {listProducts()}
             </View>
-            {isOpen ? <View style={{ marginBottom: 100 }} /> : <><View style={styles.hr} />
-              <View style={styles.addProducts}>
-                <Text style={{ fontSize: 20, color: 'rgb(74,134,232)', marginBottom: 10, fontWeight: 'bold' }}>Adicionar produtos</Text>
-                <AntDesign
-                  name="pluscircleo"
-                  size={50}
-                  style={{ color: 'rgb(117,136,236)' }}
-                  onPress={() => setModalVisibility(true)} // abrir modal
-                />
-              </View></>}
-
-          </View>
-        </View>
-      </ScrollView>
-    </View>
+            {
+              (isOpen || route.params) ? <View style={{ marginBottom: 100 }} /> :
+                <>
+                  <View style={styles.hr} />
+                  <View style={styles.addProducts}>
+                    <Text style={{ fontSize: 20, color: 'rgb(74,134,232)', marginBottom: 10, fontWeight: 'bold' }}>Adicionar produtos</Text>
+                    <AntDesign
+                      name="pluscircleo"
+                      size={50}
+                      style={{ color: 'rgb(117,136,236)' }}
+                      onPress={() => setModalVisibility(true)} // abrir modal
+                    />
+                  </View>
+                </>
+            }
+          </View >
+        </View >
+      </ScrollView >
+    </View >
   );
 };
 
@@ -303,7 +360,7 @@ const styles = StyleSheet.create({
 
   // Store Information
   image: {
-    backgroundColor: '#6E6E6E',
+    backgroundColor: "#6E6E6E",
     height: 180,
     justifyContent: 'center',   // remover
     alignItems: 'center',
@@ -311,43 +368,35 @@ const styles = StyleSheet.create({
   },
 
   header: {
-    flexDirection: 'row',
+    flexDirection: "row",
   },
 
   storeName: {
     fontSize: 32,
     fontWeight: "bold",
-    color: 'rgb(74,134,232)',
+    color: "rgb(74,134,232)",
   },
 
   storeDescription: {
     fontSize: 18,
-    color: 'rgb(74,134,232)',
+    color: "rgb(74,134,232)",
   },
 
   storeDescriptionView: {
     height: 60,
   },
 
-  // label: {
-  //   fontSize: 24,
-  //   fontWeight: "bold",
-  //   color: 'rgb(74,134,232)',
-  // },
-  // data: {
-  //   fontSize: 18,
-  // },
   productHr: {
-    borderBottomColor: '#6E6E6E',
+    borderBottomColor: "#6E6E6E",
     borderBottomWidth: 1,
-    width: '92%',
+    width: "92%",
   },
   hr: {
-    borderBottomColor: '#6E6E6E',
+    borderBottomColor: "#6E6E6E",
     borderBottomWidth: 1,
   },
   addProducts: {
-    alignItems: 'center',
+    alignItems: "center",
     marginTop: 12,
     marginBottom: 100,
   },
@@ -355,36 +404,25 @@ const styles = StyleSheet.create({
   addProductsText: {
     fontSize: 16,
   },
-  // icons: {
-  //   flexDirection: 'row',
-  // },
-  // storeHeader: {
-  //   paddingTop: 12,
-  //   paddingBottom: 12,
-  //   paddingRight: 12,
-  //   paddingLeft: 12,
-  //   flexDirection: 'row',
-  //   justifyContent: 'space-between',
-  // },
 
   // Modal Styles
   closeModal: {
-    alignItems: 'flex-end',
+    alignItems: "flex-end",
     padding: 8,
   },
   modalContainer: {
-    position: 'absolute',
-    width: '100%',
+    position: "absolute",
+    width: "100%",
     height: 445,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 10,
   },
   pageTitle: {
-    textAlign: 'center',
-    color: 'rgb(74,134,232)',
+    textAlign: "center",
+    color: "rgb(74,134,232)",
     fontSize: 22,
     padding: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   inputView: {
     // marginLeft: '10%',
@@ -398,32 +436,32 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     borderRadius: 8,
-    width: '80%',
+    width: "80%",
   },
   inputLabel: {
     fontSize: 14,
-    backgroundColor: '#FFF',
+    backgroundColor: "#FFF",
     marginBottom: -22,
-    marginLeft: '3%',
-    fontWeight: 'bold',
-    color: '#000',
+    marginLeft: "3%",
+    fontWeight: "bold",
+    color: "#000",
     elevation: 0.1,
-    alignItems: 'center',
+    alignItems: "center",
     padding: 1,
   },
   descriptionInput: {
-    width: '80%',
+    width: "80%",
     height: 100,
     marginTop: 12,
     marginBottom: 24,
     borderWidth: 1,
     padding: 10,
     borderRadius: 8,
-    textAlignVertical: 'top',
+    textAlignVertical: "top",
   },
   picker: {
     width: "110%",
-    marginLeft: "-3%"
+    marginLeft: "-3%",
   },
   pickerView: {
     height: 40,
@@ -432,7 +470,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     borderRadius: 8,
-    width: '80%',
+    width: "80%",
   },
   pickerItem: {
     fontSize: 14,
@@ -440,56 +478,56 @@ const styles = StyleSheet.create({
   // Product
   productName: {
     fontSize: 22,
-    color: 'rgb(74,134,232)',
-    fontWeight: 'bold',
+    color: "rgb(74,134,232)",
+    fontWeight: "bold",
     marginBottom: -2,
   },
   productDescription: {
     fontSize: 15,
-    color: 'rgb(74,134,232)',
+    color: "rgb(74,134,232)",
   },
   productCard: {
     height: 140,
   },
   productText: {
-    width: '70%',
-    height: '100%',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
+    width: "70%",
+    height: "100%",
+    flexDirection: "column",
+    justifyContent: "space-between",
   },
   productPrice: {
-    justifyContent: 'flex-end',
+    justifyContent: "flex-end",
     marginBottom: 2,
   },
   productNameDescription: {
-    width: '100%',
-    justifyContent: 'flex-start',
+    width: "100%",
+    justifyContent: "flex-start",
   },
   productPriceDescription: {
     fontSize: 15,
-    color: 'rgb(74,134,232)',
-    fontWeight: 'bold',
+    color: "rgb(74,134,232)",
+    fontWeight: "bold",
   },
   productImage: {
-    position: 'absolute',
+    position: "absolute",
     marginTop: 4,
-    alignSelf: 'flex-end',
-    height: '93%',
-    width: '28%',
+    alignSelf: "flex-end",
+    height: "93%",
+    width: "28%",
     borderRadius: 8,
-    backgroundColor: '#6E6E6E',
+    backgroundColor: "#6E6E6E",
   },
   product: {
     height: 110,
     marginTop: 15,
     marginBottom: 15,
-    width: '100%',
+    width: "100%",
   },
   productX: {
     marginTop: -15,
-    color: '#6E6E6E',
-    alignSelf: 'flex-end',
-    position: 'absolute',
+    color: "#6E6E6E",
+    alignSelf: "flex-end",
+    position: "absolute",
   },
   selectedProductImage: {
     // alignSelf: 'center',

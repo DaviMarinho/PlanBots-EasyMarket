@@ -65,7 +65,16 @@ export const getStoreData = async (storeID) => {
     console.error(err);
     return err;
   }
-}
+};
+
+export const openStores = async () => {
+  try {
+    const r = await APIGeneral.get('/store/open')
+    return r;
+  } catch (err) {
+    return err;
+  }
+};
 
 export const registerStore = async (storeName, storeDescription, userId) => {
   try {
@@ -116,9 +125,13 @@ export const addProductToStore = async (productsIds, storeID) => {
   }
 }
 
-export const changeStoreStatus = async (storeID, status) => {
+export const changeStoreStatus = async (storeID, status, latitude, longitude) => {
   try {
-    const r = await APIGeneral.put(`/store/status/${storeID}`, { status });
+    const r = await APIGeneral.put(`/store/status/${storeID}`, { 
+      status,
+      lat: latitude,
+      long: longitude
+    });
     return r;
   } catch (err) {
     console.warn(err);
