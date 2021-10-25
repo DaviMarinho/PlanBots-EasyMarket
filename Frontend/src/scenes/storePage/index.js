@@ -101,6 +101,12 @@ const storePage = ({ route, navigation }) => {
     });
   };
 
+  const getProductsDataFromAPI = () => {
+    getProductByStore(storeID).then((r) => {
+      setProducts(r.data);
+    });
+  }
+
   const addProduct = async () => {
     await createProduct(
       productName,
