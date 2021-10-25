@@ -17,6 +17,12 @@ const StoreSchema = new mongoose.Schema({
   open: {
     type: Boolean,
   },
+  storeLatitude: {
+    type: String,
+  },
+  storeLongitude: {
+    type: String,
+  }
 });
 
 module.exports = mongoose.model('Store', StoreSchema);

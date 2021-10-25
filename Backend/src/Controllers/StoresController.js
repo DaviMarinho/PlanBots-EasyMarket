@@ -5,20 +5,24 @@ const getStoreList = async (req, res) => {
   return res.json(await Store.find());
 }
 
+const getOpenStores = async (req, res) => {
+  const stores = await Store.find();
+  return res.json(stores.filter((s) => s.open));
+}
+
 const getStoreByID = async (req, res) => {
   return res.json(await Store.findOne({ _id: req.params.id }))
 };
 
 const changeStoreStatus = async (req, res) => {
   const { id } = req.params;
-  const { status } = req.body;
+  const { status, lat, long } = req.body;
 
-  console.log(id);
-  console.log(status);
-  
   try {
     const updatedStatus = await Store.findOneAndUpdate({ _id: id }, {
       open: status,
+      storeLatitude: lat,
+      storeLongitude: long
     }, { new: true });
     return res.json(updatedStatus);
   } catch (err) {
@@ -78,6 +82,6 @@ const deleteStore = async (req, res) => {
   }
 };
 
-module.exports = {
-  getStoreList, createStore, editStore, deleteStore, getStoreByID, changeStoreStatus,
+module.exports = { 
+  getStoreList, createStore, editStore, deleteStore, getStoreByID, changeStoreStatus, getOpenStores
 };
