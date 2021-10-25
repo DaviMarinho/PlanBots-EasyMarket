@@ -1,11 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, Button, Image, ToastAndroid, TouchableOpacity } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import { updateUser } from '../../services/apiservices';
-import { validateEmail, validatePhone, validatePassword } from '../../utils/validate';
-import { useData } from '../../context/';
-import InputField from '../../components/inputField';
-import * as ImagePicker from 'expo-image-picker';
+import React, { useEffect, useState } from "react";
+import {
+  StyleSheet,
+  View,
+  Text,
+  Button,
+  Image,
+  ToastAndroid,
+  TouchableOpacity,
+} from "react-native";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import { updateUser } from "../../services/apiservices";
+import {
+  validateEmail,
+  validatePhone,
+  validatePassword,
+} from "../../utils/validate";
+import { useData } from "../../context/";
+import InputField from "../../components/inputField";
+import * as ImagePicker from "expo-image-picker";
 
 const editUser = ({ route, navigation }) => {
   const userID = route.params.id;
@@ -14,7 +26,7 @@ const editUser = ({ route, navigation }) => {
   const [phone, setPhone] = useState(userData.phone);
   const [cpf, setCPF] = useState(userData.cpf);
   const [password, setPassword] = useState();
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [image, setImage] = useState(userData.image);
 
   const updateUserData = () => {
@@ -27,19 +39,32 @@ const editUser = ({ route, navigation }) => {
       return;
     }
     if (!validatePhone(phone)) {
-      ToastAndroid.show("Telefone invalido. Utilize o formato DDD+Telefone (celular).", ToastAndroid.LONG);
+      ToastAndroid.show(
+        "Telefone invalido. Utilize o formato DDD+Telefone (celular).",
+        ToastAndroid.LONG
+      );
       return;
     }
-    updateUser(userID, email, cpf, phone, password, image)
-      .then((r) => {
+    if (!image) {
+      updateUser(userID, email, cpf, phone, password).then((r) => {
         try {
           setUserData(r.data);
-          navigation.navigate('home');
+          navigation.navigate("home");
         } catch (e) {
           console.error(e);
         }
       });
-  }
+    } else{
+      updateUser(userID, email, cpf, phone, password, image).then((r) => {
+        try {
+          setUserData(r.data);
+          navigation.navigate("home");
+        } catch (e) {
+          console.error(e);
+        }
+      });
+    }
+  };
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -56,36 +81,79 @@ const editUser = ({ route, navigation }) => {
   };
 
   const renderPhoto = () => {
-
     if (image == null) {
-      return <Ionicons name="person-circle-outline" size={175} style={styles.icon} onPress={pickImage} color="#4A86E8" />
-    }
-
-    else {
+      return (
+        <Ionicons
+          name="person-circle-outline"
+          size={175}
+          style={styles.icon}
+          onPress={pickImage}
+          color="#4A86E8"
+        />
+      );
+    } else {
       return (
         <TouchableOpacity onPress={pickImage}>
-          <Image source={{ uri: image }} style={{ width: 200, height: 200, borderRadius: 100 }}/>
+          <Image
+            source={{ uri: image }}
+            style={{ width: 200, height: 200, borderRadius: 100 }}
+          />
         </TouchableOpacity>
-      )
+      );
     }
-  }
+  };
 
   useEffect(() => {
     renderPhoto();
-  }, [image])
+  }, [image]);
 
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-        <View style={styles.iconView}>
-          {renderPhoto()}
-        </View>
+        <View style={styles.iconView}>{renderPhoto()}</View>
         <View style={styles.inputs}>
-          <InputField title="Email" placeholder={userData.email} text={email} setText={setEmail} large="90%" />
-          <InputField title="Telefone" placeholder={userData.phone} text={phone} setText={setPhone} large="90%" type="numeric" max={11} />
-          <InputField title="CPF" placeholder={userData.cpf} text={cpf} setText={setCPF} large="90%" type="numeric" max={11} edit={false} />
-          <InputField title="Alterar Senha" placeholder="********" text={password} setText={setPassword} large="90%" password={true} />
-          <InputField title="Confirmar Nova Senha" placeholder="********" text={confirmPassword} setText={setConfirmPassword} large="90%" password={true} />
+          <InputField
+            title="Email"
+            placeholder={userData.email}
+            text={email}
+            setText={setEmail}
+            large="90%"
+          />
+          <InputField
+            title="Telefone"
+            placeholder={userData.phone}
+            text={phone}
+            setText={setPhone}
+            large="90%"
+            type="numeric"
+            max={11}
+          />
+          <InputField
+            title="CPF"
+            placeholder={userData.cpf}
+            text={cpf}
+            setText={setCPF}
+            large="90%"
+            type="numeric"
+            max={11}
+            edit={false}
+          />
+          <InputField
+            title="Alterar Senha"
+            placeholder="********"
+            text={password}
+            setText={setPassword}
+            large="90%"
+            password={true}
+          />
+          <InputField
+            title="Confirmar Nova Senha"
+            placeholder="********"
+            text={confirmPassword}
+            setText={setConfirmPassword}
+            large="90%"
+            password={true}
+          />
         </View>
         <View style={styles.button}>
           <Button title="Editar" onPress={() => updateUserData()} />
@@ -105,13 +173,13 @@ const styles = StyleSheet.create({
     paddingBottom: 12,
   },
   iconView: {
-    alignItems: 'center',
+    alignItems: "center",
   },
   icon: {
-    color: 'rgb(74,134,232)',
+    color: "rgb(74,134,232)",
   },
   label: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   input: {
     height: 40,
@@ -119,16 +187,16 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     borderWidth: 1,
     padding: 10,
-    borderRadius: 8
+    borderRadius: 8,
   },
   inputs: {
     paddingRight: 12,
     paddingLeft: 12,
-    alignItems: 'center',
+    alignItems: "center",
   },
   button: {
-    alignItems: 'center',
-  }
+    alignItems: "center",
+  },
 });
 
 export default editUser;

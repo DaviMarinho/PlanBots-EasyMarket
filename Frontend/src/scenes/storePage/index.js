@@ -60,7 +60,8 @@ const storePage = ({ navigation }) => {
     if (!result.cancelled) {
       setStoreImage(`data:image/png;base64,${result.base64}`);
       await editStoreImage(storeData._id, `data:image/png;base64,${result.base64}`);
-      storeData.image = storeImage;
+      storeData.storeImage = `data:image/png;base64,${result.base64}`;
+      setStoreData(storeData);
       ToastAndroid.show('Imagem adicionada com sucesso.', ToastAndroid.SHORT);
     }
   };
@@ -157,7 +158,6 @@ const storePage = ({ navigation }) => {
     if (products.length > 0) {
       return (
         products.map((product, idx) => {
-          console.log(product, 'yuki');
           return (
             <View style={styles.productCard} key={idx}>
               {

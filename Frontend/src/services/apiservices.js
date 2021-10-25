@@ -117,7 +117,6 @@ export const addProductToStore = async (productsIds, storeID) => {
 }
 
 export const changeStoreStatus = async (storeID, status) => {
-  console.log(status);
   try {
     const r = await APIGeneral.put(`/store/status/${storeID}`, { status });
     return r;
@@ -128,9 +127,6 @@ export const changeStoreStatus = async (storeID, status) => {
 }
 
 export const editStoreImage = async (storeID, storeImage) => {
-
-  console.log(storeID, storeImage, 'aki');
-
   try {
     const r = await APIGeneral.put(`/store/image/${storeID}`, { storeImage });
     return r;
