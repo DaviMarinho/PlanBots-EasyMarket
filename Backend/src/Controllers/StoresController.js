@@ -49,7 +49,8 @@ const createStore = async (req, res) => {
   const {
     storeName,
     storeDescription,
-    userId
+    userId,
+    storeImage,
   } = req.body;
 
   if (!storeName) {
@@ -57,7 +58,7 @@ const createStore = async (req, res) => {
   }
 
   try {
-    const newStore = await Store.create({ storeName, storeDescription});
+    const newStore = await Store.create({ storeName, storeDescription, storeImage});
     await User.findOneAndUpdate({ _id: userId }, {
       storeID: newStore._id
     }, { new: true });

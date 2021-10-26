@@ -76,12 +76,13 @@ export const openStores = async () => {
   }
 };
 
-export const registerStore = async (storeName, storeDescription, userId) => {
+export const registerStore = async (storeName, storeDescription, userId, storeImage) => {
   try {
     const r = await APIGeneral.post("/store/create", {
       storeName,
       storeDescription,
       userId,
+      storeImage,
     });
     return r;
   } catch (err) {

@@ -13,7 +13,6 @@ import {
   createProduct, deleteProduct,
   changeStoreStatus,
   editStoreImage,
-  changeStoreStatus,
 } from '../../services/apiservices';
 import CreateButton from '../../components/createButton';
 import InputField from '../../components/inputField';
@@ -24,12 +23,12 @@ const storePage = ({ route, navigation }) => {
   const { userData, storeData, setUserData, setStoreData } = useData();
   const [modalVisibility, setModalVisibility] = useState(false);
   // Store
-  const [storeID, setStoreID] = useState(
-    route.params ? route.params._id : storeData._id
-  );
+  const storeID = route.params ? route.params._id : storeData._id;
   const [storeName, setStoreName] = useState();
   const [storeDescription, setStoreDescription] = useState();
-  const [storeImage, setStoreImage] = useState(storeData.storeImage);
+  const [storeImage, setStoreImage] = useState(
+    route.params ? route.params.storeImage : storeData.storeImage
+  );
   const [isOpen, setIsOpen] = useState(storeData.open);
   const { setMarkers, getStoreLocations } = useData();
   // Products
@@ -49,6 +48,8 @@ const storePage = ({ route, navigation }) => {
       navigation.navigate("home");
     });
   };
+
+  console.log(route.params);
 
   const pickStoreImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -81,6 +82,18 @@ const storePage = ({ route, navigation }) => {
       setProductImage(`data:image/png;base64,${result.base64}`);
     }
   };
+
+  const getProductsDataFromAPI = () => {
+    getProductByStore(storeID)
+      .then((r) => {
+        setProducts(r.data);
+      });
+  };
+
+
+  useEffect(() => {
+    getProductsDataFromAPI();
+  }, []);
 
   const addProduct = async () => {
     await createProduct(productName, productDescription, productCategory, true, productPrice, storeData._id, productImage);
@@ -209,7 +222,6 @@ const storePage = ({ route, navigation }) => {
                 </View>
                 {product.productImage ? <Image source={{ uri: product.productImage }} style={styles.productWithImage} /> : <View style={styles.productImage} />}
               </View>
-              <View style={styles.productImage} />
             </View>
           );
         })
@@ -218,13 +230,6 @@ const storePage = ({ route, navigation }) => {
   };
 
   useEffect(() => {
-    getProductByStore(storeID).then((r) => {
-      setProducts(r.data);
-    });
-  }, []);
-
-  useEffect(() => {
-    console.log(route.params);
     if (route.params) {
       // Loja de outra pessoa
       setStoreName(route.params.storeName);
@@ -540,8 +545,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     marginTop: 4,
     alignSelf: 'flex-end',
-    height: '93%',
-    width: '28%',
+    height: "93%",
+    width: "28%",
     borderRadius: 8,
   },
 });
