@@ -29,10 +29,11 @@ routes.delete('/product/delete/:id', ProductController.deleteProduct);
 routes.get('/store', StoresController.getStoreList);
 routes.get('/store/open', StoresController.getOpenStores);
 routes.get('/store/:id', StoresController.getStoreByID);
-routes.post('/store/create', StoresController.createStore)
+routes.post('/store/create', StoresController.createStore);
 routes.put('/store/edit/:id', StoresController.editStore);
 routes.put('/store/status/:id', StoresController.changeStoreStatus);
-routes.delete('/store/delete/:id', StoresController.deleteStore)
+routes.delete('/store/delete/:id', StoresController.deleteStore);
+routes.put('/store/image/:id', StoresController.editStoreImage);
 
 // Users
 routes.get('/user', UsersController.getUserList);
