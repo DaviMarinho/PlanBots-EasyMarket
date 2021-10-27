@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, TextInput, Button, ToastAndroid } from 'react-native';
+import { StyleSheet, View, Text, Button, ToastAndroid } from 'react-native';
 import { loginUser, getStoreData } from '../../services/apiservices';
 import { useData } from '../../context/';
 import InputField from '../../components/inputField';
