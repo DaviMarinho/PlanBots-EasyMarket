@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   View,
-  Text,
   Button,
   Image,
   ToastAndroid,
@@ -20,9 +19,9 @@ import InputField from "../../components/inputField";
 import * as ImagePicker from "expo-image-picker";
 import Navbar from '../../components/navbar';
 
-const editUser = ({ route, navigation }) => {
-  const userID = route.params.id;
+const editUser = ({ navigation }) => {
   const { userData, setUserData } = useData();
+  const userID = userData._id;
   const [email, setEmail] = useState(userData.email);
   const [phone, setPhone] = useState(userData.phone);
   const [cpf, setCPF] = useState(userData.cpf);

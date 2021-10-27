@@ -15,8 +15,9 @@ const Header = () => {
         <Text style={styles.logoA}>Easy</Text>
         <Text style={styles.logoB}>Market</Text>
       </View>
-      <View style={styles.icons}>
-        {userData && (
+
+      {userData && (
+        <View style={styles.icons}>
           <TouchableOpacity
             onPress={() => {
               getStoreLocations();
@@ -25,17 +26,16 @@ const Header = () => {
           >
             <AntDesign name="reload1" size={30} color="#FFF" />
           </TouchableOpacity>
-        )}
-
-        <TouchableOpacity
-          onPress={() => {
-            userClean();
-            navigation.navigate("login");
-          }}
-        >
-          <MaterialIcons name="exit-to-app" size={30} color="#FFF" />
-        </TouchableOpacity>
-      </View>
+          <TouchableOpacity
+            onPress={() => {
+              userClean();
+              navigation.navigate("login");
+            }}
+          >
+            <MaterialIcons name="exit-to-app" size={30} color="#FFF" />
+          </TouchableOpacity>
+        </View>
+      )}
     </View>
   );
 };
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
   icons: {
     flexDirection: "row",
     width: 70,
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
   },
 });
 

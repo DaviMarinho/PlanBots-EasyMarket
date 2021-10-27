@@ -7,7 +7,7 @@ import { useData } from '../../context/';
 
 const Navbar = () => {
   const navigation = useNavigation();
-  const { userData, storeData } = useData();
+  const { userData, storeData, setStoreData } = useData();
 
   return (
     <View style={styles.container}>
@@ -15,12 +15,7 @@ const Navbar = () => {
         style={styles.icon}
         onPress={() => {
           if (userData) {
-            navigation.navigate('perfil', {
-              id: userData?._id,
-              email: userData?.email,
-              cpf: userData?.cpf,
-              phone: userData?.phone
-            });
+            navigation.navigate('perfil');
           } else {
             navigation.navigate('login')
           }
@@ -51,6 +46,7 @@ const Navbar = () => {
             navigation.navigate('showStore');
           } else if (userData && storeData) {
             navigation.navigate('storePage');
+            setStoreData(storeData);
           } else {
             ToastAndroid.show("Para visualizar/cadastrar uma loja realize seu login", ToastAndroid.LONG);
             navigation.navigate('login');

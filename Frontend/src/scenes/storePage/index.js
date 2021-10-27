@@ -1,16 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
-  StyleSheet, View, Text, TextInput,
-  ToastAndroid, Switch, ScrollView,
-  TouchableOpacity, Image
-} from 'react-native';
-import { Picker } from '@react-native-picker/picker';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import { useData } from '../../context/';
+  StyleSheet,
+  View,
+  Text,
+  TextInput,
+  ToastAndroid,
+  Switch,
+  ScrollView,
+  TouchableOpacity,
+  Image,
+  ActivityIndicator,
+} from "react-native";
+import { Picker } from "@react-native-picker/picker";
+import AntDesign from "react-native-vector-icons/AntDesign";
+import { useData } from "../../context/";
 import {
   deleteStore,
   getProductByStore,
-  createProduct, deleteProduct,
+  createProduct,
+  deleteProduct,
   changeStoreStatus,
   editStoreImage,
 } from '../../services/apiservices';
@@ -21,17 +29,16 @@ import * as ImagePicker from 'expo-image-picker';
 import Navbar from '../../components/navbar';
 
 const storePage = ({ route, navigation }) => {
-  const { userData, storeData, setUserData, setStoreData } = useData();
+  const { userData, storeData, setUserData, setStoreData, getStoreLocations } =
+    useData();
+  const [loading, setLoading] = useState(true);
   const [modalVisibility, setModalVisibility] = useState(false);
   // Store
-  const storeID = route.params ? route.params._id : storeData._id;
+  const storeID = route.params ? route.params._id : storeData?._id;
   const [storeName, setStoreName] = useState();
   const [storeDescription, setStoreDescription] = useState();
-  const [storeImage, setStoreImage] = useState(
-    route.params ? route.params.storeImage : storeData.storeImage
-  );
-  const [isOpen, setIsOpen] = useState(storeData.open);
-  const { setMarkers, getStoreLocations } = useData();
+  const [storeImage, setStoreImage] = useState();
+  const [isOpen, setIsOpen] = useState();
   // Products
   const [productName, setProductName] = useState("");
   const [productDescription, setProductDescription] = useState("");
@@ -41,16 +48,15 @@ const storePage = ({ route, navigation }) => {
   const [products, setProducts] = useState([]);
 
   const deleteStoreFromAPI = () => {
-    deleteStore(storeData?._id).then((r) => {
-      const deletedStoreUser = userData;
-      deletedStoreUser.storeID = "";
-      setUserData(deletedStoreUser);
-      setStoreData();
-      navigation.navigate("home");
+    deleteStore(userData?._id).then(() => {
+      setUserData({
+        ...userData,
+        storeID: "",
+      });
+      setStoreData(undefined);
     });
+    navigation.navigate("home");
   };
-
-  console.log(route.params);
 
   const pickStoreImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -63,10 +69,13 @@ const storePage = ({ route, navigation }) => {
 
     if (!result.cancelled) {
       setStoreImage(`data:image/png;base64,${result.base64}`);
-      await editStoreImage(storeData._id, `data:image/png;base64,${result.base64}`);
+      await editStoreImage(
+        storeData._id,
+        `data:image/png;base64,${result.base64}`
+      );
       storeData.storeImage = `data:image/png;base64,${result.base64}`;
       setStoreData(storeData);
-      ToastAndroid.show('Imagem adicionada com sucesso.', ToastAndroid.SHORT);
+      ToastAndroid.show("Imagem adicionada com sucesso.", ToastAndroid.SHORT);
     }
   };
 
@@ -85,26 +94,29 @@ const storePage = ({ route, navigation }) => {
   };
 
   const getProductsDataFromAPI = () => {
-    getProductByStore(storeID)
-      .then((r) => {
-        setProducts(r.data);
-      });
+    getProductByStore(storeID).then((r) => {
+      setProducts(r.data);
+      setLoading(false);
+    });
   };
 
-
-  useEffect(() => {
-    getProductsDataFromAPI();
-  }, []);
-
   const addProduct = async () => {
-    await createProduct(productName, productDescription, productCategory, true, productPrice, storeData._id, productImage);
+    await createProduct(
+      productName,
+      productDescription,
+      productCategory,
+      true,
+      productPrice,
+      storeData._id,
+      productImage
+    );
     setModalVisibility(false);
-    setProductCategory('');
-    setProductDescription('');
-    setProductName('');
-    setProductPrice('');
+    setProductCategory("");
+    setProductDescription("");
+    setProductName("");
+    setProductPrice("");
     setProductImage(null);
-    ToastAndroid.show('Cadastro realizado com sucesso.', ToastAndroid.SHORT);
+    ToastAndroid.show("Cadastro realizado com sucesso.", ToastAndroid.SHORT);
     getProductsDataFromAPI();
   };
 
@@ -141,107 +153,173 @@ const storePage = ({ route, navigation }) => {
   };
 
   const renderStoreImage = () => {
-
     if (storeImage == null) {
       return (
         <View style={styles.image}>
-          <Text style={{ fontSize: 28, color: 'white' }}>Adicionar imagem</Text>
+          <Text style={{ fontSize: 28, color: "white" }}>Adicionar imagem</Text>
           <AntDesign
             name="pluscircleo"
             size={50}
-            style={{ color: 'white' }}
+            style={{ color: "white" }}
             onPress={pickStoreImage}
           />
-        </View>
-      )
-    }
-    else {
-      return (
-        <TouchableOpacity onPress={pickStoreImage}>
-          <Image source={{ uri: storeImage }} style={{ height: 180, width: '100%' }} />
-        </TouchableOpacity>
-      )
-    }
-
-  }
-
-  const renderProductImage = () => {
-
-    if (productImage == null) {
-      return (
-        <View style={styles.selectedProductImage}>
-          <Text style={{ fontSize: 14, color: 'black' }}>Adicionar imagem</Text>
-          <AntDesign
-            name="pluscircleo"
-            size={50}
-            style={{ color: 'black' }}
-            onPress={pickProductImage}
-          />
-        </View>
-      )
-    }
-    else {
-      return (
-        <TouchableOpacity onPress={pickProductImage}>
-          <Image source={{ uri: productImage }} style={{ height: 80, width: 80 }} />
-        </TouchableOpacity>
-      )
-    }
-
-  }
-
-  const listProducts = () => {
-    if (products.length > 0) {
-      return (
-        products.map((product, idx) => {
-          return (
-            <View style={styles.productCard} key={idx}>
-              {
-                (isOpen || route.params) ? <View style={styles.hr} /> : <><View style={styles.productHr} />
-                  <AntDesign
-                    name="closecircleo"
-                    size={30}
-                    style={styles.productX}
-                    onPress={() => deleteProductFromAPI(product._id)}
-                  /></>
-              }
-              <View style={styles.product}>
-                <View style={styles.productText}>
-                  <View style={styles.productNameDescription}>
-                    <Text numberOfLines={1} style={styles.productName}>
-                      {product.productName}
-                    </Text>
-                    <Text numberOfLines={3} style={styles.productDescription}>
-                      {product.productDescription}
-                    </Text>
-                  </View>
-                  <View style={styles.productPrice}>
-                    <Text style={styles.productPriceDescription}>
-                      R${product.price}
-                    </Text>
-                  </View>
-                </View>
-                {product.productImage ? <Image source={{ uri: product.productImage }} style={styles.productWithImage} /> : <View style={styles.productImage} />}
-              </View>
+          {!route.params && !isOpen && (
+            <View
+              style={{
+                flexDirection: "row",
+                position: "absolute",
+                right: 10,
+                top: 10,
+              }}
+            >
+              <AntDesign
+                name="edit"
+                size={30}
+                style={{ color: "black" }}
+                onPress={() => navigation.navigate('editStore')}
+              />
+              <AntDesign
+                name="closecircleo"
+                size={30}
+                style={{ color: "black", marginLeft: 8 }}
+                onPress={() => deleteStoreFromAPI()}
+              />
             </View>
-          );
-        })
+          )}
+        </View>
+      );
+    } else {
+      return (
+        <View>
+          <Image
+            source={{ uri: storeImage }}
+            style={{ height: 180, width: "100%" }}
+          />
+          {!route.params && !isOpen && (
+            <View
+              style={{
+                flexDirection: "row",
+                position: "absolute",
+                right: 10,
+                top: 10,
+              }}
+            >
+              <AntDesign
+                name="edit"
+                size={30}
+                style={{ color: "black" }}
+                onPress={() => navigation.navigate('editStore')}
+              />
+              <AntDesign
+                name="closecircleo"
+                size={30}
+                style={{ color: "black", marginLeft: 8 }}
+                onPress={() => deleteStoreFromAPI()}
+              />
+            </View>
+          )}
+        </View>
       );
     }
   };
 
+  const renderProductImage = () => {
+    if (productImage == null) {
+      return (
+        <View style={styles.selectedProductImage}>
+          <Text style={{ fontSize: 14, color: "black" }}>Adicionar imagem</Text>
+          <AntDesign
+            name="pluscircleo"
+            size={50}
+            style={{ color: "black" }}
+            onPress={pickProductImage}
+          />
+        </View>
+      );
+    } else {
+      return (
+        <TouchableOpacity onPress={pickProductImage}>
+          <Image
+            source={{ uri: productImage }}
+            style={{ height: 80, width: 80 }}
+          />
+        </TouchableOpacity>
+      );
+    }
+  };
+
+  const listProducts = () => {
+    if (products.length > 0) {
+      return products.map((product, idx) => {
+        return (
+          <View style={styles.productCard} key={idx}>
+            {isOpen || route.params ? (
+              <View style={styles.hr} />
+            ) : (
+              <View>
+                <View style={styles.productHr} />
+                <AntDesign
+                  name="closecircleo"
+                  size={30}
+                  style={styles.productX}
+                  onPress={() => deleteProductFromAPI(product._id)}
+                />
+              </View>
+            )}
+            <View style={styles.product}>
+              <View style={styles.productText}>
+                <View style={styles.productNameDescription}>
+                  <Text numberOfLines={1} style={styles.productName}>
+                    {product.productName}
+                  </Text>
+                  <Text numberOfLines={3} style={styles.productDescription}>
+                    {product.productDescription}
+                  </Text>
+                </View>
+                <View style={styles.productPrice}>
+                  <Text style={styles.productPriceDescription}>
+                    R${product.price}
+                  </Text>
+                </View>
+              </View>
+              {product.productImage ? (
+                <Image
+                  source={{ uri: product.productImage }}
+                  style={styles.productWithImage}
+                />
+              ) : (
+                <View style={styles.productImage} />
+              )}
+            </View>
+          </View>
+        );
+      });
+    }
+  };
+
   useEffect(() => {
+    getProductsDataFromAPI();
+  }, []);
+
+  useEffect(() => {
+    setStoreName("");
+    setStoreDescription("");
+    setIsOpen(true);
+    setProducts([]);
     if (route.params) {
       // Loja de outra pessoa
       setStoreName(route.params.storeName);
       setStoreDescription(route.params.storeDescription);
       setIsOpen(true);
+      setStoreImage(route.params.storeImage);
     } else {
       // Minha loja
       setStoreName(storeData.storeName);
       setStoreDescription(storeData.storeDescription);
+      setIsOpen(storeData.open);
+      setStoreImage(storeData.storeImage);
     }
-  }, []);
+  }, [route.params]);
 
   return (
     <View style={styles.container}>
@@ -258,16 +336,20 @@ const storePage = ({ route, navigation }) => {
                   <AntDesign
                     name="closecircleo"
                     size={30}
-                    style={{ color: 'rgb(117,136,236)' }}
+                    style={{ color: "rgb(117,136,236)" }}
                     onPress={() => setModalVisibility(false)}
                   />
                 </View>
-                <Text style={styles.pageTitle}>
-                  Adicionar novo produto
-                </Text>
+                <Text style={styles.pageTitle}>Adicionar novo produto</Text>
                 <View style={styles.inputView}>
                   {renderProductImage()}
-                  <InputField title="Nome do produto*" placeholder="Nome do produto" setText={setProductName} text={productName} large="80%" />
+                  <InputField
+                    title="Nome do produto*"
+                    placeholder="Nome do produto"
+                    setText={setProductName}
+                    text={productName}
+                    large="80%"
+                  />
                   <Text style={styles.inputLabel}>Categoria do produto*</Text>
                   <View style={styles.pickerView}>
                     <Picker
@@ -275,13 +357,34 @@ const storePage = ({ route, navigation }) => {
                       selectedValue={productCategory}
                       onValueChange={(itemValue) =>
                         setProductCategory(itemValue)
-                      }>
-                      <Picker.Item label="Categoria do produto" value="0" color="#9A9A9A" style={styles.pickerItem} />
-                      <Picker.Item label="Salgado" value="SALGADO" style={styles.pickerItem} />
-                      <Picker.Item label="Doce" value="DOCE" style={styles.pickerItem} />
+                      }
+                    >
+                      <Picker.Item
+                        label="Categoria do produto"
+                        value="0"
+                        color="#9A9A9A"
+                        style={styles.pickerItem}
+                      />
+                      <Picker.Item
+                        label="Salgado"
+                        value="SALGADO"
+                        style={styles.pickerItem}
+                      />
+                      <Picker.Item
+                        label="Doce"
+                        value="DOCE"
+                        style={styles.pickerItem}
+                      />
                     </Picker>
                   </View>
-                  <InputField title="Preço*" placeholder="R$ 00.00" setText={setProductPrice} text={productPrice} large="80%" type="numeric" />
+                  <InputField
+                    title="Preço*"
+                    placeholder="R$ 00.00"
+                    setText={setProductPrice}
+                    text={productPrice}
+                    large="80%"
+                    type="numeric"
+                  />
                   <Text style={styles.inputLabel}>Descrição*</Text>
                   <TextInput
                     style={styles.descriptionInput}
@@ -291,11 +394,11 @@ const storePage = ({ route, navigation }) => {
                     value={productDescription}
                   />
                 </View>
-                <CreateButton create={addProduct} text='Cadastrar produto' />
+                <CreateButton create={addProduct} text="Cadastrar produto" />
               </TouchableOpacity>
             </ScrollView>
-          </View >
-        </Modal >
+          </View>
+        </Modal>
         <View>
           {renderStoreImage()}
           <View style={{ paddingLeft: 12, paddingRight: 12, marginTop: 12 }}>
@@ -318,6 +421,7 @@ const storePage = ({ route, navigation }) => {
                         open: !isOpen,
                       });
                       setIsOpen(!isOpen);
+                      getStoreLocations();
                     }}
                     value={isOpen}
                   />
@@ -329,29 +433,40 @@ const storePage = ({ route, navigation }) => {
                 {storeDescription}
               </Text>
             </View>
-            <View style={{ marginTop: 18 }}>
-              {listProducts()}
-            </View>
-            {
-              (isOpen || route.params) ? <View style={{ marginBottom: 100 }} /> :
-                <>
-                  <View style={styles.hr} />
-                  <View style={styles.addProducts}>
-                    <Text style={{ fontSize: 20, color: 'rgb(74,134,232)', marginBottom: 10, fontWeight: 'bold' }}>Adicionar produtos</Text>
-                    <AntDesign
-                      name="pluscircleo"
-                      size={50}
-                      style={{ color: 'rgb(117,136,236)' }}
-                      onPress={() => setModalVisibility(true)} // abrir modal
-                    />
-                  </View>
-                </>
-            }
-          </View >
-        </View >
-      </ScrollView >
-      <Navbar />
-    </View >
+            {loading ? (
+              <ActivityIndicator size="large" color="rgb(117,136,236)" />
+            ) : (
+              <View style={{ marginTop: 18 }}>{listProducts()}</View>
+            )}
+            {isOpen || route.params ? (
+              <View style={{ marginBottom: 100 }} />
+            ) : (
+              <>
+                <View style={styles.hr} />
+                <View style={styles.addProducts}>
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      color: "rgb(74,134,232)",
+                      marginBottom: 10,
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Adicionar produtos
+                  </Text>
+                  <AntDesign
+                    name="pluscircleo"
+                    size={50}
+                    style={{ color: "rgb(117,136,236)" }}
+                    onPress={() => setModalVisibility(true)} // abrir modal
+                  />
+                </View>
+              </>
+            )}
+          </View>
+        </View>
+      </ScrollView>
+    </View>
   );
 };
 
@@ -369,9 +484,9 @@ const styles = StyleSheet.create({
   image: {
     backgroundColor: "#6E6E6E",
     height: 180,
-    justifyContent: 'center',   // remover
-    alignItems: 'center',
-    flexDirection: 'column',       // remover
+    justifyContent: "center", // remover
+    alignItems: "center",
+    flexDirection: "column", // remover
   },
 
   header: {
@@ -433,8 +548,8 @@ const styles = StyleSheet.create({
   },
   inputView: {
     // marginLeft: '10%',
-    width: '100%',
-    alignItems: 'center',
+    width: "100%",
+    alignItems: "center",
   },
   input: {
     height: 40,
@@ -539,14 +654,14 @@ const styles = StyleSheet.create({
   selectedProductImage: {
     // alignSelf: 'center',
     height: 90,
-    justifyContent: 'center',   // remover
-    alignItems: 'center',
-    flexDirection: 'column',       // remover
+    justifyContent: "center", // remover
+    alignItems: "center",
+    flexDirection: "column", // remover
   },
   productWithImage: {
-    position: 'absolute',
+    position: "absolute",
     marginTop: 4,
-    alignSelf: 'flex-end',
+    alignSelf: "flex-end",
     height: "93%",
     width: "28%",
     borderRadius: 8,
