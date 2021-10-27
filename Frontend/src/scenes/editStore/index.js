@@ -6,7 +6,8 @@ import {
   Button,
   TextInput,
   ToastAndroid,
-  TouchableOpacity
+  TouchableOpacity,
+  Image
 } from "react-native";
 import { updateStore } from "../../services/apiservices";
 import { useData } from "../../context/";
@@ -29,7 +30,7 @@ const editStore = ({ navigation }) => {
       );
       return;
     }
-    updateStore(storeID, storeName, storeDescription).then((r) => {
+    updateStore(storeID, storeName, storeDescription, storeImage).then((r) => {
       setStoreData(r.data);
       navigation.navigate("home");
     });

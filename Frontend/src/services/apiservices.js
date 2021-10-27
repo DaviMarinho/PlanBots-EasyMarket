@@ -91,11 +91,12 @@ export const registerStore = async (storeName, storeDescription, userId, storeIm
   };
 };
 
-export const updateStore = async (storeID, storeName, storeDescription) => {
+export const updateStore = async (storeID, storeName, storeDescription, storeImage) => {
   try {
     const r = await APIGeneral.put(`/store/edit/${storeID}`, {
       storeName,
       storeDescription,
+      storeImage
     });
     return r;
   } catch (err) {

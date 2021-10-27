@@ -33,7 +33,7 @@ const storePage = ({ route, navigation }) => {
   const [loading, setLoading] = useState(true);
   const [modalVisibility, setModalVisibility] = useState(false);
   // Store
-  const storeID = route.params ? route.params._id : storeData._id;
+  const storeID = route.params ? route.params._id : storeData?._id;
   const [storeName, setStoreName] = useState();
   const [storeDescription, setStoreDescription] = useState();
   const [storeImage, setStoreImage] = useState();
@@ -189,7 +189,7 @@ const storePage = ({ route, navigation }) => {
       );
     } else {
       return (
-        <TouchableOpacity onPress={pickStoreImage}>
+        <View>
           <Image
             source={{ uri: storeImage }}
             style={{ height: 180, width: "100%" }}
@@ -217,7 +217,7 @@ const storePage = ({ route, navigation }) => {
               />
             </View>
           )}
-        </TouchableOpacity>
+        </View>
       );
     }
   };
