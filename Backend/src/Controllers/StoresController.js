@@ -1,4 +1,5 @@
 const Store = require('../Models/StoreSchema');
+const Product = require('../Models/ProductSchema');
 const User = require('../Models/UserSchema');
 
 const getStoreList = async (req, res) => {
@@ -6,8 +7,7 @@ const getStoreList = async (req, res) => {
 }
 
 const getOpenStores = async (req, res) => {
-  const stores = await Store.find();
-  return res.json(stores.filter((s) => s.open));
+  return res.json(await Store.find({ open: true }));
 }
 
 const getStoreByID = async (req, res) => {
@@ -90,9 +90,13 @@ const editStore = async (req, res) => {
 
 const deleteStore = async (req, res) => {
   const { id } = req.params;
-
+  const user = await User.findOne({ _id: id });
   try {
-    const deletedStore = await Store.findOneAndDelete({ _id: id })
+    const deletedStore = await Store.findOneAndDelete({ _id: user.storeID });
+    await Product.deleteMany({ storeID: user.storeID });
+    await User.findOneAndUpdate({ _id: id }, {
+      storeID: "",
+    }, { new: true });
     return res.json(deletedStore);
   } catch (err) {
     return res.json(err);
@@ -100,5 +104,12 @@ const deleteStore = async (req, res) => {
 };
 
 module.exports = { 
-  getStoreList, createStore, editStore, deleteStore, getStoreByID, changeStoreStatus, getOpenStores, editStoreImage,
+  getStoreList, 
+  createStore, 
+  editStore, 
+  deleteStore, 
+  getStoreByID, 
+  changeStoreStatus, 
+  getOpenStores, 
+  editStoreImage
 };

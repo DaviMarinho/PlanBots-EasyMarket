@@ -16,14 +16,15 @@ const createStore = ({ navigation }) => {
     try {
       registerStore(storeName, storeDescription, userData._id, storeImage)
         .then((r) => {
-          console.log(r.data);
-          const updatedUserData = userData;
-          updatedUserData.storeID = r.data._id;
-          setUserData(updatedUserData);
           setStoreData(r.data);
+          setUserData({
+            ...userData,
+            storeID: r.data._id
+          });
+          ToastAndroid.show('Loja criada com sucesso.', ToastAndroid.SHORT);
+          navigation.navigate('home');
         });
-      ToastAndroid.show('Loja criada com sucesso.', ToastAndroid.SHORT);
-      navigation.navigate('home');
+
     } catch (e) {
       console.error(e);
       return;
@@ -46,7 +47,6 @@ const createStore = ({ navigation }) => {
   };
 
   const renderStoreImage = () => {
-
     if (storeImage == null) {
       return (
         <View style={styles.imageField}>
@@ -68,7 +68,6 @@ const createStore = ({ navigation }) => {
         </TouchableOpacity>
       )
     }
-
   }
 
   return (

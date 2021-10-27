@@ -1,54 +1,47 @@
-import React, { useState } from "react";
-import {
-  View,
-  ScrollView,
-  StyleSheet,
-  Text,
-  Image,
-} from "react-native";
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import { useNavigation } from '@react-navigation/native';
-import { useData } from '../../context/';
+import React from "react";
+import { View, ScrollView, StyleSheet, Text, Image } from "react-native";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import { useData } from "../../context/";
 
-const UserAccountScreen = ({route, navigation}) => {
-
-  const reqNavigation = useNavigation();
-  const { userData, setUserData } = useData();
-  const userID = route.params.id;
-  const [userName, setUserName] = useState('Perfil');
-  const [userPhone, setUserPhone] = useState(route.params.phone);
-  const [userEmail, setUserEmail] = useState(route.params.email);
-  const [userCPF, setUserCPF] = useState(route.params.cpf);
-  const [userImage, setUserImage] = useState(route.params.image);
+const UserAccountScreen = ({ navigation }) => {
+  const { userData } = useData();
+  const userID = userData._id;
+  const userPhone = userData.phone;
+  const userEmail = userData.email;
+  const userCPF = userData.cpf;
 
   const renderPhoto = () => {
-
     if (userData.image == null) {
-      return <Ionicons name="person-circle-outline" size={120} color="#4A86E8" />
+      return (
+        <Ionicons name="person-circle-outline" size={120} color="#4A86E8" />
+      );
     }
-
-    else {
-      return <Image source={{ uri: userData.image }} style={{ width: 100, height: 100, borderRadius: 50 }} />
-    }
-  }
+    return (
+      <Image
+        source={{ uri: userData.image }}
+        style={{ width: 100, height: 100, borderRadius: 50 }}
+      />
+    );
+  };
 
   return (
     <View style={style.container}>
       <ScrollView>
-
         <View style={style.teste}>
           {renderPhoto()}
-          <Ionicons onPress={() => { reqNavigation.navigate("editUser", {
-              id: userID,
-              email: userEmail,
-              cpf: userCPF,
-              phone: userPhone
-            }) }} name="create-outline" size={30} color="#4A86E8" style={{ position: "absolute", right: 0, top: 25 }} />
+          <Ionicons
+            onPress={() => {
+              navigation.navigate("editUser");
+            }}
+            name="create-outline"
+            size={30}
+            color="#4A86E8"
+            style={{ position: "absolute", right: 0, top: 25 }}
+          />
         </View>
 
-        <View style={{ alignSelf: 'center', width: '100%' }}>
-
-          <Text style={style.textName}>{userName}</Text>
+        <View style={{ alignSelf: "center", width: "100%" }}>
+          <Text style={style.textName}>Perfil</Text>
 
           <View style={style.line} />
 
@@ -70,7 +63,6 @@ const UserAccountScreen = ({route, navigation}) => {
             <Text style={style.label}>CPF</Text>
             <Text style={style.textformat}>{userCPF}</Text>
           </View>
-
         </View>
       </ScrollView>
     </View>
@@ -79,11 +71,11 @@ const UserAccountScreen = ({route, navigation}) => {
 
 const style = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
   teste: {
     padding: 20,
-    alignItems: 'center',
+    alignItems: "center",
     width: 150,
     alignSelf: "center",
   },
@@ -93,39 +85,38 @@ const style = StyleSheet.create({
     marginBottom: 12,
     borderWidth: 1,
     padding: 10,
-    borderRadius: 8
+    borderRadius: 8,
   },
   icon: {
-    color: '#4A86E8'
+    color: "#4A86E8",
   },
   textName: {
     fontSize: 30,
-    textAlign: 'center',
-    color: '#4A86E8',
-    fontWeight: 'bold'
+    textAlign: "center",
+    color: "#4A86E8",
+    fontWeight: "bold",
   },
   line: {
-    backgroundColor: 'black',
+    backgroundColor: "black",
     height: 1,
-    width: '90%',
+    width: "90%",
     margin: 10,
-    alignSelf: 'center'
+    alignSelf: "center",
   },
   dataInput: {
-    alignSelf: 'flex-start',
+    alignSelf: "flex-start",
     marginLeft: 15,
   },
   label: {
-    fontWeight: 'bold',
-    color: '#4A86E8',
+    fontWeight: "bold",
+    color: "#4A86E8",
     fontSize: 24,
     margin: 10,
   },
   textformat: {
     margin: 10,
     fontSize: 18,
-  }
-
-})
+  },
+});
 
 export default UserAccountScreen;

@@ -69,7 +69,7 @@ export const getStoreData = async (storeID) => {
 
 export const openStores = async () => {
   try {
-    const r = await APIGeneral.get('/store/open')
+    const r = await APIGeneral.get('/store/open');
     return r;
   } catch (err) {
     return err;
@@ -91,11 +91,12 @@ export const registerStore = async (storeName, storeDescription, userId, storeIm
   };
 };
 
-export const updateStore = async (storeID, storeName, storeDescription) => {
+export const updateStore = async (storeID, storeName, storeDescription, storeImage) => {
   try {
     const r = await APIGeneral.put(`/store/edit/${storeID}`, {
       storeName,
       storeDescription,
+      storeImage
     });
     return r;
   } catch (err) {
@@ -104,9 +105,11 @@ export const updateStore = async (storeID, storeName, storeDescription) => {
   };
 };
 
-export const deleteStore = async (storeID) => {
+export const deleteStore = async (storeID, userId) => {
   try {
-    const r = await APIGeneral.delete(`/store/delete/${storeID}`);
+    const r = await APIGeneral.delete(`/store/delete/${storeID}`, {
+      userId: userId,
+    });
     return r;
   } catch (err) {
     console.error(err);
