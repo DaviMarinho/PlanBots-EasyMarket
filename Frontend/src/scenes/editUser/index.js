@@ -18,6 +18,7 @@ import {
 import { useData } from "../../context/";
 import InputField from "../../components/inputField";
 import * as ImagePicker from "expo-image-picker";
+import Navbar from '../../components/navbar';
 
 const editUser = ({ route, navigation }) => {
   const userID = route.params.id;
@@ -54,7 +55,7 @@ const editUser = ({ route, navigation }) => {
           console.error(e);
         }
       });
-    } else{
+    } else {
       updateUser(userID, email, cpf, phone, password, image).then((r) => {
         try {
           setUserData(r.data);
@@ -159,6 +160,7 @@ const editUser = ({ route, navigation }) => {
           <Button title="Editar" onPress={() => updateUserData()} />
         </View>
       </View>
+      <Navbar/>
     </View>
   );
 };

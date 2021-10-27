@@ -9,8 +9,9 @@ import {
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import { useData } from '../../context/';
+import Navbar from '../../components/navbar';
 
-const UserAccountScreen = ({route, navigation}) => {
+const UserAccountScreen = ({ route, navigation }) => {
 
   const reqNavigation = useNavigation();
   const { userData, setUserData } = useData();
@@ -38,12 +39,14 @@ const UserAccountScreen = ({route, navigation}) => {
 
         <View style={style.teste}>
           {renderPhoto()}
-          <Ionicons onPress={() => { reqNavigation.navigate("editUser", {
+          <Ionicons onPress={() => {
+            reqNavigation.navigate("editUser", {
               id: userID,
               email: userEmail,
               cpf: userCPF,
               phone: userPhone
-            }) }} name="create-outline" size={30} color="#4A86E8" style={{ position: "absolute", right: 0, top: 25 }} />
+            })
+          }} name="create-outline" size={30} color="#4A86E8" style={{ position: "absolute", right: 0, top: 25 }} />
         </View>
 
         <View style={{ alignSelf: 'center', width: '100%' }}>
@@ -73,6 +76,7 @@ const UserAccountScreen = ({route, navigation}) => {
 
         </View>
       </ScrollView>
+      <Navbar />
     </View>
   );
 };

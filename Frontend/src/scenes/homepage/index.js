@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { useData } from "../../context/";
 import * as Location from "expo-location";
+import Navbar from '../../components/navbar';
 
 const HomePage = ({ navigation }) => {
   const [initialPosition, setInitialPosition] = useState(null);
@@ -55,7 +56,7 @@ const HomePage = ({ navigation }) => {
               description={marker.storeDescription}
               key={idx}
               onPress={() => navigation.navigate("storePage", marker)}
-              // image={require('../../../assets/trolley.png')}
+            // image={require('../../../assets/trolley.png')}
             >
               <Image
                 source={require("../../../assets/trolley.png")}
@@ -98,6 +99,7 @@ const HomePage = ({ navigation }) => {
       ) : (
         <ActivityIndicator size="large" color="red" />
       )}
+      <Navbar seila={false} />
     </View>
   );
 };

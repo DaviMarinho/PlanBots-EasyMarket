@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, Button, TextInput, ToastAndroid } from 'react-n
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { updateStore } from '../../services/apiservices';
 import { useData } from '../../context/';
+import Navbar from '../../components/navbar';
 
 const editStore = ({ navigation, route }) => {
   const storeID = route.params.storeID;
@@ -48,6 +49,7 @@ const editStore = ({ navigation, route }) => {
           <Button title="Editar" onPress={() => updateStoreData()} />
         </View>
       </View>
+      <Navbar seila={true}/>
     </View>
   );
 };

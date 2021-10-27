@@ -5,6 +5,7 @@ import { useData } from '../../context/';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import InputField from '../../components/inputField';
 import * as ImagePicker from 'expo-image-picker';
+import Navbar from '../../components/navbar';
 
 const createStore = ({ navigation }) => {
   const [storeName, setStoreName] = useState('');
@@ -90,6 +91,7 @@ const createStore = ({ navigation }) => {
           <Button onPress={() => cadastrarLoja()} color='rgb(74,134,232)' title="Criar loja" />
         </View>
       </View>
+      <Navbar/>
     </View>
   )
 }
