@@ -11,11 +11,15 @@ const Signup = ({ navigation }) => {
   const [confirmPassword, setConfirmPassword] = useState('');
 
   const registrar = () => {
+    const dict = {
+      email: 'email',
+      phone: 'telefone',
+      cpf: 'cpf'
+    }
     registerUser(email, phone, cpf, password)
       .then((r) => {
         if (r.duplicated) {
-          console.log(r.duplicated);
-          ToastAndroid.show(`${Object.keys(r.duplicated).join(', ')} ja cadastrados.`, ToastAndroid.SHORT);
+          ToastAndroid.show(`${dict[Object.keys(r.duplicated)[0]]} ja cadastrado.`, ToastAndroid.SHORT);
         } else {          
           ToastAndroid.show('Cadastro realizado com sucesso.', ToastAndroid.SHORT);
           navigation.navigate('home');
