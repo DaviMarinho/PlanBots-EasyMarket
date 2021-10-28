@@ -1,7 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import Navbar from '../../components/navbar';
 
 const showStore = ({ navigation }) => {
   return (
@@ -15,7 +14,6 @@ const showStore = ({ navigation }) => {
         </Text>
         <AntDesign name="pluscircleo" size={50} color={styles.header.color} onPress={() => navigation.navigate('createStore')} />
       </View>
-      <Navbar />
     </View>
   );
 }
