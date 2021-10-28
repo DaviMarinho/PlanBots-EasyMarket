@@ -10,7 +10,7 @@ const ProductSchema = new mongoose.Schema({
     },
     category: {
         type: String,
-        enum: ['SALGADO', 'DOCE', 'BEBIDA', 'DIVERSOS'],
+        enum: ['SALGADO', 'DOCE', 'BEBIDA', 'ARTESANATO', 'MARMITA', 'DIVERSOS'],
         require: true,
     },
     available: {
@@ -26,8 +26,8 @@ const ProductSchema = new mongoose.Schema({
         require: true,
     },
     productImage: {
-      type: String,
-      require: false,
+        type: String,
+        require: false,
     },
 });
 
