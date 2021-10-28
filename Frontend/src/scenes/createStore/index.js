@@ -22,7 +22,7 @@ const createStore = ({ navigation }) => {
             storeID: r.data._id
           });
           ToastAndroid.show('Loja criada com sucesso.', ToastAndroid.SHORT);
-          navigation.navigate('home');
+          navigation.navigate('storePage');
         });
 
     } catch (e) {
