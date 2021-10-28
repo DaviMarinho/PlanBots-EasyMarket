@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, Button, ToastAndroid } from 'react-native';
 import { loginUser, getStoreData } from '../../services/apiservices';
 import { useData } from '../../context/';
@@ -7,7 +7,11 @@ import InputField from '../../components/inputField';
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { userData, setUserData, setStoreData, storeData } = useData();
+  const { userData, setUserData, setStoreData, storeData, showNav, setShowNav } = useData();
+
+  useEffect(() => {
+    setShowNav(false);
+  }, [showNav, userData]);
 
   const getStoreDataFromAPI = (storeID) => {
     getStoreData(storeID)
@@ -47,9 +51,9 @@ const Login = ({ navigation }) => {
         </View>
         <View style={styles.additionalOptions}>
           <Text style={styles.additionalOptionsText}>
-            Esqueci minha senha
+            Ainda não possui conta?
           </Text>
-          <Text style={styles.additionalOptionsText} onPress={() => navigation.navigate('register')}>
+          <Text style={styles.newAccount} onPress={() => navigation.navigate('register')}>
             Criar conta
           </Text>
         </View>
@@ -70,6 +74,7 @@ const styles = StyleSheet.create({
     color: 'rgb(74,134,232)',
     paddingTop: 12,
     paddingBottom: 12,
+    marginTop: '10%',
   },
   content: {
     paddingTop: 12,
@@ -92,19 +97,27 @@ const styles = StyleSheet.create({
     paddingLeft: 12,
   },
   additionalOptions: {
-    marginTop: 12,
+    marginTop: "20%",
     marginBottom: 12,
     alignItems: 'center',
+  },
+  newAccount: {
+    marginBottom: 6,
+    fontSize: 16,
+    padding: 6,
+    color: 'blue',
+    textDecorationLine: 'underline',
   },
   additionalOptionsText: {
     fontWeight: 'bold',
     marginTop: 6,
-    marginBottom: 6,
     fontSize: 16,
     padding: 6,
+    color: "#000",
   },
   button: {
     alignItems: 'center',
+    marginTop: '5%',
   }
 });
 

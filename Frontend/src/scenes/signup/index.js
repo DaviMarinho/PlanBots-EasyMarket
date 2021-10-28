@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -12,6 +12,7 @@ import { registerUser } from "../../services/apiservices";
 import InputField from "../../components/inputField";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import * as ImagePicker from "expo-image-picker";
+import { useData } from '../../context/';
 
 const Signup = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -20,6 +21,12 @@ const Signup = ({ navigation }) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [image, setImage] = useState(null);
+  const { setShowNav, showNav } = useData();
+
+  useEffect(() => {
+    setShowNav(false);
+  }, [showNav]);
+
 
   const registrar = () => {
     const dict = {
@@ -45,7 +52,7 @@ const Signup = ({ navigation }) => {
     } else {
       setPassword('');
       setConfirmPassword('');
-      ToastAndroid.show("As senhas não correspondem.", ToastAndroid.SHORT);   
+      ToastAndroid.show("As senhas não correspondem.", ToastAndroid.SHORT);
     }
   };
 
@@ -136,7 +143,7 @@ const Signup = ({ navigation }) => {
             style={styles.additionalOptionsText}
             onPress={() => navigation.navigate("login")}
           >
-            Realizar login
+            Voltar a tela de login
           </Text>
         </View>
       </View>
@@ -178,19 +185,20 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   additionalOptions: {
-    marginTop: 12,
+    marginTop: "10%",
     marginBottom: 12,
     alignItems: "center",
   },
   additionalOptionsText: {
-    fontWeight: "bold",
-    marginTop: 6,
     marginBottom: 6,
     fontSize: 16,
     padding: 6,
+    color: 'blue',
+    textDecorationLine: 'underline',
   },
   button: {
     alignItems: "center",
+    marginTop: "5%",
   },
 });
 

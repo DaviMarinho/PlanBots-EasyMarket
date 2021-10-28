@@ -8,6 +8,7 @@ const DataProvider = ({ children }) => {
   const [userData, setUserData] = useState();
   const [storeData, setStoreData] = useState();
   const [markers, setMarkers] = useState();
+  const [showNav, setShowNav] = useState(false);
 
   // const onDataDidChange = (data) => {
   //   if (data) {
@@ -48,7 +49,9 @@ const DataProvider = ({ children }) => {
         storeData,
         setStoreData,
         markers,
-        getStoreLocations
+        getStoreLocations,
+        showNav,
+        setShowNav,
       }}
     >
       {children}

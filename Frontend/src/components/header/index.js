@@ -26,14 +26,6 @@ const Header = () => {
           >
             <AntDesign name="reload1" size={30} color="#FFF" />
           </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              userClean();
-              navigation.navigate("home");
-            }}
-          >
-            <MaterialIcons name="exit-to-app" size={30} color="#FFF" />
-          </TouchableOpacity>
         </View>
       )}
     </View>
@@ -63,10 +55,11 @@ const styles = StyleSheet.create({
   logo: {
     flex: 1,
     flexDirection: "row",
+    left: 7,
   },
   icons: {
     flexDirection: "row",
-    width: 70,
+    width: 40,
     justifyContent: "space-between",
   },
 });

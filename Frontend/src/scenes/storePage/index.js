@@ -208,16 +208,16 @@ const storePage = ({ route, navigation }) => {
               <View style={styles.imageIcons}>
                 <AntDesign
                   name="edit"
-                  size={25}
-                  style={{ color: "rgb(117,136,236)" }}
+                  size={23}
+                  style={{ color: "#4A86E8" }}
                   onPress={() => navigation.navigate("editStore")}
                 />
               </View>
               <View style={styles.imageIcons}>
                 <AntDesign
-                  name="closecircleo"
-                  size={30}
-                  style={{ color: "rgb(117,136,236)" }}
+                  name="close"
+                  size={23}
+                  style={{ color: "#4A86E8" }}
                   onPress={() => deleteStoreFromAPI()}
                 />
               </View>
@@ -231,14 +231,16 @@ const storePage = ({ route, navigation }) => {
                 top: 10,
               }}
             >
-              <AntDesign
-                name="phone"
-                size={30}
-                style={{ color: "black", marginLeft: 8 }}
-                onPress={() => {
-                  ToastAndroid.show(ownerNumber, ToastAndroid.SHORT);
-                }}
-              />
+              <View style={styles.imageIcons}>
+                <AntDesign
+                  name="phone"
+                  size={23}
+                  style={{ color: "#4A86E8" }}
+                  onPress={() => {
+                    ToastAndroid.show(`${ownerNumber}`, ToastAndroid.SHORT);
+                  }}
+                />
+              </View>
             </View>
           )}
         </View>
@@ -250,11 +252,11 @@ const storePage = ({ route, navigation }) => {
     if (productImage == null) {
       return (
         <View style={styles.selectedProductImage}>
-          <Text style={{ fontSize: 14, color: "black" }}>Adicionar imagem</Text>
+          <Text style={{ fontSize: 14, color: "black", fontWeight: "bold", marginBottom: 10 }}>Adicionar imagem</Text>
           <AntDesign
             name="pluscircleo"
             size={50}
-            style={{ color: "black" }}
+            style={{ color: "black", marginBottom: 5 }}
             onPress={pickProductImage}
           />
         </View>
@@ -353,87 +355,87 @@ const storePage = ({ route, navigation }) => {
           avoidKeyboard={false}
         >
           <View style={styles.modalContainer}>
-              <View style={styles.closeModal}>
-                <AntDesign
-                  name="closecircleo"
-                  size={30}
-                  style={{ color: "rgb(117,136,236)", marginBottom: '-10%'}}
-                  onPress={() => setModalVisibility(false)}
-                />
+            <View style={styles.closeModal}>
+              <AntDesign
+                name="closecircleo"
+                size={30}
+                style={{ color: "rgb(117,136,236)", marginBottom: '-10%' }}
+                onPress={() => setModalVisibility(false)}
+              />
+            </View>
+            <Text style={styles.pageTitle}>Adicionar novo produto</Text>
+            <View style={styles.inputView}>
+              {renderProductImage()}
+              <InputField
+                title="Nome do produto*"
+                placeholder="Nome do produto"
+                setText={setProductName}
+                text={productName}
+                large="80%"
+              />
+              <Text style={styles.inputLabel}>Categoria do produto*</Text>
+              <View style={styles.pickerView}>
+                <Picker
+                  style={styles.picker}
+                  selectedValue={productCategory}
+                  onValueChange={(itemValue) => setProductCategory(itemValue)}
+                >
+                  <Picker.Item
+                    label="Categoria do produto"
+                    value="0"
+                    color="#9A9A9A"
+                    style={styles.pickerItem}
+                  />
+                  <Picker.Item
+                    label="Artesanato"
+                    value="ARTESANATO"
+                    style={styles.pickerItem}
+                  />
+                  <Picker.Item
+                    label="Bebida"
+                    value="BEBIDA"
+                    style={styles.pickerItem}
+                  />
+                  <Picker.Item
+                    label="Diversos"
+                    value="DIVERSOS"
+                    style={styles.pickerItem}
+                  />
+                  <Picker.Item
+                    label="Doce"
+                    value="DOCE"
+                    style={styles.pickerItem}
+                  />
+                  <Picker.Item
+                    label="Marmita"
+                    value="MARMITA"
+                    style={styles.pickerItem}
+                  />
+                  <Picker.Item
+                    label="Salgado"
+                    value="SALGADO"
+                    style={styles.pickerItem}
+                  />
+                </Picker>
               </View>
-              <Text style={styles.pageTitle}>Adicionar novo produto</Text>
-              <View style={styles.inputView}>
-                {renderProductImage()}
-                <InputField
-                  title="Nome do produto*"
-                  placeholder="Nome do produto"
-                  setText={setProductName}
-                  text={productName}
-                  large="80%"
-                />
-                <Text style={styles.inputLabel}>Categoria do produto*</Text>
-                <View style={styles.pickerView}>
-                  <Picker
-                    style={styles.picker}
-                    selectedValue={productCategory}
-                    onValueChange={(itemValue) => setProductCategory(itemValue)}
-                  >
-                    <Picker.Item
-                      label="Categoria do produto"
-                      value="0"
-                      color="#9A9A9A"
-                      style={styles.pickerItem}
-                    />
-                    <Picker.Item
-                      label="Artesanato"
-                      value="ARTESANATO"
-                      style={styles.pickerItem}
-                    />
-                    <Picker.Item
-                      label="Bebida"
-                      value="BEBIDA"
-                      style={styles.pickerItem}
-                    />
-                    <Picker.Item
-                      label="Diversos"
-                      value="DIVERSOS"
-                      style={styles.pickerItem}
-                    />
-                    <Picker.Item
-                      label="Doce"
-                      value="DOCE"
-                      style={styles.pickerItem}
-                    />
-                    <Picker.Item
-                      label="Marmita"
-                      value="MARMITA"
-                      style={styles.pickerItem}
-                    />
-                    <Picker.Item
-                      label="Salgado"
-                      value="SALGADO"
-                      style={styles.pickerItem}
-                    />
-                  </Picker>
-                </View>
-                <InputField
-                  title="Preço*"
-                  placeholder="R$ 00.00"
-                  setText={setProductPrice}
-                  text={productPrice}
-                  large="80%"
-                  type="numeric"
-                />
-                <Text style={styles.inputLabel}>Descrição*</Text>
-                <TextInput
-                  style={styles.descriptionInput}
-                  placeholder="Descrição"
-                  multiline={true}
-                  onChangeText={setProductDescription}
-                  value={productDescription}
-                />
-              </View>
-              <CreateButton create={addProduct} text="Cadastrar produto" />
+              <InputField
+                title="Preço*"
+                placeholder="R$ 00.00"
+                setText={setProductPrice}
+                text={productPrice}
+                large="80%"
+                type="numeric"
+              />
+              <Text style={styles.inputLabel}>Descrição*</Text>
+              <TextInput
+                style={styles.descriptionInput}
+                placeholder="Descrição"
+                multiline={true}
+                onChangeText={setProductDescription}
+                value={productDescription}
+              />
+            </View>
+            <CreateButton create={addProduct} text="Cadastrar produto" />
           </View>
         </Modal>
         <View>
@@ -446,7 +448,7 @@ const storePage = ({ route, navigation }) => {
                 justifyContent: "space-between",
               }}
             >
-              <Text style={styles.storeName}>{storeName}</Text>
+              <Text style={styles.storeName} numberOfLines={1}>{storeName}</Text>
               {!route.params && (
                 <View style={{ alignItems: "center" }}>
                   <Text>Loja</Text>
@@ -534,6 +536,7 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: "bold",
     color: "rgb(74,134,232)",
+    width: "88%",
   },
 
   storeDescription: {
@@ -576,6 +579,9 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 2,
+    borderColor: '#4A86E8',
   },
   // Modal Styles
   closeModal: {

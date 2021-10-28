@@ -16,7 +16,11 @@ const HomePage = ({ navigation }) => {
   const [initialPosition, setInitialPosition] = useState(null);
   const [radius, setRadius] = useState(500);
   const [storeType, setStoreType] = useState("sem filtro");
-  const { markers, getStoreLocations, userData } = useData();
+  const { markers, getStoreLocations, userData, setShowNav, showNav } = useData();
+
+  useEffect(() => {
+    setShowNav(true);
+  }, [showNav, userData]);
 
   const getUserLocation = () => {
     Location.installWebGeolocationPolyfill();
