@@ -56,7 +56,6 @@ export const loginUser = async (email, password) => {
 };
 
 export const storeOwnerPhone = async (ownerID) => {
-  console.log(ownerID);
   try {
     const r = await APIGeneral.get(`/store/number/${ownerID}`)
     return r;
