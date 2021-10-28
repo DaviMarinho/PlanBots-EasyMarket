@@ -16,6 +16,13 @@ const createStore = ({ navigation }) => {
     try {
       registerStore(storeName, storeDescription, userData._id, storeImage)
         .then((r) => {
+<<<<<<< HEAD
+=======
+          setUserData({
+            ...userData,
+            storeID: r.data._id
+          });
+>>>>>>> refs/remotes/origin/fix_correcoes
           setStoreData(r.data);
           setUserData({
             ...userData,
