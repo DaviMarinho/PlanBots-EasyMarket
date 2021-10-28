@@ -34,6 +34,7 @@ routes.put('/store/edit/:id', StoresController.editStore);
 routes.put('/store/status/:id', StoresController.changeStoreStatus);
 routes.delete('/store/delete/:id', StoresController.deleteStore);
 routes.put('/store/image/:id', StoresController.editStoreImage);
+routes.get('/store/number/:id', StoresController.getStoreOwnerPhone);
 
 // Users
 routes.get('/user', UsersController.getUserList);

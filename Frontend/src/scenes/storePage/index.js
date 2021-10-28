@@ -21,6 +21,7 @@ import {
   deleteProduct,
   changeStoreStatus,
   editStoreImage,
+  storeOwnerPhone
 } from "../../services/apiservices";
 import CreateButton from "../../components/createButton";
 import InputField from "../../components/inputField";
@@ -32,6 +33,7 @@ const storePage = ({ route, navigation }) => {
     useData();
   const [loading, setLoading] = useState(true);
   const [modalVisibility, setModalVisibility] = useState(false);
+  const [ownerNumber, setOwnerNumber] = useState();
   // Store
   const storeID = route.params ? route.params._id : storeData?._id;
   const [storeName, setStoreName] = useState();
@@ -189,12 +191,12 @@ const storePage = ({ route, navigation }) => {
       );
     } else {
       return (
-        <View>
+        <TouchableOpacity onPress={pickStoreImage}>
           <Image
             source={{ uri: storeImage }}
             style={{ height: 180, width: "100%" }}
           />
-          {!route.params && !isOpen && (
+          {!route.params && !isOpen ? (
             <View
               style={{
                 flexDirection: "row",
@@ -207,7 +209,7 @@ const storePage = ({ route, navigation }) => {
                 name="edit"
                 size={30}
                 style={{ color: "black" }}
-                onPress={() => navigation.navigate('editStore')}
+                onPress={() => navigation.navigate("editStore")}
               />
               <AntDesign
                 name="closecircleo"
@@ -216,9 +218,27 @@ const storePage = ({ route, navigation }) => {
                 onPress={() => deleteStoreFromAPI()}
               />
             </View>
+          ) : (
+            <View
+              style={{
+                flexDirection: "row",
+                position: "absolute",
+                right: 10,
+                top: 10,
+              }}
+            >
+              <AntDesign
+                name="phone"
+                size={30}
+                style={{ color: "black", marginLeft: 8 }}
+                onPress={() => {
+                  ToastAndroid.show(ownerNumber, ToastAndroid.SHORT);
+                }}
+              />
+            </View>
           )}
-        </View>
-      );
+        </TouchableOpacity>
+      )
     }
   };
 
@@ -311,12 +331,14 @@ const storePage = ({ route, navigation }) => {
       setStoreDescription(route.params.storeDescription);
       setIsOpen(true);
       setStoreImage(route.params.storeImage);
+      storeOwnerPhone(route.params._id).then((r) => setOwnerNumber(r.data.phone));
     } else {
       // Minha loja
       setStoreName(storeData.storeName);
       setStoreDescription(storeData.storeDescription);
       setIsOpen(storeData.open);
       setStoreImage(storeData.storeImage);
+      setOwnerNumber(storeData.phone);
     }
   }, [route.params]);
 

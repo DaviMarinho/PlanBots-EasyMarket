@@ -42,7 +42,17 @@ const editStoreImage = async (req, res) => {
   } catch (err) {
     return res.json(err);
   }
+}
 
+const getStoreOwnerPhone = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const userData = await User.findOne({ storeID: id });
+    return res.json({ phone: userData.phone });
+  } catch (err) {
+    return res.json(err);
+  }
 }
 
 const createStore = async (req, res) => {
@@ -111,5 +121,6 @@ module.exports = {
   getStoreByID, 
   changeStoreStatus, 
   getOpenStores, 
-  editStoreImage
+  editStoreImage,
+  getStoreOwnerPhone
 };
