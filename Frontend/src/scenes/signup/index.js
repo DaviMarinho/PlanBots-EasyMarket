@@ -21,15 +21,31 @@ const Signup = ({ navigation }) => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [image, setImage] = useState(null);
 
-  const registrar = async () => {
+  const registrar = () => {
+    const dict = {
+      email: "email",
+      phone: "telefone",
+      cpf: "cpf",
+    };
     if (password === confirmPassword) {
-      await registerUser(email, phone, cpf, password, image).then((r) => r);
-      ToastAndroid.show("Cadastro realizado com sucesso.", ToastAndroid.SHORT);
-      navigation.navigate("home");
+      registerUser(email, phone, cpf, password).then((r) => {
+        if (r.duplicated) {
+          ToastAndroid.show(
+            `${dict[Object.keys(r.duplicated)[0]]} ja cadastrado.`,
+            ToastAndroid.SHORT
+          );
+        } else {
+          ToastAndroid.show(
+            "Cadastro realizado com sucesso.",
+            ToastAndroid.SHORT
+          );
+          navigation.navigate("home");
+        }
+      });
     } else {
       setPassword('');
       setConfirmPassword('');
-      ToastAndroid.show("As senhas não correspondem.", ToastAndroid.SHORT);      
+      ToastAndroid.show("As senhas não correspondem.", ToastAndroid.SHORT);   
     }
   };
 

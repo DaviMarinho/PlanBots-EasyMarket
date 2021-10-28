@@ -100,7 +100,7 @@ const storePage = ({ route, navigation }) => {
       setLoading(false);
     });
   };
-
+  
   const addProduct = async () => {
     await createProduct(
       productName,
@@ -326,14 +326,12 @@ const storePage = ({ route, navigation }) => {
     setIsOpen(true);
     setProducts([]);
     if (route.params) {
-      // Loja de outra pessoa
       setStoreName(route.params.storeName);
       setStoreDescription(route.params.storeDescription);
       setIsOpen(true);
       setStoreImage(route.params.storeImage);
       storeOwnerPhone(route.params._id).then((r) => setOwnerNumber(r.data.phone));
     } else {
-      // Minha loja
       setStoreName(storeData.storeName);
       setStoreDescription(storeData.storeDescription);
       setIsOpen(storeData.open);
