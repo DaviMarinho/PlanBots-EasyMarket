@@ -7,59 +7,60 @@ import { useData } from '../../context/';
 
 const Navbar = () => {
   const navigation = useNavigation();
-  const { userData, storeData, setStoreData } = useData();
+  const { userData, storeData, setStoreData, showNav } = useData();
 
   return (
-    <View style={styles.container}>
-      <TouchableOpacity
-        style={styles.icon}
-        onPress={() => {
-          if (userData) {
-            navigation.navigate('perfil');
-          } else {
-            navigation.navigate('login')
-          }
-        }}
-      >
-        <Ionicons
-          name="person"
-          size={30}
-          color="#FFF"
-        />
-      </TouchableOpacity>
+    (showNav ?
+      (< View style={styles.container} >
+        <TouchableOpacity
+          style={styles.icon}
+          onPress={() => {
+            if (userData) {
+              navigation.navigate('perfil');
+            } else {
+              navigation.navigate('login')
+            }
+          }}
+        >
+          <Ionicons
+            name="person"
+            size={30}
+            color="#FFF"
+          />
+        </TouchableOpacity>
 
-      <TouchableOpacity
-        style={styles.icon}
-        onPress={() => navigation.navigate('home') }
-      >
-        <Ionicons
-          name="home"
-          size={30}
-          color="#FFF"
-        />
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.icon}
+          onPress={() => navigation.navigate('home')}
+        >
+          <Ionicons
+            name="home"
+            size={30}
+            color="#FFF"
+          />
+        </TouchableOpacity>
 
-      <TouchableOpacity
-        style={styles.icon}
-        onPress={() => {
-          if (userData && !storeData) {
-            navigation.navigate('showStore');
-          } else if (userData && storeData) {
-            navigation.navigate('storePage');
-            setStoreData(storeData);
-          } else {
-            ToastAndroid.show("Para visualizar/cadastrar uma loja realize seu login", ToastAndroid.LONG);
-            navigation.navigate('login');
-          }
-        }}
-      >
-        <Feather
-          name="shopping-bag"
-          size={30}
-          color="#FFF"
-        />
-      </TouchableOpacity>
-    </View >
+        <TouchableOpacity
+          style={styles.icon}
+          onPress={() => {
+            if (userData && !storeData) {
+              navigation.navigate('showStore');
+            } else if (userData && storeData) {
+              navigation.navigate('storePage');
+              setStoreData(storeData);
+            } else {
+              ToastAndroid.show("Para visualizar/cadastrar uma loja realize seu login", ToastAndroid.LONG);
+              navigation.navigate('login');
+            }
+          }}
+        >
+          <Feather
+            name="shopping-bag"
+            size={30}
+            color="#FFF"
+          />
+        </TouchableOpacity>
+      </View >) : <></>)
   );
 };
 

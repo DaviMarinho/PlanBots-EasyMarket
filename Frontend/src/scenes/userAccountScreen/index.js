@@ -1,14 +1,17 @@
 import React from "react";
-import { View, ScrollView, StyleSheet, Text, Image } from "react-native";
+import { View, ScrollView, StyleSheet, Text, Image, TouchableOpacity } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useData } from "../../context/";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import { useNavigation } from "@react-navigation/native";
 
 const UserAccountScreen = ({ navigation }) => {
-  const { userData } = useData();
+  const { userData, userClean } = useData();
   const userID = userData._id;
   const userPhone = userData.phone;
   const userEmail = userData.email;
   const userCPF = userData.cpf;
+  const navigate = useNavigation();
 
   const renderPhoto = () => {
     if (userData.image == null) {
@@ -26,6 +29,15 @@ const UserAccountScreen = ({ navigation }) => {
 
   return (
     <View style={style.container}>
+      <TouchableOpacity
+        onPress={() => {
+          userClean();
+          navigate.navigate("login");
+        }}
+        style={{ alignSelf: "flex-end", marginBottom: '-5%', marginRight: 15, marginTop: 15 }}
+      >
+        <MaterialIcons name="exit-to-app" size={40} color="#4A86E8" />
+      </TouchableOpacity>
       <ScrollView>
         <View style={style.teste}>
           {renderPhoto()}

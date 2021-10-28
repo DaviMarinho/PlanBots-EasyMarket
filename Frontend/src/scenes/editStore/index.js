@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -16,7 +16,7 @@ import * as ImagePicker from 'expo-image-picker';
 import InputField from '../../components/inputField';
 
 const editStore = ({ navigation }) => {
-  const { storeData, setStoreData } = useData();
+  const { storeData, setStoreData, showNav, setShowNav } = useData();
   const storeID = storeData._id;
   const [storeName, setStoreName] = useState(storeData.storeName);
   const [storeDescription, setStoreDescription] = useState(storeData.storeDescription);
