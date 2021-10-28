@@ -42,7 +42,17 @@ const editStoreImage = async (req, res) => {
   } catch (err) {
     return res.json(err);
   }
+}
 
+const getStoreOwnerPhone = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const userData = await User.findOne({ storeID: id });
+    return res.json({ phone: userData.phone });
+  } catch (err) {
+    return res.json(err);
+  }
 }
 
 const createStore = async (req, res) => {
@@ -100,5 +110,13 @@ const deleteStore = async (req, res) => {
 };
 
 module.exports = { 
-  getStoreList, createStore, editStore, deleteStore, getStoreByID, changeStoreStatus, getOpenStores, editStoreImage,
+  getStoreList, 
+  createStore, 
+  editStore, 
+  deleteStore, 
+  getStoreByID, 
+  changeStoreStatus, 
+  getOpenStores, 
+  editStoreImage,
+  getStoreOwnerPhone
 };

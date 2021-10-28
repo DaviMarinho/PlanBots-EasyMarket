@@ -1,8 +1,17 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, Text, Button, TextInput, ToastAndroid } from 'react-native';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import { updateStore } from '../../services/apiservices';
-import { useData } from '../../context/';
+import React, { useState } from "react";
+import {
+  StyleSheet,
+  View,
+  Text,
+  Button,
+  TextInput,
+  ToastAndroid,
+  TouchableOpacity,
+} from "react-native";
+import { updateStore } from "../../services/apiservices";
+import { useData } from "../../context/";
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import * as ImagePicker from 'expo-image-picker';
 
 const editStore = ({ navigation, route }) => {
   const storeID = route.params.storeID;
@@ -15,11 +24,49 @@ const editStore = ({ navigation, route }) => {
       ToastAndroid.show("Nome da loja muito pequeno. Insira pelo menos 5 caracteres.", ToastAndroid.LONG);
       return;
     }
-    updateStore(storeID, storeName, storeDescription)
-      .then((r) => {
-        setStoreData(r.data)
-        navigation.navigate('home');
-      });
+    updateStore(storeID, storeName, storeDescription, storeImage).then((r) => {
+      setStoreData(r.data);
+      navigation.navigate("home");
+    });
+  };
+
+  const pickStoreImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      base64: true,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.cancelled) {
+      setStoreImage(`data:image/png;base64,${result.base64}`);
+      // setStoreData(storeData);
+    }
+  };
+
+  const renderStoreImage = () => {
+    if (storeImage == null) {
+      return (
+        <View style={styles.imageField}>
+        <AntDesign
+          name="pluscircleo"
+          size={50}
+          style={{ color: '#FFF', marginTop: '5%' }}
+          onPress={pickStoreImage}
+        />
+        <Text style={styles.ImageText}>Adicionar imagem da loja</Text>
+        <Text style={styles.imageSubtext}>(opcional)</Text>
+      </View>
+      )
+    }
+    else {
+      return (
+        <TouchableOpacity onPress={pickStoreImage}>
+          <Image source={{ uri: storeImage }} style={{ height: 200, width: '100%' }} /> 
+        </TouchableOpacity>
+      )
+    }
   }
 
   return (
