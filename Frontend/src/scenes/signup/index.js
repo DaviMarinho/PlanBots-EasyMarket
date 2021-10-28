@@ -46,7 +46,7 @@ const Signup = ({ navigation }) => {
             "Cadastro realizado com sucesso.",
             ToastAndroid.SHORT
           );
-          navigation.navigate("home");
+          navigation.navigate("login");
         }
       });
     } else {
