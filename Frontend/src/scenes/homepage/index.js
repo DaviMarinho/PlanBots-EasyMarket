@@ -10,6 +10,7 @@ import {
 import { useData } from "../../context/";
 import * as Location from "expo-location";
 import { Picker } from "@react-native-picker/picker";
+import { getDistance } from 'geolib';
 
 const HomePage = ({ navigation }) => {
   const [initialPosition, setInitialPosition] = useState(null);
@@ -42,12 +43,47 @@ const HomePage = ({ navigation }) => {
       if (storeType === "sem filtro") {
         return markers.map((marker, idx) => {
           if (marker.storeLatitude && marker.storeLongitude) {
-            // remover depois que todas as lojas estejam usando o storeLatitude e storeLongitude
-            let tintColor = userData
-              ? userData.storeID === marker._id
-                ? "red"
-                : "rgb(74,134,232)"
-              : "rgb(74,134,232)";
+            if (getDistance({ latitude: initialPosition.latitude, longitude: initialPosition.longitude }, { latitude: marker.storeLatitude, longitude: marker.storeLongitude }) <= radius) {
+              // remover depois que todas as lojas estejam usando o storeLatitude e storeLongitude
+              let tintColor = userData
+                ? userData.storeID === marker._id
+                  ? "red"
+                  : "rgb(74,134,232)"
+                : "rgb(74,134,232)";
+              return (
+                <Marker
+                  coordinate={{
+                    latitude: parseFloat(marker.storeLatitude),
+                    longitude: parseFloat(marker.storeLongitude),
+                  }}
+                  // pinColor={color} // any color
+                  title={marker.storeName}
+                  description={marker.storeDescription}
+                  key={idx}
+                  onPress={() => navigation.navigate("storePage", marker)}
+                // image={require('../../../assets/trolley.png')}
+                >
+                  <Image
+                    source={require("../../../assets/trolley.png")}
+                    style={{ width: 20, height: 20, tintColor }}
+                    resizeMode="contain"
+                  />
+                </Marker>
+              );
+            }
+          }
+        });
+      }
+      return markers.map((marker, idx) => {
+        if (marker.storeLatitude && marker.storeLongitude) {
+          // remover depois que todas as lojas estejam usando o storeLatitude e storeLongitude
+          let tintColor = userData
+            ? userData.storeID === marker._id
+              ? "red"
+              : "rgb(74,134,232)"
+            : "rgb(74,134,232)";
+
+          if (getDistance({ latitude: initialPosition.latitude, longitude: initialPosition.longitude }, { latitude: marker.storeLatitude, longitude: marker.storeLongitude }) <= radius) {
             return (
               <Marker
                 coordinate={{
@@ -69,36 +105,6 @@ const HomePage = ({ navigation }) => {
               </Marker>
             );
           }
-        });
-      }
-      return markers.map((marker, idx) => {
-        if (marker.storeLatitude && marker.storeLongitude) {
-          // remover depois que todas as lojas estejam usando o storeLatitude e storeLongitude
-          let tintColor = userData
-            ? userData.storeID === marker._id
-              ? "red"
-              : "rgb(74,134,232)"
-            : "rgb(74,134,232)";
-          return (
-            <Marker
-              coordinate={{
-                latitude: parseFloat(marker.storeLatitude),
-                longitude: parseFloat(marker.storeLongitude),
-              }}
-              // pinColor={color} // any color
-              title={marker.storeName}
-              description={marker.storeDescription}
-              key={idx}
-              onPress={() => navigation.navigate("storePage", marker)}
-            // image={require('../../../assets/trolley.png')}
-            >
-              <Image
-                source={require("../../../assets/trolley.png")}
-                style={{ width: 20, height: 20, tintColor }}
-                resizeMode="contain"
-              />
-            </Marker>
-          );
         }
       });
     }
