@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { useData } from "../../context/";
 import * as Location from "expo-location";
+import Navbar from '../../components/navbar';
 import { Picker } from "@react-native-picker/picker";
 import { getDistance } from 'geolib';
 
@@ -223,6 +224,7 @@ const HomePage = ({ navigation }) => {
       ) : (
         <ActivityIndicator size="large" color="red" />
       )}
+      <Navbar seila={false} />
     </View>
   );
 };

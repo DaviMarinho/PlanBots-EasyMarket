@@ -14,6 +14,7 @@ import { useData } from "../../context/";
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import * as ImagePicker from 'expo-image-picker';
 import InputField from '../../components/inputField';
+import Navbar from '../../components/navbar';
 
 const editStore = ({ navigation }) => {
   const { storeData, setStoreData } = useData();
@@ -94,6 +95,7 @@ const editStore = ({ navigation }) => {
           <Button onPress={() => editarLoja()} color='rgb(74,134,232)' title="Editar loja" />
         </View>
       </View>
+      <Navbar seila={true}/>
     </View>
   );
 };

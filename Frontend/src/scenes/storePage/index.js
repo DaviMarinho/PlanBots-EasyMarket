@@ -21,12 +21,12 @@ import {
   deleteProduct,
   changeStoreStatus,
   editStoreImage,
-  storeOwnerPhone
-} from "../../services/apiservices";
-import CreateButton from "../../components/createButton";
-import InputField from "../../components/inputField";
-import Modal from "react-native-modal";
-import * as ImagePicker from "expo-image-picker";
+} from '../../services/apiservices';
+import CreateButton from '../../components/createButton';
+import InputField from '../../components/inputField';
+import Modal from 'react-native-modal';
+import * as ImagePicker from 'expo-image-picker';
+import Navbar from '../../components/navbar';
 
 const storePage = ({ route, navigation }) => {
   const { userData, storeData, setUserData, setStoreData, getStoreLocations } =
@@ -503,6 +503,7 @@ const storePage = ({ route, navigation }) => {
           </View>
         </View>
       </ScrollView>
+      <Navbar />
     </View>
   );
 };

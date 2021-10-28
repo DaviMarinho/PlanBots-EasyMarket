@@ -29,7 +29,7 @@ const Header = () => {
           <TouchableOpacity
             onPress={() => {
               userClean();
-              navigation.navigate("home");
+              navigation.navigate("login");
             }}
           >
             <MaterialIcons name="exit-to-app" size={30} color="#FFF" />
