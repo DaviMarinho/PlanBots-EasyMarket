@@ -2,7 +2,6 @@ import React from "react";
 import { View, ScrollView, StyleSheet, Text, Image } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useData } from "../../context/";
-import Navbar from '../../components/navbar';
 
 const UserAccountScreen = ({ navigation }) => {
   const { userData } = useData();
@@ -66,7 +65,6 @@ const UserAccountScreen = ({ navigation }) => {
           </View>
         </View>
       </ScrollView>
-      <Navbar />
     </View>
   );
 };

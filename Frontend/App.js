@@ -68,6 +68,7 @@ const App = () => {
           options={{ headerShown: false }}
         />
         </Stack.Navigator>
+        <Navbar />
       </NavigationContainer>
     </DataProvider>
   );
