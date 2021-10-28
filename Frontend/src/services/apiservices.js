@@ -21,8 +21,8 @@ export const registerUser = async (email, phone, cpf, password, image) => {
     });
     return r;
   } catch (err) {
-    console.error(err);
-    return err;
+    console.warn(err);
+    return err.response.data;
   }
 };
 
@@ -55,6 +55,16 @@ export const loginUser = async (email, password) => {
   };
 };
 
+export const storeOwnerPhone = async (ownerID) => {
+  console.log(ownerID);
+  try {
+    const r = await APIGeneral.get(`/store/number/${ownerID}`)
+    return r;
+  } catch (err) {
+    console.error(err);
+    return err;
+  }
+}
 
 // Loja
 export const getStoreData = async (storeID) => {
@@ -96,7 +106,7 @@ export const updateStore = async (storeID, storeName, storeDescription, storeIma
     const r = await APIGeneral.put(`/store/edit/${storeID}`, {
       storeName,
       storeDescription,
-      storeImage
+      storeImage,
     });
     return r;
   } catch (err) {
